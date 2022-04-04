@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/O-clock-Zagreus/projet-13-majordome-back#readme",
   "dependencies": {
+    "@faker-js/faker": "^6.1.1",
     "bunyan": "^1.8.15",
     "cors": "^2.8.5",
     "debug": "^4.3.4",
@@ -30,7 +31,8 @@
     "joi": "^17.6.0",
     "pg": "^8.7.3",
     "pug": "^3.0.2",
-    "sanitizer": "^0.1.3"
+    "sanitizer": "^0.1.3",
+    "tiny-seeder": "^2.1.3"
   },
   "devDependencies": {
     "eslint": "^8.12.0",
