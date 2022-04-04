@@ -1,0 +1,8 @@
+extends layouts/main.pug
+
+block append main
+    section
+        h2 Documentation
+        .grid
+            p.text-center
+                a(href=process.env.API_DOCUMENTATION_ROUTE role="button").outline View
