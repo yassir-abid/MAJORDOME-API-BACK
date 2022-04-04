@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "resetDB": "sqitch revert -y; sqitch deploy; DEBUG=import:* node ./data/import-data.js",
-    "start": "NODE_ENV=production node .",
+    "start": "node .",
     "dev": "DEBUG=*,-express:*,-nodemon*,-body* node-dev index --notify=false"
   },
   "repository": {
