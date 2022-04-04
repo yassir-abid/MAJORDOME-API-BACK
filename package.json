@@ -1,0 +1,40 @@
+{
+  "name": "projet-majordome-back",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "resetDB": "sqitch revert -y; sqitch deploy; DEBUG=import:* node ./data/import-data.js",
+    "start": "NODE_ENV=production node .",
+    "dev": "DEBUG=*,-express:*,-nodemon*,-body* node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/O-clock-Zagreus/projet-13-majordome-back.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/O-clock-Zagreus/projet-13-majordome-back/issues"
+  },
+  "homepage": "https://github.com/O-clock-Zagreus/projet-13-majordome-back#readme",
+  "dependencies": {
+    "bunyan": "^1.8.15",
+    "cors": "^2.8.5",
+    "debug": "^4.3.4",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "express-jsdoc-swagger": "^1.6.7",
+    "joi": "^17.6.0",
+    "pg": "^8.7.3",
+    "pug": "^3.0.2",
+    "sanitizer": "^0.1.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.12.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4"
+  }
+}
