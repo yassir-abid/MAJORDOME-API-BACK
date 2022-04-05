@@ -1,6 +1,7 @@
 const express = require('express');
 
 // todo Import entities routers
+const clientRouter = require('./client');
 
 const { apiController } = require('../../controllers/api');
 
@@ -16,6 +17,7 @@ router.use((_, response, next) => {
 router.all('/', apiController.home);
 
 // todo Use entities routers
+router.use('/clients', clientRouter);
 
 router.use(() => {
     throw new ApiError('API Route not found', { statusCode: 404 });
