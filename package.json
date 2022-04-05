@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node .",
-    "dev": "DEBUG=*,-express:*,-nodemon*,-body* node-dev index --notify=false"
+    "dev": "DEBUG=*,-express:*,-nodemon*,-body*,-send* node-dev index --notify=false"
   },
   "repository": {
     "type": "git",
