@@ -10,9 +10,3 @@ const server = http.createServer(app);
 server.listen(port, () => {
     debug(`Listening on ${port}`);
 });
-
-// const app = require('./app');
-
-// app.listen(port, () => {
-//     debug(`Listening on ${port}`);
-// });
