@@ -12,6 +12,7 @@ const tables = [
             phone: () => faker.phone.phoneNumber(),
             address: () => faker.address.streetAddress(true),
             password: () => faker.internet.password(),
+            picture: () => faker.datatype.string(10),
         },
     },
 

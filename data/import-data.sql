@@ -4,11 +4,11 @@ BEGIN;
 TRUNCATE "provider", "task", "supplier", "client", "address", "project", "intervention", "picture", "document", "notification" RESTART IDENTITY;
 
 -- Table: provider
-INSERT INTO "provider" ("firstname", "lastname", "email", "phone", "address", "password") VALUES
-('Marlon', 'Schultz', 'Krystel.Kassulke11@gmail.com', '0601024547', '77ter rue Descartes 92150 Suresnes', 'zbO6X7XUMmT8auE'),
-('Hank', 'Russel', 'Tillman53@yahoo.com', '0548789652', '10bis rue Shanahan 95130 Franconville la Garenne', 'Hu67A6SgF9S4lll'),
-('Alayna', 'Kozey', 'Franco.OReilly@hotmail.com', '0799100235', '45 avenue Hermann 92350 Le Plessis Robinson', 'UiaImhVxvx12tVY'),
-('Chelsie', 'Swaniawski', 'Lindsey91@gmail.com', '0162368597', '29 chemin Alfredo Stravenue 33000 Bordeaux', 'J9Kanl7gmHqGUBz');
+INSERT INTO "provider" ("firstname", "lastname", "email", "phone", "address", "password", "picture") VALUES
+('Marlon', 'Schultz', 'Krystel.Kassulke11@gmail.com', '0601024547', '77ter rue Descartes 92150 Suresnes', 'zbO6X7XUMmT8auE', '/picture1'),
+('Hank', 'Russel', 'Tillman53@yahoo.com', '0548789652', '10bis rue Shanahan 95130 Franconville la Garenne', 'Hu67A6SgF9S4lll', '/picture2'),
+('Alayna', 'Kozey', 'Franco.OReilly@hotmail.com', '0799100235', '45 avenue Hermann 92350 Le Plessis Robinson', 'UiaImhVxvx12tVY', '/picture3'),
+('Chelsie', 'Swaniawski', 'Lindsey91@gmail.com', '0162368597', '29 chemin Alfredo Stravenue 33000 Bordeaux', 'J9Kanl7gmHqGUBz', '/picture4');
 
 -- Table: task
 INSERT INTO "task" ("description", "status", "provider_id") VALUES

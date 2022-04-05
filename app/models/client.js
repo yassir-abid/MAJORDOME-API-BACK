@@ -30,67 +30,28 @@ const clientDataMapper = {
      * @returns {array<Client>} - All clients of the database and their addresses
      */
     async findAll() {
-        /** Solution 1 */
-        // const result = await client.query(`
-        // SELECT
-        //     client.*,
-        //     json_agg(json_build_object('id', address.id, 'number', address.number,
-        //                              'street', address.street,
-        //                             'postal_code', address.postal_code, 'city', address.city,
-        //                              'comments', address.comments,
-        //                              'client_id', address.client_id)) as addresses
-        // FROM client
-        // LEFT JOIN address on address.client_id = client.id
-        // GROUP BY client.id
-        // ORDER BY client.id;
-        // `);
-
-        /** Solution 2 */
-        const result = await client.query(`
-        SELECT * FROM (
-            SELECT
-                client.*,
-                json_agg(json_build_object('id', address.id, 'number', address.number, 'street', address.street,
-                                           'postal_code', address.postal_code, 'city', address.city,
-                                           'comments', address.comments, 'client_id', address.client_id)) as addresses
-            FROM client
-            JOIN address on address.client_id = client.id
-            GROUP BY client.id
-            UNION ALL
-            SELECT client.*, json_build_array() as addresses FROM client
-            WHERE client.id <> ALL (
-                SELECT address.client_id FROM address
-            ))
-        as client
-        ORDER BY client.id
-        ;
-        `);
-
-        /** Solution 3 */
-        // const result = await client.query(`
-        // SELECT * FROM (
-        //     SELECT
-        //         client.*,
-        //         jsonb_agg(jsonb_build_object('id', address.id, 'number', address.number,
-        //                                      'street', address.street,
-        //                                      'postal_code', address.postal_code,
-        //                                      'city', address.city,
-        //                                      'comments', address.comments,
-        //                                      'client_id', address.client_id)) as addresses
-        //     FROM client
-        //     JOIN address on address.client_id = client.id
-        //     GROUP BY client.id
-        //     UNION
-        //     SELECT client.*, null as addresses FROM client
-        //     WHERE client.id <> ALL (
-        //         SELECT address.client_id FROM address
-        //     ))
-        // as client
-        // ORDER BY client.id
-        // ;
-        // `);
-
+        const result = await client.query('SELECT * FROM client_and_addresses ORDER BY id;');
         return result.rows;
+    },
+
+    /**
+     * Find client by id
+     * @param {number} clientId - id of the desired client
+     * @returns {(Client|undefined)} -
+     * The desired client or undefined if no client found with this id
+     */
+    async findByPk(clientId) {
+        const preparedQuery = {
+            text: 'SELECT * FROM client_and_addresses WHERE id = $1;',
+            values: [clientId],
+        };
+        const result = await client.query(preparedQuery);
+
+        if (result.rowCount === 0) {
+            return undefined;
+        }
+
+        return result.rows[0];
     },
 };
 
