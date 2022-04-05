@@ -30,6 +30,21 @@ const clientController = {
 
         return response.json(client);
     },
+    /**
+     * Client controller to create a record.
+     * ExpressMiddleware signature
+     * @param {object} request Express request object (not used)
+     * @param {object} response Express response object
+     * @returns {object} Route API JSON response
+     */
+    async create(request, response) {
+        const client = await clientDataMapper.isUnique(request.body);
+        if (client) {
+            throw new ApiError('Client already exists with this email', { statusCode: 400 });
+        }
+        const savedClient = await clientDataMapper.insert(request.body);
+        return response.json(savedClient);
+    },
 };
 
 module.exports = clientController;

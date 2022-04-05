@@ -1,0 +1,45 @@
+################################################################################
+# Test file of API HTTP Routes
+# Requires REST Client extension for VSCode
+# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+################################################################################
+@endpoint = http://localhost:{{$dotenv PORT}}/api
+
+### 404
+GET {{ endpoint }}/clientsss
+
+#########################
+#       CLIENTS         #
+#########################
+
+### Get all clients and their addresses
+GET {{ endpoint }}/clients
+
+### Get a client and his addresses by an id that does not exist
+GET {{ endpoint }}/clients/123
+
+### Get a client and his addresses by id
+GET {{ endpoint }}/clients/2
+
+### Create an error client
+POST {{ endpoint }}/clients
+content-type: application/json
+
+{
+    "firstname": "Chuck",
+    "lastname": "Norris",
+    "email": "chuck.norris@gmail.com",
+    "provider_id": 1
+}
+
+### Create client
+POST {{ endpoint }}/clients
+content-type: application/json
+
+{
+    "firstname": "Chuck",
+    "lastname": "Norris",
+    "email": "test5@gmail.com",
+    "phone": "062744588854",
+    "provider_id": 1
+}

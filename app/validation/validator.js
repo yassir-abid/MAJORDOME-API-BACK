@@ -16,6 +16,7 @@ module.exports = (prop, schema) => async (request, _, next) => {
         await schema.validateAsync(request[prop]);
         next();
     } catch (error) {
+        debug(error);
         next(new ApiError(error.details[0].message, { statusCode: 400 }));
     }
 };

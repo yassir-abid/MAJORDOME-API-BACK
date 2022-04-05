@@ -1,6 +1,31 @@
 const client = require('../config/db');
 
 /**
+ * @typedef {object} Client
+ * @property {number} id - Client's table PK
+ * @property {string} firstname - Client's firstname
+ * @property {string} lastname - Client's lastname
+ * @property {string} email - Client's email
+ * @property {string} phone - Client's phone
+ * @property {string} comments - Client's comments and specific informations
+ * @property {string} our_equipments - Client's equipment installed by the provider
+ * @property {string} other_equipments - Client's equipment installed by other providers
+ * @property {string} needs - Client's needs identified by the provider
+ * @property {number} provider_id - Id of the provider linked to the client
+ */
+/**
+ * @typedef {Object} InputClient
+ * @property {string} firstname - Client's firstname
+ * @property {string} lastname - Client's lastname
+ * @property {string} email - Client's email
+ * @property {string} phone - Client's phone
+ * @property {string} comments - Client's comments and specific informations
+ * @property {string} our_equipments - Client's equipment installed by the provider
+ * @property {string} other_equipments - Client's equipment installed by other providers
+ * @property {string} needs - Client's needs identified by the provider
+ * @property {number} provider_id - Id of the provider linked to the client
+ */
+/**
  * @typedef {object} Address
  * @property {number} id - Address's table PK
  * @property {string} number - Number of the street
@@ -11,7 +36,7 @@ const client = require('../config/db');
  * @property {number} client_id - Id of the client linked to the address
  */
 /**
- * @typedef {object} Client
+ * @typedef {object} ClientWithAddress
  * @property {number} id - Client's table PK
  * @property {string} firstname - Client's firstname
  * @property {string} lastname - Client's lastname
@@ -27,7 +52,7 @@ const client = require('../config/db');
 
 const clientDataMapper = {
     /**
-     * @returns {array<Client>} - All clients of the database and their addresses
+     * @returns {array<ClientWithAddress>} - All clients of the database and their addresses
      */
     async findAll() {
         const result = await client.query('SELECT * FROM client_and_addresses ORDER BY id;');
@@ -37,7 +62,7 @@ const clientDataMapper = {
     /**
      * Find client by id
      * @param {number} clientId - id of the desired client
-     * @returns {(Client|undefined)} -
+     * @returns {(ClientWithAddress|undefined)} -
      * The desired client or undefined if no client found with this id
      */
     async findByPk(clientId) {
@@ -49,6 +74,50 @@ const clientDataMapper = {
 
         if (result.rowCount === 0) {
             return undefined;
+        }
+
+        return result.rows[0];
+    },
+    /**
+     * Add client in the database
+     * @param {InputClient} client - Data to insert
+     * @returns {Client} - Inserted client
+     */
+    async insert(clientInfos) {
+        const preparedQuery = {
+            text: `INSERT INTO client
+                    (firstname, lastname, email, phone, comments, our_equipments, other_equipments, needs, provider_id)
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;`,
+            values: [clientInfos.firstname, clientInfos.lastname, clientInfos.email,
+                clientInfos.phone, clientInfos.comments, clientInfos.our_equipments,
+                clientInfos.other_equipments, clientInfos.needs, clientInfos.provider_id],
+        };
+        const savedClient = await client.query(preparedQuery);
+
+        return savedClient.rows[0];
+    },
+    /**
+     * Checks if a client already exists with the same email
+     * @param {object} inputData - Data provided
+     * @param {number} clientId - Client id (optional)
+     * @returns {(Client|null)} - The existing client
+     * or null if no client exists with this data
+     */
+    async isUnique(inputData, clientId) {
+        const preparedQuery = {
+            text: 'SELECT * FROM client WHERE email = $1',
+            values: [inputData.email],
+        };
+
+        if (clientId) {
+            preparedQuery.text += ' AND id <> $2;';
+            preparedQuery.values.push(clientId);
+        }
+
+        const result = await client.query(preparedQuery);
+
+        if (result.rowCount === 0) {
+            return null;
         }
 
         return result.rows[0];
