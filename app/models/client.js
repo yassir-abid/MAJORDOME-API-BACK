@@ -97,6 +97,28 @@ const clientDataMapper = {
         return savedClient.rows[0];
     },
     /**
+     * Update client
+     * @param {number} id - id of the client to update
+     * @param {InputClient} clientInfos - Data to update
+     * @returns {Client} - Updated client
+     */
+    async update(id, clientInfos) {
+        const fields = Object.keys(clientInfos).map((prop, index) => `"${prop}" = $${index + 1}`);
+        const values = Object.values(clientInfos);
+
+        const savedClient = await client.query(
+            `
+                UPDATE client SET
+                    ${fields}
+                WHERE id = $${fields.length + 1}
+                RETURNING *
+            `,
+            [...values, id],
+        );
+
+        return savedClient.rows[0];
+    },
+    /**
      * Checks if a client already exists with the same email
      * @param {object} inputData - Data provided
      * @param {number} clientId - Client id (optional)
@@ -112,6 +134,8 @@ const clientDataMapper = {
         if (clientId) {
             preparedQuery.text += ' AND id <> $2;';
             preparedQuery.values.push(clientId);
+        } else {
+            preparedQuery.text += ';';
         }
 
         const result = await client.query(preparedQuery);

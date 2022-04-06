@@ -2,6 +2,7 @@ const express = require('express');
 
 const validate = require('../../validation/validator');
 const createSchema = require('../../validation/schemas/clientCreateSchema');
+const updateSchema = require('../../validation/schemas/clientUpdateSchema');
 
 const { clientController: controller } = require('../../controllers/api');
 const controllerHandler = require('../../helpers/controllerHandler');
@@ -37,8 +38,20 @@ router
      * @param {number} id.path.required - client identifier
      * @return {ClientWithAddress} 200 - success response - application/json
      * @return {ApiError} 400 - Bad request response - application/json
-     * @return {ApiError} 404 - CLient not found - application/json
+     * @return {ApiError} 404 - Client not found - application/json
      */
-    .get(controllerHandler(controller.getOne));
+    .get(controllerHandler(controller.getOne))
+    /**
+     * PATCH /api/clients/{id}
+     * @summary Update one client
+     * @tags Client
+     * @param {number} id.path.required - client identifier
+     * @param {InputClient} request.body.required - client info
+     * @return {Client} 200 - success response - application/json
+     * @return {ApiError} 400 - Bad request response - application/json
+     * @return {ApiError} 404 - Client not found - application/json
+     */
+    // .patch(validate('body', updateSchema), controllerHandler(controller.update));
+    .patch(validate('body', updateSchema), controllerHandler(controller.update));
 
 module.exports = router;

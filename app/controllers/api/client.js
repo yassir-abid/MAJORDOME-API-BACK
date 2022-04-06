@@ -45,6 +45,29 @@ const clientController = {
         const savedClient = await clientDataMapper.insert(request.body);
         return response.json(savedClient);
     },
+    /**
+     * Client controller to update a record.
+     * ExpressMiddleware signature
+     * @param {object} request Express request object (not used)
+     * @param {object} response Express response object
+     * @returns {object} Route API JSON response
+     */
+    async update(request, response) {
+        const client = await clientDataMapper.findByPk(request.params.id);
+        if (!client) {
+            throw new ApiError('This client does not exists', { statusCode: 404 });
+        }
+
+        if (request.body.email) {
+            const existingClient = await clientDataMapper.isUnique(request.body, request.params.id);
+            if (existingClient) {
+                throw new ApiError('Client already exists with this email', { statusCode: 400 });
+            }
+        }
+
+        const savedClient = await clientDataMapper.update(request.params.id, request.body);
+        return response.json(savedClient);
+    },
 };
 
 module.exports = clientController;

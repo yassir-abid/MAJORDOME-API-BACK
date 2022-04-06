@@ -21,6 +21,18 @@ GET {{ endpoint }}/clients/123
 ### Get a client and his addresses by id
 GET {{ endpoint }}/clients/2
 
+### Create client
+POST {{ endpoint }}/clients
+content-type: application/json
+
+{
+    "firstname": "Chuck",
+    "lastname": "Norris",
+    "email": "chuck.norris@gmail.com",
+    "phone": "0644588854",
+    "provider_id": 1
+}
+
 ### Create an error client
 POST {{ endpoint }}/clients
 content-type: application/json
@@ -32,14 +44,11 @@ content-type: application/json
     "provider_id": 1
 }
 
-### Create client
-POST {{ endpoint }}/clients
+### Update client
+PATCH {{ endpoint }}/clients/1
 content-type: application/json
 
 {
-    "firstname": "Chuck",
-    "lastname": "Norris",
-    "email": "test5@gmail.com",
-    "phone": "062744588854",
-    "provider_id": 1
+    "firstname": "Michel",
+    "email": "test@gmail.com"
 }
