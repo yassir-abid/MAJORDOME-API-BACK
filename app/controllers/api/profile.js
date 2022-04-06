@@ -6,6 +6,13 @@ const { ApiError } = require('../../helpers/errorHandler');
 
 const profileController = {
 
+    /**
+     * Profile controller to get one record.
+     * ExpressMiddleware signature
+     * @param {object} request Express request object (not used)
+     * @param {object} response Express response object
+     * @returns {string} Route API JSON response
+     */
     async getOne(request, response) {
         const profile = await profileDataMapper.findByPk(request.params.id);
 
@@ -16,6 +23,13 @@ const profileController = {
         return response.json(profile);
     },
 
+    /**
+     * Profile controller to update one record.
+     * ExpressMiddleware signature
+     * @param {object} request Express request object (not used)
+     * @param {object} response Express response object
+     * @returns {string} Route API JSON response
+     */
     async update(request, response) {
         const profile = await profileDataMapper.findByPk(request.params.id);
 
@@ -35,6 +49,13 @@ const profileController = {
         return response.json(savedProfile);
     },
 
+    /**
+     * Profile controller to delete one record.
+     * ExpressMiddleware signature
+     * @param {object} request Express request object (not used)
+     * @param {object} response Express response object
+     * @returns {string} Route API JSON response
+     */
     async delete(request, response) {
         const profile = await profileDataMapper.findByPk(request.params.id);
 
