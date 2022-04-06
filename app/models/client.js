@@ -78,6 +78,7 @@ const clientDataMapper = {
 
         return result.rows[0];
     },
+
     /**
      * Add client in the database
      * @param {InputClient} client - Data to insert
@@ -89,13 +90,14 @@ const clientDataMapper = {
                     (firstname, lastname, email, phone, comments, our_equipments, other_equipments, needs, provider_id)
                     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;`,
             values: [clientInfos.firstname, clientInfos.lastname, clientInfos.email,
-                clientInfos.phone, clientInfos.comments, clientInfos.our_equipments,
-                clientInfos.other_equipments, clientInfos.needs, clientInfos.provider_id],
+            clientInfos.phone, clientInfos.comments, clientInfos.our_equipments,
+            clientInfos.other_equipments, clientInfos.needs, clientInfos.provider_id],
         };
         const savedClient = await client.query(preparedQuery);
 
         return savedClient.rows[0];
     },
+
     /**
      * Update client
      * @param {number} id - id of the client to update
@@ -118,6 +120,23 @@ const clientDataMapper = {
 
         return savedClient.rows[0];
     },
+
+    /**
+     * Remove client from the database
+     * @param {number} id - id of the client to delete
+     * @returns {boolean} - Result of the delete operation
+     */
+    async delete(id) {
+        const preparedQuery = {
+            text: 'DELETE FROM client WHERE id = $1',
+            values: [id],
+        };
+        const result = await client.query(preparedQuery);
+        // the rowcount is equal to 1 (truthy) or 0 (falsy)
+        // We cast the truthy/falsy as a real boolean
+        return !!result.rowCount;
+    },
+
     /**
      * Checks if a client already exists with the same email
      * @param {object} inputData - Data provided

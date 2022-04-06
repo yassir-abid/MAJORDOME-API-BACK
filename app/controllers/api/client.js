@@ -68,6 +68,22 @@ const clientController = {
         const savedClient = await clientDataMapper.update(request.params.id, request.body);
         return response.json(savedClient);
     },
+    /**
+     * Client controller to delete a record.
+     * ExpressMiddleware signature
+     * @param {object} request Express request object (not used)
+     * @param {object} response Express response object
+     * @returns {string} Route API JSON response
+     */
+    async delete(request, response) {
+        const client = await clientDataMapper.findByPk(request.params.id);
+        if (!client) {
+            throw new ApiError('This client does not exists', { statusCode: 404 });
+        }
+
+        await clientDataMapper.delete(request.params.id);
+        return response.status(204).json();
+    },
 };
 
 module.exports = clientController;

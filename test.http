@@ -52,3 +52,6 @@ content-type: application/json
     "firstname": "Michel",
     "email": "test@gmail.com"
 }
+
+### Delete client
+DELETE {{ endpoint }}/clients/7
