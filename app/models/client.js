@@ -1,3 +1,5 @@
+const debug = require('debug')('ClientDataMapper');
+
 const client = require('../config/db');
 
 /**
@@ -13,18 +15,7 @@ const client = require('../config/db');
  * @property {string} needs - Client's needs identified by the provider
  * @property {number} provider_id - Id of the provider linked to the client
  */
-/**
- * @typedef {Object} InputClient
- * @property {string} firstname - Client's firstname
- * @property {string} lastname - Client's lastname
- * @property {string} email - Client's email
- * @property {string} phone - Client's phone
- * @property {string} comments - Client's comments and specific informations
- * @property {string} our_equipments - Client's equipment installed by the provider
- * @property {string} other_equipments - Client's equipment installed by other providers
- * @property {string} needs - Client's needs identified by the provider
- * @property {number} provider_id - Id of the provider linked to the client
- */
+
 /**
  * @typedef {object} Address
  * @property {number} id - Address's table PK
@@ -35,6 +26,7 @@ const client = require('../config/db');
  * @property {string} comments - Additionnal informations
  * @property {number} client_id - Id of the client linked to the address
  */
+
 /**
  * @typedef {object} ClientWithAddress
  * @property {number} id - Client's table PK
@@ -50,11 +42,44 @@ const client = require('../config/db');
  * @property {array<Address>} addresses - client's addresses
  */
 
+/**
+ * @typedef {Object} InputClient
+ * @property {string} firstname - Client's firstname
+ * @property {string} lastname - Client's lastname
+ * @property {string} email - Client's email
+ * @property {string} phone - Client's phone
+ * @property {string} comments - Client's comments and specific informations
+ * @property {string} our_equipments - Client's equipment installed by the provider
+ * @property {string} other_equipments - Client's equipment installed by other providers
+ * @property {string} needs - Client's needs identified by the provider
+ * @property {number} provider_id - Id of the provider linked to the client
+ */
+/**
+ * @typedef {object} InputAddress
+ * @property {string} number - Number of the street
+ * @property {string} street - Street
+ * @property {string} postal_code - Postal_code
+ * @property {string} city - City
+ * @property {string} comments - Additionnal informations
+ * @property {number} client_id - Id of the client linked to the address
+ */
+/**
+ * @typedef {Object} InsertClientWithAddress
+ * @property {InputClient} client - Client's informations
+ * @property {array<InputAddress>} addresses - Client's addresses informations
+ */
+/**
+ * @typedef {Object} UpdateClientWithAddress
+ * @property {InputClient} client - Client's informations
+ * @property {array<Address>} addresses - Client's addresses informations with their
+ */
+
 const clientDataMapper = {
     /**
      * @returns {array<ClientWithAddress>} - All clients of the database and their addresses
      */
     async findAll() {
+        debug('findAll');
         const result = await client.query('SELECT * FROM client_and_addresses ORDER BY id;');
         return result.rows;
     },
@@ -66,6 +91,7 @@ const clientDataMapper = {
      * The desired client or undefined if no client found with this id
      */
     async findByPk(clientId) {
+        debug('findByPk');
         const preparedQuery = {
             text: 'SELECT * FROM client_and_addresses WHERE id = $1;',
             values: [clientId],
@@ -81,17 +107,18 @@ const clientDataMapper = {
 
     /**
      * Add client in the database
-     * @param {InputClient} client - Data to insert
+     * @param {InputClient} clientInfos - Data to insert
      * @returns {Client} - Inserted client
      */
     async insert(clientInfos) {
+        debug('insert');
         const preparedQuery = {
             text: `INSERT INTO client
                     (firstname, lastname, email, phone, comments, our_equipments, other_equipments, needs, provider_id)
                     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;`,
             values: [clientInfos.firstname, clientInfos.lastname, clientInfos.email,
-            clientInfos.phone, clientInfos.comments, clientInfos.our_equipments,
-            clientInfos.other_equipments, clientInfos.needs, clientInfos.provider_id],
+                clientInfos.phone, clientInfos.comments, clientInfos.our_equipments,
+                clientInfos.other_equipments, clientInfos.needs, clientInfos.provider_id],
         };
         const savedClient = await client.query(preparedQuery);
 
@@ -105,6 +132,7 @@ const clientDataMapper = {
      * @returns {Client} - Updated client
      */
     async update(id, clientInfos) {
+        debug('update');
         const fields = Object.keys(clientInfos).map((prop, index) => `"${prop}" = $${index + 1}`);
         const values = Object.values(clientInfos);
 
@@ -127,13 +155,12 @@ const clientDataMapper = {
      * @returns {boolean} - Result of the delete operation
      */
     async delete(id) {
+        debug('delete');
         const preparedQuery = {
             text: 'DELETE FROM client WHERE id = $1',
             values: [id],
         };
         const result = await client.query(preparedQuery);
-        // the rowcount is equal to 1 (truthy) or 0 (falsy)
-        // We cast the truthy/falsy as a real boolean
         return !!result.rowCount;
     },
 
@@ -145,6 +172,7 @@ const clientDataMapper = {
      * or null if no client exists with this data
      */
     async isUnique(inputData, clientId) {
+        debug('isUnique');
         const preparedQuery = {
             text: 'SELECT * FROM client WHERE email = $1',
             values: [inputData.email],

@@ -26,11 +26,27 @@ POST {{ endpoint }}/clients
 content-type: application/json
 
 {
-    "firstname": "Chuck",
-    "lastname": "Norris",
-    "email": "chuck.norris@gmail.com",
-    "phone": "0644588854",
-    "provider_id": 1
+    "client": {
+        "firstname": "Chuck",
+        "lastname": "Norris",
+        "email": "test222@gmail.com",
+        "phone": "0644588854",
+        "provider_id": 1
+    },
+    "addresses": [
+        {
+        "number": "56bis",
+        "street": "test",
+        "postal_code": "56900",
+        "city": "test"
+        },
+        {
+        "number": "57bis",
+        "street": "test",
+        "postal_code": "56900",
+        "city": "test"
+        }
+    ]
 }
 
 ### Create an error client
@@ -38,20 +54,52 @@ POST {{ endpoint }}/clients
 content-type: application/json
 
 {
-    "firstname": "Chuck",
-    "lastname": "Norris",
-    "email": "chuck.norris@gmail.com",
-    "provider_id": 1
+    "client": {
+        "firstname": "Chuck",
+        "lastname": "Norris",
+        "email": "chuck.norris@gmail.com",
+        "provider_id": 1
+    },
+    "addresses": [
+        {
+        "street": "test",
+        "postal_code": "56900",
+        "city": "test"
+        }
+    ]
 }
 
 ### Update client
-PATCH {{ endpoint }}/clients/1
+PATCH {{ endpoint }}/clients/2
 content-type: application/json
 
 {
-    "firstname": "Michel",
-    "email": "test@gmail.com"
+    "client": {
+        "firstname": "Jon",
+        "email": "Jon@gmail.com"
+    },
+    "addresses": [
+        {
+        "id": 4,
+        "number": "58bis"
+        },
+        {
+        "id": 6,
+        "number": "56bis",
+        "postal_code": "56980"
+        },
+        {
+        "id": null,
+        "number": "58ter",
+        "street": "testa",
+        "postal_code": "56900",
+        "city": "testa"
+        }
+    ]
 }
 
 ### Delete client
-DELETE {{ endpoint }}/clients/7
+DELETE {{ endpoint }}/clients/1
+
+### Delete client address
+DELETE {{ endpoint }}/clients/address/6

@@ -1,27 +1,33 @@
+const debug = require('debug')('ClientController');
+
 const clientDataMapper = require('../../models/client');
+const addressDataMapper = require('../../models/address');
 
 const { ApiError } = require('../../helpers/errorHandler');
 
 const clientController = {
     /**
-     * Client controller to get all clients
+     * Client controller to get all clients and their addresses
      * ExpressMiddleware signature
      * @param {object} request Express request object (not used)
      * @param {object} response Express response object
-     * @returns {array<object>} Route API JSON response
+     * @returns {array<ClientWithAddress>} Route API JSON response
      */
     async getAll(request, response) {
+        debug('getAll');
         const clients = await clientDataMapper.findAll();
         return response.json(clients);
     },
+
     /**
-     * Client controller to get a record.
+     * Client controller to get a one client and his addresses
      * ExpressMiddleware signature
-     * @param {object} request Express request object (not used)
+     * @param {object} request Express request object
      * @param {object} response Express response object
-     * @returns {object} Route API JSON response
+     * @returns {ClientWithAddress} Route API JSON response
      */
     async getOne(request, response) {
+        debug('getOne');
         const client = await clientDataMapper.findByPk(request.params.id);
 
         if (!client) {
@@ -30,58 +36,113 @@ const clientController = {
 
         return response.json(client);
     },
+
     /**
-     * Client controller to create a record.
+     * Client controller to create a new client and his addresses
      * ExpressMiddleware signature
-     * @param {object} request Express request object (not used)
+     * @param {object} request Express request object
      * @param {object} response Express response object
-     * @returns {object} Route API JSON response
+     * @returns {ClientWithAddress} Route API JSON response
      */
     async create(request, response) {
-        const client = await clientDataMapper.isUnique(request.body);
+        debug('create');
+        const client = await clientDataMapper.isUnique(request.body.client);
         if (client) {
-            throw new ApiError('Client already exists with this email', { statusCode: 400 });
+            throw new ApiError('Client already exists with this email', { statusCode: 409 });
         }
-        const savedClient = await clientDataMapper.insert(request.body);
-        return response.json(savedClient);
+        const savedClient = await clientDataMapper.insert(request.body.client);
+
+        const promises = [];
+        request.body.addresses.forEach((address) => {
+            address.client_id = savedClient.id;
+            promises.push(addressDataMapper.insert(address));
+        });
+        const savedAddresses = await Promise.all(promises);
+
+        savedClient.addresses = savedAddresses;
+
+        return response.json({ client: savedClient });
     },
+
     /**
-     * Client controller to update a record.
+     * Client controller to update a client and his addresses, or create address if does not exists
      * ExpressMiddleware signature
-     * @param {object} request Express request object (not used)
+     * @param {object} request Express request object
      * @param {object} response Express response object
-     * @returns {object} Route API JSON response
+     * @returns {ClientWithAddress} Route API JSON response
      */
     async update(request, response) {
+        debug('update');
         const client = await clientDataMapper.findByPk(request.params.id);
         if (!client) {
             throw new ApiError('This client does not exists', { statusCode: 404 });
         }
 
-        if (request.body.email) {
-            const existingClient = await clientDataMapper.isUnique(request.body, request.params.id);
-            if (existingClient) {
-                throw new ApiError('Client already exists with this email', { statusCode: 400 });
+        if (request.body.client) {
+            if (request.body.client.email) {
+                const existingClient = await clientDataMapper.isUnique(
+                    request.body.client,
+                    request.params.id,
+                );
+                if (existingClient) {
+                    throw new ApiError('Client already exists with this email', { statusCode: 409 });
+                }
             }
+            await clientDataMapper.update(request.params.id, request.body.client);
         }
 
-        const savedClient = await clientDataMapper.update(request.params.id, request.body);
+        if (request.body.addresses) {
+            const promises = [];
+            request.body.addresses.forEach((address) => {
+                const { id, ...addressInfos } = address;
+                if (id === null) {
+                    addressInfos.client_id = request.params.id;
+                    promises.push(addressDataMapper.insert(addressInfos));
+                } else {
+                    promises.push(addressDataMapper.update(id, addressInfos));
+                }
+            });
+            await Promise.all(promises);
+        }
+
+        const savedClient = await clientDataMapper.findByPk(request.params.id);
+
         return response.json(savedClient);
     },
+
     /**
-     * Client controller to delete a record.
+     * Client controller to delete a client record.
      * ExpressMiddleware signature
-     * @param {object} request Express request object (not used)
+     * @param {object} request Express request object
      * @param {object} response Express response object
      * @returns {string} Route API JSON response
      */
     async delete(request, response) {
+        debug('delete');
         const client = await clientDataMapper.findByPk(request.params.id);
         if (!client) {
             throw new ApiError('This client does not exists', { statusCode: 404 });
         }
 
         await clientDataMapper.delete(request.params.id);
+        return response.status(204).json();
+    },
+
+    /**
+     * Client controller to delete a client's address record.
+     * ExpressMiddleware signature
+     * @param {object} request Express request object
+     * @param {object} response Express response object
+     * @returns {string} Route API JSON response
+     */
+    async deleteAddress(request, response) {
+        debug('deleteAddress');
+        const address = await addressDataMapper.findByPk(request.params.id);
+        if (!address) {
+            throw new ApiError('This address does not exists', { statusCode: 404 });
+        }
+
+        await addressDataMapper.delete(request.params.id);
         return response.status(204).json();
     },
 };

@@ -20,10 +20,10 @@ router
     .get(controllerHandler(controller.getAll))
     /**
      * POST /api/clients
-     * @summary Create a client
+     * @summary Create a client and his addresses
      * @tags Client
-     * @param {InputClient} request.body.required - client info
-     * @return {Client} 200 - success response - application/json
+     * @param {InsertClientWithAddress} request.body.required - client informations
+     * @return {ClientWithAddress} 200 - success response - application/json
      * @return {ApiError} 400 - Bad request response - application/json
      * @return {ApiError} 404 - Client not found - application/json
      */
@@ -43,25 +43,37 @@ router
     .get(controllerHandler(controller.getOne))
     /**
      * PATCH /api/clients/{id}
-     * @summary Update one client
+     * @summary Update one client and update or create his addresses
      * @tags Client
      * @param {number} id.path.required - client identifier
-     * @param {InputClient} request.body.required - client info
-     * @return {Client} 200 - success response - application/json
+     * @param {UpdateClientWithAddress} request.body.required - client informations
+     * @return {ClientWithAddress} 200 - success response - application/json
      * @return {ApiError} 400 - Bad request response - application/json
      * @return {ApiError} 404 - Client not found - application/json
      */
-    // .patch(validate('body', updateSchema), controllerHandler(controller.update));
     .patch(validate('body', updateSchema), controllerHandler(controller.update))
     /**
      * DELETE /api/clients/{id}
      * @summary Delete one client
      * @tags Client
      * @param {number} id.path.required - client identifier
-     * @return {Client} 200 - success response - application/json
+     * @return {String} 200 - success response - application/json
      * @return {ApiError} 400 - Bad request response - application/json
      * @return {ApiError} 404 - Client not found - application/json
      */
     .delete(controllerHandler(controller.delete));
+
+router
+    .route('/address/:id(\\d+)')
+    /**
+     * DELETE /api/clients/address/{id}
+     * @summary Delete a client's address
+     * @tags Client
+     * @param {number} id.path.required - address identifier
+     * @return {String} 200 - success response - application/json
+     * @return {ApiError} 400 - Bad request response - application/json
+     * @return {ApiError} 404 - Client not found - application/json
+     */
+    .delete(controllerHandler(controller.deleteAddress));
 
 module.exports = router;
