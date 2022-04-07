@@ -15,7 +15,7 @@ router
      * GET /api/clients
      * @summary Get all clients and their addresses
      * @tags Client
-     * @return {array<ClientWithAddress>} 200 - success response - application/json
+     * @returns {array<ClientWithAddress>} 200 - success response - application/json
      */
     .get(controllerHandler(controller.getAll))
     /**
@@ -23,9 +23,9 @@ router
      * @summary Create a client and his addresses
      * @tags Client
      * @param {InsertClientWithAddress} request.body.required - client informations
-     * @return {ClientWithAddress} 200 - success response - application/json
-     * @return {ApiError} 400 - Bad request response - application/json
-     * @return {ApiError} 404 - Client not found - application/json
+     * @returns {ClientWithAddress} 200 - success response - application/json
+     * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 404 - Client not found - application/json
      */
     .post(validate('body', createSchema), controllerHandler(controller.create));
 
@@ -36,9 +36,9 @@ router
      * @summary Get one client and his addresses
      * @tags Client
      * @param {number} id.path.required - client identifier
-     * @return {ClientWithAddress} 200 - success response - application/json
-     * @return {ApiError} 400 - Bad request response - application/json
-     * @return {ApiError} 404 - Client not found - application/json
+     * @returns {ClientWithAddress} 200 - success response - application/json
+     * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 404 - Client not found - application/json
      */
     .get(controllerHandler(controller.getOne))
     /**
@@ -47,9 +47,9 @@ router
      * @tags Client
      * @param {number} id.path.required - client identifier
      * @param {UpdateClientWithAddress} request.body.required - client informations
-     * @return {ClientWithAddress} 200 - success response - application/json
-     * @return {ApiError} 400 - Bad request response - application/json
-     * @return {ApiError} 404 - Client not found - application/json
+     * @returns {ClientWithAddress} 200 - success response - application/json
+     * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 404 - Client not found - application/json
      */
     .patch(validate('body', updateSchema), controllerHandler(controller.update))
     /**
@@ -57,9 +57,9 @@ router
      * @summary Delete one client
      * @tags Client
      * @param {number} id.path.required - client identifier
-     * @return {String} 200 - success response - application/json
-     * @return {ApiError} 400 - Bad request response - application/json
-     * @return {ApiError} 404 - Client not found - application/json
+     * @returns 204 - success response - application/json
+     * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 404 - Client not found - application/json
      */
     .delete(controllerHandler(controller.delete));
 
@@ -70,9 +70,9 @@ router
      * @summary Delete a client's address
      * @tags Client
      * @param {number} id.path.required - address identifier
-     * @return {String} 200 - success response - application/json
-     * @return {ApiError} 400 - Bad request response - application/json
-     * @return {ApiError} 404 - Client not found - application/json
+     * @returns 204 - success response - application/json
+     * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 404 - Client not found - application/json
      */
     .delete(controllerHandler(controller.deleteAddress));
 

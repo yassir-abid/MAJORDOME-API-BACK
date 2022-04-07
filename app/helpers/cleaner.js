@@ -3,6 +3,8 @@
  * by escaping HTML special characters
  */
 
+const debug = require('debug')('Cleaner');
+
 const sanitizer = require('sanitizer');
 
 const sanitize = (obj) => {
@@ -12,12 +14,42 @@ const sanitize = (obj) => {
 };
 
 const cleaner = (request, response, next) => {
-    sanitize(request.params);
-    sanitize(request.query);
-    if (request.body) {
-        sanitize(request.body);
+    debug(request.url);
+    if (request.url.includes('/api/clients')) {
+        sanitize(request.params);
+        sanitize(request.query);
+        if (request.body) {
+            if (request.body.client) {
+                sanitize(request.body.client);
+            }
+            if (request.body.addresses) {
+                request.body.addresses.forEach((address) => sanitize(address));
+            }
+        }
+        next();
+    } else {
+        sanitize(request.params);
+        sanitize(request.query);
+        if (request.body) {
+            sanitize(request.body);
+        }
+        next();
     }
-    next();
 };
+
+// const cleanerClient = (request, response, next) => {
+//     debug(request.url);
+//     sanitize(request.params);
+//     sanitize(request.query);
+//     if (request.body) {
+//         if (request.body.client) {
+//             sanitize(request.body.client);
+//         }
+//         if (request.body.addresses) {
+//             request.body.addresses.forEach((address) => sanitize(address));
+//         }
+//     }
+//     next();
+// };
 
 module.exports = cleaner;

@@ -4,21 +4,21 @@ const client = require('../config/db');
 
 /**
  * @typedef {object} Client
- * @property {number} id - Client's table PK
- * @property {string} firstname - Client's firstname
- * @property {string} lastname - Client's lastname
- * @property {string} email - Client's email
- * @property {string} phone - Client's phone
- * @property {string} comments - Client's comments and specific informations
- * @property {string} our_equipments - Client's equipment installed by the provider
- * @property {string} other_equipments - Client's equipment installed by other providers
- * @property {string} needs - Client's needs identified by the provider
+ * @property {number} id - Client id
+ * @property {string} firstname - Client firstname
+ * @property {string} lastname - Client lastname
+ * @property {string} email - Client email
+ * @property {string} phone - Client phone
+ * @property {string} comments - Client comments and specific informations
+ * @property {string} our_equipments - Client equipment installed by the provider
+ * @property {string} other_equipments - Client equipment installed by other providers
+ * @property {string} needs - Client needs identified by the provider
  * @property {number} provider_id - Id of the provider linked to the client
  */
 
 /**
  * @typedef {object} Address
- * @property {number} id - Address's table PK
+ * @property {number} id - Address id
  * @property {string} number - Number of the street
  * @property {string} street - Street
  * @property {string} postal_code - Postal_code
@@ -29,29 +29,29 @@ const client = require('../config/db');
 
 /**
  * @typedef {object} ClientWithAddress
- * @property {number} id - Client's table PK
- * @property {string} firstname - Client's firstname
- * @property {string} lastname - Client's lastname
- * @property {string} email - Client's email
- * @property {string} phone - Client's phone
- * @property {string} comments - Client's comments and specific informations
- * @property {string} our_equipments - Client's equipment installed by the provider
- * @property {string} other_equipments - Client's equipment installed by other providers
- * @property {string} needs - Client's needs identified by the provider
+ * @property {number} id - Client id
+ * @property {string} firstname - Client firstname
+ * @property {string} lastname - Client lastname
+ * @property {string} email - Client email
+ * @property {string} phone - Client phone
+ * @property {string} comments - Client comments and specific informations
+ * @property {string} our_equipments - Client equipment installed by the provider
+ * @property {string} other_equipments - Client equipment installed by other providers
+ * @property {string} needs - Client needs identified by the provider
  * @property {number} provider_id - Id of the provider linked to the client
- * @property {array<Address>} addresses - client's addresses
+ * @property {array<Address>} addresses - client addresses
  */
 
 /**
  * @typedef {Object} InputClient
- * @property {string} firstname - Client's firstname
- * @property {string} lastname - Client's lastname
- * @property {string} email - Client's email
- * @property {string} phone - Client's phone
- * @property {string} comments - Client's comments and specific informations
- * @property {string} our_equipments - Client's equipment installed by the provider
- * @property {string} other_equipments - Client's equipment installed by other providers
- * @property {string} needs - Client's needs identified by the provider
+ * @property {string} firstname - Client firstname
+ * @property {string} lastname - Client lastname
+ * @property {string} email - Client email
+ * @property {string} phone - Client phone
+ * @property {string} comments - Client comments and specific informations
+ * @property {string} our_equipments - Client equipment installed by the provider
+ * @property {string} other_equipments - Client equipment installed by other providers
+ * @property {string} needs - Client needs identified by the provider
  * @property {number} provider_id - Id of the provider linked to the client
  */
 /**
@@ -65,16 +65,16 @@ const client = require('../config/db');
  */
 /**
  * @typedef {Object} InsertClientWithAddress
- * @property {InputClient} client - Client's informations
+ * @property {InputClient} client - Client informations
  * @property {array<InputAddress>} addresses - Client's addresses informations
  */
 /**
  * @typedef {Object} UpdateClientWithAddress
- * @property {InputClient} client - Client's informations
+ * @property {InputClient} client - Client informations
  * @property {array<Address>} addresses - Client's addresses informations with their
  */
 
-const clientDataMapper = {
+const dataMapper = {
     /**
      * @returns {array<ClientWithAddress>} - All clients of the database and their addresses
      */
@@ -181,8 +181,6 @@ const clientDataMapper = {
         if (clientId) {
             preparedQuery.text += ' AND id <> $2;';
             preparedQuery.values.push(clientId);
-        } else {
-            preparedQuery.text += ';';
         }
 
         const result = await client.query(preparedQuery);
@@ -195,4 +193,4 @@ const clientDataMapper = {
     },
 };
 
-module.exports = clientDataMapper;
+module.exports = dataMapper;

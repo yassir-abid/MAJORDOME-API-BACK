@@ -2,6 +2,8 @@ const path = require('path');
 const express = require('express');
 const cors = require('cors');
 
+const cleaner = require('./helpers/cleaner');
+
 const router = require('./routers');
 
 const app = express();
@@ -18,6 +20,8 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+app.use(cleaner);
 
 app.use(router);
 

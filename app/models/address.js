@@ -3,7 +3,7 @@ const client = require('../config/db');
 
 /**
  * @typedef {object} Address
- * @property {number} id - Address's table PK
+ * @property {number} id - Address id
  * @property {string} number - Number of the street
  * @property {string} street - Street
  * @property {string} postal_code - Postal_code

@@ -19,7 +19,7 @@ GET {{ endpoint }}/clients
 GET {{ endpoint }}/clients/123
 
 ### Get a client and his addresses by id
-GET {{ endpoint }}/clients/2
+GET {{ endpoint }}/clients/1
 
 ### Create client
 POST {{ endpoint }}/clients
@@ -29,7 +29,7 @@ content-type: application/json
     "client": {
         "firstname": "Chuck",
         "lastname": "Norris",
-        "email": "test222@gmail.com",
+        "email": "test@co.io",
         "phone": "0644588854",
         "provider_id": 1
     },
@@ -99,7 +99,7 @@ content-type: application/json
 }
 
 ### Delete client
-DELETE {{ endpoint }}/clients/1
+DELETE {{ endpoint }}/clients/2
 
 ### Delete client address
-DELETE {{ endpoint }}/clients/address/6
+DELETE {{ endpoint }}/clients/address/26
