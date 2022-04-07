@@ -13,7 +13,6 @@ module.exports = Joi.object({
         our_equipments: Joi.string().optional(),
         other_equipments: Joi.string().optional(),
         needs: Joi.string().optional(),
-        provider_id: Joi.number().integer().min(1).required(),
     }),
     addresses: Joi.array().items(Joi.object({
         number: Joi.string().required(),

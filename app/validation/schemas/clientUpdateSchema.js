@@ -12,7 +12,6 @@ module.exports = Joi.object({
         our_equipments: Joi.string(),
         other_equipments: Joi.string(),
         needs: Joi.string(),
-        provider_id: Joi.number().integer().min(1),
     }),
     addresses: Joi.array().items(Joi.object({
         id: Joi.number().integer().min(1).allow(null),

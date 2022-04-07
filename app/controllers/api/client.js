@@ -46,11 +46,13 @@ const clientController = {
      */
     async create(request, response) {
         debug('create');
-        const client = await clientDataMapper.isUnique(request.body.client);
+        const clientInfos = request.body.client;
+        const client = await clientDataMapper.isUnique(clientInfos);
         if (client) {
             throw new ApiError('Client already exists with this email', { statusCode: 409 });
         }
-        const savedClient = await clientDataMapper.insert(request.body.client);
+        clientInfos.provider_id = request.decoded.id;
+        const savedClient = await clientDataMapper.insert(clientInfos);
 
         const promises = [];
         request.body.addresses.forEach((address) => {

@@ -52,8 +52,8 @@ const client = require('../config/db');
  * @property {string} our_equipments - Client equipment installed by the provider
  * @property {string} other_equipments - Client equipment installed by other providers
  * @property {string} needs - Client needs identified by the provider
- * @property {number} provider_id - Id of the provider linked to the client
  */
+
 /**
  * @typedef {object} InputAddress
  * @property {string} number - Number of the street
@@ -63,11 +63,13 @@ const client = require('../config/db');
  * @property {string} comments - Additionnal informations
  * @property {number} client_id - Id of the client linked to the address
  */
+
 /**
  * @typedef {Object} InsertClientWithAddress
  * @property {InputClient} client - Client informations
  * @property {array<InputAddress>} addresses - Client's addresses informations
  */
+
 /**
  * @typedef {Object} UpdateClientWithAddress
  * @property {InputClient} client - Client informations
