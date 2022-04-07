@@ -23,9 +23,10 @@ const client = require('../config/db');
 const dataMapper = {
 
     /**
-     * Get by id
+     * Find profile by id
      * @param {number} profileId - The desired Profile id
-     * @returns {(Profile|undefined)} - Desired Profile or null if no Profile with that id
+     * @returns {(Profile|undefined)} -
+     * Desired Profile or undefined if no Profile with that id
      */
     async findByPk(profileId) {
         const preparedQuery = {
@@ -94,7 +95,7 @@ const dataMapper = {
     },
 
     /**
-     * Delete from database
+     * Remove profile from database
      * @param {number} id - Id to delete
      * @returns {boolean} - Deletion result
      */

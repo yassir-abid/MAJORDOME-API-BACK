@@ -16,9 +16,9 @@ router
      * POST /api/signup
      * @summary Create an account
      * @tags Account
-     * @return {object} 200 - success response - application/json
-     * @return {object} 201 - created - application/json
-     * @return {ApiError} 409 - Email already exists - application/json
+     * @returns {object} 200 - success response - application/json
+     * @returns {object} 201 - created - application/json
+     * @returns {ApiError} 409 - Email already exists - application/json
      */
     .post(validate('body', createSchema), controllerHandler(signupController.signup));
 
