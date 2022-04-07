@@ -15,7 +15,6 @@ const signupController = {
      */
     async signup(request, response) {
         const user = await signupDataMapper.findByEmail(request.body);
-        // const user = await profileDataMapper.isUnique(request.body);
 
         debug(user);
 

@@ -1,7 +1,6 @@
 const debug = require('debug')('account');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-// const profileDataMapper = require('../../models/profile');
 const loginDataMapper = require('../../models/login');
 const { ApiError } = require('../../helpers/errorHandler');
 
@@ -15,7 +14,6 @@ const loginController = {
      */
     async login(request, response) {
         const user = await loginDataMapper.findByEmail(request.body);
-        // const user = await profileDataMapper.isUnique(request.body);
 
         debug(user);
 

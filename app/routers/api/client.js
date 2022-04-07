@@ -27,7 +27,7 @@ router
      * @tags Client
      * @security BearerAuth
      * @param {InsertClientWithAddress} request.body.required - client informations
-     * @returns {ClientWithAddress} 200 - success response - application/json
+     * @returns {ClientWithAddress} 201 - success response - application/json
      * @returns {ApiError} 400 - Bad request response - application/json
      * @returns {ApiError} 404 - Client not found - application/json
      */
