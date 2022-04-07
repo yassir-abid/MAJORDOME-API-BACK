@@ -1,26 +1,68 @@
-const client = require('../config/db');
 const debug = require('debug')('Profile');
+const client = require('../config/db');
+
+/**
+ * @typedef {object} Profile
+ * @property {number} id - Profile id
+ * @property {string} firstname - Profile firstname
+ * @property {string} lastname - Profile lastname
+ * @property {string} email - Profile email
+ * @property {string} phone - Profile phone number
+ * @property {string} password - Profile password
+ */
+
+/**
+ * @typedef {object} InputProfile
+ * @property {string} firstname - Profile firstname
+ * @property {string} lastname - Profile lastname
+ * @property {string} email - Profile email
+ * @property {string} phone - Profile phone number
+ * @property {string} password - Profile password
+ */
 
 const dataMapper = {
 
     /**
      * Get by id
      * @param {number} profileId - The desired Profile id
-     * @returns {(Profile|undefined)} - Desired Profile or undefined if no Profile with that id
+     * @returns {(Profile|undefined)} - Desired Profile or null if no Profile with that id
      */
     async findByPk(profileId) {
-        const preparedquery = {
-            text: `SELECT * FROM provider WHERE id = $1`,
+        const preparedQuery = {
+            text: 'SELECT firstname, lastname, email, phone, address FROM provider WHERE id = $1',
             values: [profileId],
         };
 
-        const result = await client.query(preparedquery);
+        const result = await client.query(preparedQuery);
+
+        debug(result);
 
         if (result.rowsCount === 0) {
-            return null;
+            return undefined;
         }
 
         return result.rows[0];
+    },
+
+    /**
+     * Add profile in the database
+     * @param {InputProfile} client - Data to insert
+     * @returns {Profile} - Inserted profile
+     */
+    async insert(profile) {
+        const preparedQuery = {
+            text: `INSERT INTO provider
+                    (firstname, lastname, email, phone, address, password)
+                    VALUES ($1, $2, $3, $4, $5, $6)
+                    RETURNING id, firstname, lastname, email, phone, address;`,
+            values: [profile.firstname, profile.lastname, profile.email,
+                profile.phone, profile.address, profile.password],
+        };
+        const savedProfile = await client.query(preparedQuery);
+
+        debug(savedProfile);
+
+        return savedProfile.rows[0];
     },
 
     /**
@@ -33,6 +75,10 @@ const dataMapper = {
         const fields = Object.keys(profile).map((prop, index) => `"${prop}" = $${index + 1}`);
         const values = Object.values(profile);
 
+        debug(fields);
+
+        debug(values);
+
         const savedProfile = await client.query(
             `
                 UPDATE provider SET
@@ -42,10 +88,10 @@ const dataMapper = {
             `,
             [...values, id],
         );
+        debug(savedProfile);
 
         return savedProfile.rows[0];
     },
-
 
     /**
      * Delete from database
@@ -53,30 +99,38 @@ const dataMapper = {
      * @returns {boolean} - Deletion result
      */
     async delete(id) {
-        const result = await client.query(`DELETE FROM provider WHERE id = $1`, [id]);
+        const preparedQuery = {
+            text: 'DELETE FROM provider WHERE id = $1',
+            values: [id],
+        };
+        const result = await client.query(preparedQuery);
+
+        debug(result);
 
         return !!result.rowCount;
     },
 
-     /**
+    /**
      * Checks if a Profile with the same email already exists
      * @param {object} inputData - Data provided by client
      * @param {number} profileId - Profile id (optional)
      * @returns {(Profile|null)} - Existing Profile
      * or null if no Profile with these data
      */
-      async isUnique(inputData, clientId) {
+    async isUnique(inputData, profileId) {
         const preparedQuery = {
-            text: 'SELECT * FROM client WHERE email = $1',
+            text: 'SELECT * FROM provider WHERE email = $1',
             values: [inputData.email],
         };
 
-        if (clientId) {
+        if (profileId) {
             preparedQuery.text += ' AND id <> $2;';
-            preparedQuery.values.push(clientId);
+            preparedQuery.values.push(profileId);
         }
 
         const result = await client.query(preparedQuery);
+
+        debug(result);
 
         if (result.rowCount === 0) {
             return null;

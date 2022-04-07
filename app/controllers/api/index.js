@@ -1,5 +1,7 @@
 // todo Import entities controllers
 const profileController = require('./profile');
+const signupController = require('./signup');
+const loginController = require('./login');
 
 const apiController = {
     /**
@@ -19,4 +21,4 @@ const apiController = {
 
 // todo Add to export entities controllers
 
-module.exports = { apiController, profileController };
+module.exports = { apiController, profileController, signupController, loginController };
