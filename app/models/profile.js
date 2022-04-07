@@ -8,7 +8,6 @@ const client = require('../config/db');
  * @property {string} lastname - Profile lastname
  * @property {string} email - Profile email
  * @property {string} phone - Profile phone number
- * @property {string} password - Profile password
  */
 
 /**
@@ -30,7 +29,7 @@ const dataMapper = {
      */
     async findByPk(profileId) {
         const preparedQuery = {
-            text: 'SELECT firstname, lastname, email, phone, address FROM provider WHERE id = $1',
+            text: 'SELECT firstname, lastname, email, phone, address, picture FROM provider WHERE id = $1',
             values: [profileId],
         };
 
@@ -53,11 +52,11 @@ const dataMapper = {
     async insert(profile) {
         const preparedQuery = {
             text: `INSERT INTO provider
-                    (firstname, lastname, email, phone, address, password)
+                    (firstname, lastname, email, phone, address, password, picture)
                     VALUES ($1, $2, $3, $4, $5, $6)
-                    RETURNING id, firstname, lastname, email, phone, address;`,
+                    RETURNING id, firstname, lastname, email, phone, address, picture;`,
             values: [profile.firstname, profile.lastname, profile.email,
-            profile.phone, profile.address, profile.password],
+                profile.phone, profile.address, profile.password],
         };
         const savedProfile = await client.query(preparedQuery);
 
@@ -85,7 +84,7 @@ const dataMapper = {
                 UPDATE provider SET
                     ${fields}
                 WHERE id = $${fields.length + 1}
-                RETURNING firstname, lastname, email, phone, address
+                RETURNING firstname, lastname, email, phone, address, picture
             `,
             [...values, id],
         );
