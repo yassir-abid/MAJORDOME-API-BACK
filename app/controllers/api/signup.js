@@ -1,11 +1,11 @@
 const debug = require('debug')('account');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const signupDataMapper = require('../../models/signup');
 const profileDataMapper = require('../../models/profile');
 const { ApiError } = require('../../helpers/errorHandler');
 
 const signupController = {
-
     /**
      * Signup controller to create an account.
      * ExpressMiddleware signature
@@ -14,7 +14,8 @@ const signupController = {
      * @returns {object} Route API JSON response
      */
     async signup(request, response) {
-        const user = await profileDataMapper.isUnique(request.body);
+        const user = await signupDataMapper.findByEmail(request.body);
+        // const user = await profileDataMapper.isUnique(request.body);
 
         debug(user);
 
