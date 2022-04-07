@@ -11,6 +11,12 @@ const options = {
     swaggerUIPath: process.env.API_DOCUMENTATION_ROUTE,
     exposeApiDocs: true,
     apiDocsPath: '/api/docs',
+    security: {
+        BearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+        },
+    },
 };
 
 /**

@@ -21,6 +21,7 @@
   "homepage": "https://github.com/O-clock-Zagreus/projet-13-majordome-back#readme",
   "dependencies": {
     "@faker-js/faker": "^6.1.1",
+    "bcrypt": "^5.0.1",
     "bunyan": "^1.8.15",
     "cors": "^2.8.5",
     "debug": "^4.3.4",
@@ -28,6 +29,7 @@
     "express": "^4.17.3",
     "express-jsdoc-swagger": "^1.6.7",
     "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
     "pg": "^8.7.3",
     "pug": "^3.0.2",
     "sanitizer": "^0.1.3",
