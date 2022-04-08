@@ -2,6 +2,7 @@ const debug = require('debug')('account');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const loginDataMapper = require('../../models/login');
+const profileDataMapper = require('../../models/profile');
 const { ApiError } = require('../../helpers/errorHandler');
 
 const loginController = {
@@ -10,9 +11,10 @@ const loginController = {
      * ExpressMiddleware signature
      * @param {object} request Express request object
      * @param {object} response Express response object
-     * @returns {object} Route API JSON response
+     * @returns {Token} Route API JSON response
      */
     async login(request, response) {
+        debug('login');
         const user = await loginDataMapper.findByEmail(request.body);
 
         debug(user);
@@ -36,6 +38,28 @@ const loginController = {
             logged: true,
             pseudo: `${user.firstname} ${user.lastname}`,
             token,
+        });
+    },
+
+    /**
+     * Login controller to check user id
+     * ExpressMiddleware signature
+     * @param {object} request Express request object
+     * @param {object} response Express response object
+     * @returns {object} Route API JSON response
+     */
+    async checkuser(request, response) {
+        debug('checkuser');
+        const user = await profileDataMapper.findByPk(request.decoded.id);
+        if (!user) {
+            return response.json({
+                logged: false,
+                pseudo: undefined,
+            });
+        }
+        return response.json({
+            logged: true,
+            pseudo: `${user.firstname} ${user.lastname}`,
         });
     },
 };

@@ -19,6 +19,12 @@ const client = require('../config/db');
  * @property {string} password - Profile password
  */
 
+/**
+ * @typedef {object} CheckUser
+ * @property {boolean} logged - Login status
+ * @property {string} pseudo - Profile name
+ */
+
 const dataMapper = {
 
     /**
