@@ -50,6 +50,26 @@ const interventionController = {
     },
 
     /**
+     * Intervention controller to update a record.
+     * ExpressMiddleware signature
+     * @param {object} request Express request object
+     * @param {object} response Express response object
+     * @returns {Intervention} Route API JSON response
+     */
+    async update(request, response) {
+        debug('Update');
+        const intervention = await interventionDataMapper.findByPk(request.params.id);
+        if (!intervention) {
+            throw new ApiError('This intervention does not exists', { statusCode: 404 });
+        }
+        const savedIntervention = await interventionDataMapper.update(
+            request.params.id,
+            request.body,
+        );
+        return response.json(savedIntervention);
+    },
+
+    /**
      * Intervention controller to delete an intervention record.
      * ExpressMiddleware signature
      * @param {object} request Express request object

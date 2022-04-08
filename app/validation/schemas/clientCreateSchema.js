@@ -9,16 +9,16 @@ module.exports = Joi.object({
             // .pattern(/^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/)
             .pattern(/^0[1-9]\d{8}$/)
             .required(),
-        comments: Joi.string().optional(),
-        our_equipments: Joi.string().optional(),
-        other_equipments: Joi.string().optional(),
-        needs: Joi.string().optional(),
+        comments: Joi.string(),
+        our_equipments: Joi.string(),
+        other_equipments: Joi.string(),
+        needs: Joi.string(),
     }),
     addresses: Joi.array().items(Joi.object({
         number: Joi.string().required(),
         street: Joi.string().required(),
         postal_code: Joi.string().required(),
         city: Joi.string().required(),
-        comments: Joi.string().optional(),
+        comments: Joi.string(),
     })),
 }).required();

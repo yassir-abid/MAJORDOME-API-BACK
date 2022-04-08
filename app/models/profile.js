@@ -56,7 +56,7 @@ const dataMapper = {
                     VALUES ($1, $2, $3, $4, $5, $6)
                     RETURNING id, firstname, lastname, email, phone, address;`,
             values: [profile.firstname, profile.lastname, profile.email,
-            profile.phone, profile.address, profile.password],
+                profile.phone, profile.address, profile.password],
         };
         const savedProfile = await client.query(preparedQuery);
 

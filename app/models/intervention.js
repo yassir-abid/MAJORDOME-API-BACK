@@ -61,6 +61,7 @@ const interventionDataMapper = {
      * @returns {Intervention} - Inserted intervention
      */
     async insert(intervention) {
+        debug('insert');
         const preparedQuery = {
             text: ` INSERT INTO intervention
             (title, description, date, status, comments, report, project_id) VALUES
@@ -71,6 +72,31 @@ const interventionDataMapper = {
                 intervention.project_id],
         };
         const savedIntervention = await client.query(preparedQuery);
+
+        return savedIntervention.rows[0];
+    },
+
+    /**
+     * Update intervention
+     * @param {number} id - id of the intervention to update
+     * @param {InputIntervention} intervention - Data to edit
+     * @returns {Intervention} - Updated intervention
+     */
+    async update(id, intervention) {
+        debug('update');
+        const fields = Object.keys(intervention).map((prop, index) => `"${prop}" = $${index + 1}`);
+        const values = Object.values(intervention);
+
+        const savedIntervention = await client.query(
+            `
+                UPDATE intervention SET
+                    ${fields}
+                WHERE id = $${fields.length + 1}
+                RETURNING *;
+            `,
+            [...values, id],
+        );
+        debug(savedIntervention);
 
         return savedIntervention.rows[0];
     },

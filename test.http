@@ -110,3 +110,4 @@ DELETE {{ endpoint }}/clients/address/26
   "email": "test@test.com",
   "password": "testTest!0"
 }
+
