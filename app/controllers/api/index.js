@@ -3,6 +3,7 @@ const signupController = require('./signup');
 const loginController = require('./login');
 const profileController = require('./profile');
 const clientController = require('./client');
+const interventionController = require('./intervention');
 
 const apiController = {
     /**
@@ -27,4 +28,5 @@ module.exports = {
     loginController,
     profileController,
     clientController,
+    interventionController,
 };
