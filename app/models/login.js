@@ -17,6 +17,11 @@ const client = require('../config/db');
  * @property {string} password - Profile password
  */
 
+/**
+ * @typedef {object} Token
+ * @property {string} token - Profile token
+ */
+
 const dataMapper = {
     /**
      * Find a Profile by email
