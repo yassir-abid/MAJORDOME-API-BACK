@@ -44,7 +44,6 @@ router
      * @returns {ApiError} 400 - Bad request response - application/json
      * @returns {ApiError} 404 - Profile not found - application/json
      */
-
     .delete(authenticateToken, controllerHandler(profileController.delete));
 
 module.exports = router;

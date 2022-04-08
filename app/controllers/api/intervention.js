@@ -37,6 +37,19 @@ const interventionController = {
     },
 
     /**
+     * Intervention controller to create a new intervention
+     * ExpressMiddleware signature
+     * @param {object} request Express request object
+     * @param {object} response Express response object
+     * @returns {Intervention} Route API JSON response
+     */
+    async create(request, response) {
+        debug('create');
+        const savedintervention = await interventionDataMapper.insert(request.body);
+        return response.json(savedintervention);
+    },
+
+    /**
      * Intervention controller to delete an intervention record.
      * ExpressMiddleware signature
      * @param {object} request Express request object

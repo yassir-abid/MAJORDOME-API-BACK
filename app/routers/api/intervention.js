@@ -1,7 +1,7 @@
 const express = require('express');
 
-// const validate = require('../../validation/validator');
-// const createSchema = require('../../validation/schemas/interventionCreateSchema');
+const validate = require('../../validation/validator');
+const createSchema = require('../../validation/schemas/interventionCreateSchema');
 // const updateSchema = require('../../validation/schemas/interventionUpdateSchema');
 
 const authenticateToken = require('../../middlewares/authenticateToken');
@@ -20,7 +20,19 @@ router
      * @security BearerAuth
      * @returns {array<Intervention>} 200 - success response - application/json
      */
-    .get(authenticateToken, controllerHandler(controller.getAll));
+    .get(authenticateToken, controllerHandler(controller.getAll))
+    /**
+     * POST /api/interventions
+     * @summary Create intervention
+     * @tags Intervention
+     * @security BearerAuth
+     * @param {InputIntervention} request.body.required - Intervention informations
+     * @returns {Intervention} 201 - success response - application/json
+     * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 404 - Intervention not found - application/json
+     */
+    // .post(authenticateToken, controllerHandler(controller.create));
+    .post(authenticateToken, validate('body', createSchema), controllerHandler(controller.create));
 
 router
     .route('/:id(\\d+)')

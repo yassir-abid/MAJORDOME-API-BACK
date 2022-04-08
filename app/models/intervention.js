@@ -56,6 +56,26 @@ const interventionDataMapper = {
     },
 
     /**
+     * Add intervention in the database
+     * @param {InputIntervention} intervention - Data to insert
+     * @returns {Intervention} - Inserted intervention
+     */
+    async insert(intervention) {
+        const preparedQuery = {
+            text: ` INSERT INTO intervention
+            (title, description, date, status, comments, report, project_id) VALUES
+            ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`,
+            values: [intervention.title, intervention.description,
+                intervention.date, intervention.status,
+                intervention.comments, intervention.report,
+                intervention.project_id],
+        };
+        const savedIntervention = await client.query(preparedQuery);
+
+        return savedIntervention.rows[0];
+    },
+
+    /**
      * Remove intervention from the database
      * @param {number} id - id of the intervention to delete
      * @returns {boolean} - Result of the delete operation
