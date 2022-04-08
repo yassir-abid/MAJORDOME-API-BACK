@@ -20,7 +20,7 @@ const dataMapper ={
      * @returns {(Project|undefined)} -
      * The desired project or undefined if no project found with this id
      */
-    async findByPk(projectId){
+    async findByPk(projectId) {
         const preparedQuery = {
             text: `SELECT * FROM project WHERE id = $1`,
             values: [projectId],
@@ -41,7 +41,7 @@ const dataMapper ={
             (title, description, comments, client_id),
             VALUES ($1, $2, $3, $4) RETURNING *`,
             values: [projectInfos.title, projectInfos.description,
-            projectInfos.comments, projectInfos.client_id],
+                projectInfos.comments, projectInfos.client_id],
         }
         const savedProject = await client.query(preparedQuery);
 
@@ -56,9 +56,12 @@ const dataMapper ={
      * @param {InputProject} projectInfos - Data to update
      * @returns {Project} - Updated project
      */
-    async update(projectId, projectInfos){
+    async update(id, projectInfos) {
         const fields = Object.keys(projectInfos).map((prop, index) => `"${prop}" = $${index + 1}`);
         const values = Object.values(projectInfos);
+
+        debug(fields);
+        debug(values);
 
         const savedProject = await client.query(
             `UPDATE project SET
@@ -68,9 +71,10 @@ const dataMapper ={
             [...values, id],
         );
 
-        return savedProject.rows[0];
+        debug(savedProject);
 
-        },
+        return savedProject.rows[0];
+    },
 
     /**
      * Remove project from the database
@@ -79,13 +83,15 @@ const dataMapper ={
      */
     async delete(id) {
         const preparedQuery = {
-            text: `SELECT * FROM project WHERE id = $1`;
+            text: `SELECT * FROM project WHERE id = $1`,
             values: [id],
         };
 
         const result = await client.query(preparedQuery);
 
-         return !!result.rowCount;
+        debug(result);
+
+        return !!result.rowCount;
     },
 
     /**
@@ -95,7 +101,7 @@ const dataMapper ={
      * @returns {(Project|null)} - The existing project
      * or null if no project exists with this data
      */
-     async isUnique(inputData, projectId) {
+    async isUnique(inputData, projectId) {
         debug('isUnique');
         const preparedQuery = {
             text: 'SELECT * FROM project WHERE email = $1',
@@ -108,6 +114,8 @@ const dataMapper ={
         }
 
         const result = await client.query(preparedQuery);
+
+        debug(result);
 
         if (result.rowCount === 0) {
             return null;

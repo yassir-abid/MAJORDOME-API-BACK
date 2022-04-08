@@ -5,6 +5,7 @@ const signupRouter = require('./signup');
 const loginRouter = require('./login');
 const profileRouter = require('./profile');
 const clientRouter = require('./client');
+const projectRouter = require('./project');
 
 const { apiController } = require('../../controllers/api');
 
@@ -24,6 +25,7 @@ router.use('/signup', signupRouter);
 router.use('/login', loginRouter);
 router.use('/profile', profileRouter);
 router.use('/clients', clientRouter);
+router.use('project', projectRouter);
 
 router.use(() => {
     throw new ApiError('API Route not found', { statusCode: 404 });
