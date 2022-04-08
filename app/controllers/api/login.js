@@ -10,7 +10,7 @@ const loginController = {
      * ExpressMiddleware signature
      * @param {object} request Express request object
      * @param {object} response Express response object
-     * @returns {string} Route API JSON response
+     * @returns {object} Route API JSON response
      */
     async login(request, response) {
         const user = await loginDataMapper.findByEmail(request.body);
@@ -32,7 +32,11 @@ const loginController = {
                 expiresIn: '2h',
             },
         );
-        return response.json(token);
+        return response.json({
+            logged: true,
+            pseudo: `${user.firstname} ${user.lastname}`,
+            token,
+        });
     },
 };
 

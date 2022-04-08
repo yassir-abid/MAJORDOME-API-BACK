@@ -13,7 +13,7 @@ router
      * @summary Login to access an account
      * @tags Account
      * @param {InputLogin} request.body.required - client informations
-     * @returns {string} 200 - success response - application/json
+     * @returns {Authentification} 200 - success response - application/json
      * @returns {ApiError} 401 - Invalid credentials - application/json
      */
     .post(controllerHandler(loginController.login));
