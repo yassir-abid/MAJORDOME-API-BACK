@@ -108,7 +108,7 @@ const projectController = {
 
         debug(project);
 
-        await projectDataMapper.delete(project);
+        await projectDataMapper.delete(request.params.id);
 
         return response.status(204).json();
     },

@@ -17,6 +17,7 @@ const client = require('../config/db');
  * @property {string} email - Profile email
  * @property {string} phone - Profile phone number
  * @property {string} password - Profile password
+ * @property {string} picture - Profile picture
  */
 
 const dataMapper = {
@@ -53,10 +54,10 @@ const dataMapper = {
         const preparedQuery = {
             text: `INSERT INTO provider
                     (firstname, lastname, email, phone, address, password, picture)
-                    VALUES ($1, $2, $3, $4, $5, $6)
+                    VALUES ($1, $2, $3, $4, $5, $6, $7)
                     RETURNING id, firstname, lastname, email, phone, address, picture;`,
             values: [profile.firstname, profile.lastname, profile.email,
-                profile.phone, profile.address, profile.password],
+                profile.phone, profile.address, profile.password, profile.picture],
         };
         const savedProfile = await client.query(preparedQuery);
 

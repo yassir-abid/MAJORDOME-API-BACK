@@ -98,7 +98,7 @@ const dataMapper = {
     async insert(projectInfos) {
         const preparedQuery = {
             text: `INSERT INTO project
-            (title, description, comments, client_id),
+            (title, description, comments, client_id)
             VALUES ($1, $2, $3, $4) RETURNING *`,
             values: [projectInfos.title, projectInfos.description,
                 projectInfos.comments, projectInfos.client_id],

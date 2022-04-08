@@ -2,6 +2,6 @@
 
 BEGIN;
 
-DROP TABLE "notification", "document", "picture", "intervention", "project", "address", "client", "supplier", "task", "provider";
+DROP TABLE "notification", "document", "picture", "intervention", "project", "address", "client", "supplier", "task", "provider" CASCADE;
 
 COMMIT;
