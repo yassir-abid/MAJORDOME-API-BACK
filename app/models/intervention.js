@@ -35,6 +35,15 @@ const interventionDataMapper = {
     },
 
     /**
+     * @returns {array<Intervention>} - All interventions of the day in database
+     */
+    async findAllOfDay() {
+        debug('findAllOfDay');
+        const result = await client.query('SELECT * FROM intervention WHERE date::date = current_date;');
+        return result.rows;
+    },
+
+    /**
      * Find intervention by id
      * @param {number} interventionId - id of the desired intervention
      * @returns {(Intervention|undefined)} -

@@ -19,6 +19,19 @@ const interventionController = {
     },
 
     /**
+     * Intervention controller to get all interventions of the day
+     * ExpressMiddleware signature
+     * @param {object} request Express request object (not used)
+     * @param {object} response Express response object
+     * @returns {array<Intervention>} Route API JSON response
+     */
+    async getAllOfDay(request, response) {
+        debug('getAllOfDay');
+        const interventions = await interventionDataMapper.findAllOfDay();
+        return response.json(interventions);
+    },
+
+    /**
      * Intervention controller to get a one intervention
      * ExpressMiddleware signature
      * @param {object} request Express request object

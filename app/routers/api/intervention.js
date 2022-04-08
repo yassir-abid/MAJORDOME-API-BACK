@@ -29,10 +29,22 @@ router
      * @param {InputIntervention} request.body.required - Intervention informations
      * @returns {Intervention} 201 - success response - application/json
      * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Intervention not found - application/json
      */
     // .post(authenticateToken, controllerHandler(controller.create));
     .post(authenticateToken, validate('body', createSchema), controllerHandler(controller.create));
+
+router
+    .route('/today')
+    /**
+     * GET /api/interventions/today
+     * @summary Get all interventions of the day
+     * @tags Intervention
+     * @security BearerAuth
+     * @returns {array<Intervention>} 200 - success response - application/json
+     */
+    .get(authenticateToken, controllerHandler(controller.getAllOfDay));
 
 router
     .route('/:id(\\d+)')
@@ -43,7 +55,7 @@ router
      * @security BearerAuth
      * @param {number} id.path.required - intervention identifier
      * @returns {Intervention} 200 - success response - application/json
-     * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Intervention not found - application/json
      */
     .get(authenticateToken, controllerHandler(controller.getOne))
@@ -56,6 +68,7 @@ router
      * @param {InputIntervention} request.body.required - intervention informations
      * @returns {Intervention} 200 - success response - application/json
      * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Intervention not found - application/json
      */
     .patch(authenticateToken, validate('body', updateSchema), controllerHandler(controller.update))
@@ -66,7 +79,7 @@ router
      * @security BearerAuth
      * @param {number} id.path.required - Intervention identifier
      * @returns 204 - success response - application/json
-     * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Intervention not found - application/json
      */
     .delete(authenticateToken, controllerHandler(controller.delete));
