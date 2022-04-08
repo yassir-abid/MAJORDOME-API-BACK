@@ -54,6 +54,21 @@ const interventionDataMapper = {
 
         return result.rows[0];
     },
+
+    /**
+     * Remove intervention from the database
+     * @param {number} id - id of the intervention to delete
+     * @returns {boolean} - Result of the delete operation
+     */
+    async delete(id) {
+        debug('delete');
+        const preparedQuery = {
+            text: 'DELETE FROM intervention WHERE id = $1',
+            values: [id],
+        };
+        const result = await client.query(preparedQuery);
+        return !!result.rowCount;
+    },
 };
 
 module.exports = interventionDataMapper;

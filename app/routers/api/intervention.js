@@ -34,6 +34,17 @@ router
      * @returns {ApiError} 400 - Bad request response - application/json
      * @returns {ApiError} 404 - Intervention not found - application/json
      */
-    .get(authenticateToken, controllerHandler(controller.getOne));
+    .get(authenticateToken, controllerHandler(controller.getOne))
+    /**
+     * DELETE /api/interventions/{id}
+     * @summary Delete one intervention
+     * @tags Intervention
+     * @security BearerAuth
+     * @param {number} id.path.required - Intervention identifier
+     * @returns 204 - success response - application/json
+     * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 404 - Intervention not found - application/json
+     */
+    .delete(authenticateToken, controllerHandler(controller.delete));
 
 module.exports = router;

@@ -35,6 +35,24 @@ const interventionController = {
 
         return response.json(intervention);
     },
+
+    /**
+     * Intervention controller to delete an intervention record.
+     * ExpressMiddleware signature
+     * @param {object} request Express request object
+     * @param {object} response Express response object
+     * @returns {string} Route API JSON response
+     */
+    async delete(request, response) {
+        debug('delete');
+        const intervention = await interventionDataMapper.findByPk(request.params.id);
+        if (!intervention) {
+            throw new ApiError('This client does not exists', { statusCode: 404 });
+        }
+
+        await interventionDataMapper.delete(request.params.id);
+        return response.status(204).json();
+    },
 };
 
 module.exports = interventionController;
