@@ -44,7 +44,7 @@ const profileController = {
             debug(existingEmail);
 
             if (existingEmail) {
-                throw new ApiError('Other user exists with this email', { statusCode: 400 });
+                throw new ApiError('Other user exists with this email', { statusCode: 409 });
             }
         }
 

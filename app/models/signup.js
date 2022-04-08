@@ -17,6 +17,7 @@ const client = require('../config/db');
  * @property {string} lastname - User last
  * @property {string} email - User email
  * @property {string} password - User password
+ * @property {string} passwordConfirm - User password confirmation
  */
 
 /**

@@ -20,7 +20,7 @@ router
      * @tags Profile
      * @security BearerAuth
      * @returns {Profile} 200 - success response - application/json
-     * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Profile not found - application/json
      */
     .get(authenticateToken, controllerHandler(profileController.getOne))
@@ -32,6 +32,7 @@ router
      * @param {InputProfile} request.body.required - profile info
      * @returns {Profile} 200 - success response - application/json
      * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Profile not found - application/json
      */
     .patch(authenticateToken, validate('body', updateSchema), controllerHandler(profileController.update))
@@ -41,7 +42,7 @@ router
      * @tags Profile
      * @security BearerAuth
      * @returns 204 - success response - application/json
-     * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Profile not found - application/json
      */
 

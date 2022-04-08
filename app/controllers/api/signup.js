@@ -22,6 +22,10 @@ const signupController = {
             throw new ApiError('User with this email already exists', { statusCode: 409 });
         }
 
+        if (request.body.password !== request.body.passwordConfirm) {
+            throw new ApiError('Password and its confirmation does not match', { statusCode: 409 });
+        }
+
         const passwordHashed = await bcrypt.hash(request.body.password, 10);
 
         const newUser = await profileDataMapper.insert(

@@ -29,6 +29,7 @@ router
      * @param {InsertClientWithAddress} request.body.required - client informations
      * @returns {ClientWithAddress} 201 - success response - application/json
      * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Client not found - application/json
      */
     .post(authenticateToken, validate('body', createSchema), controllerHandler(controller.create));
@@ -42,7 +43,7 @@ router
      * @security BearerAuth
      * @param {number} id.path.required - client identifier
      * @returns {ClientWithAddress} 200 - success response - application/json
-     * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Client not found - application/json
      */
     .get(authenticateToken, controllerHandler(controller.getOne))
@@ -55,6 +56,7 @@ router
      * @param {UpdateClientWithAddress} request.body.required - client informations
      * @returns {ClientWithAddress} 200 - success response - application/json
      * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Client not found - application/json
      */
     .patch(authenticateToken, validate('body', updateSchema), controllerHandler(controller.update))
@@ -65,7 +67,7 @@ router
      * @security BearerAuth
      * @param {number} id.path.required - client identifier
      * @returns 204 - success response - application/json
-     * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Client not found - application/json
      */
     .delete(authenticateToken, controllerHandler(controller.delete));
@@ -79,7 +81,7 @@ router
      * @security BearerAuth
      * @param {number} id.path.required - address identifier
      * @returns 204 - success response - application/json
-     * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 409 - Bad request response - application/json
      * @returns {ApiError} 404 - Client not found - application/json
      */
     .delete(authenticateToken, controllerHandler(controller.deleteAddress));
