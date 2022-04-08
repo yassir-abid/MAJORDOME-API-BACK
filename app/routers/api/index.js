@@ -25,7 +25,7 @@ router.use('/signup', signupRouter);
 router.use('/login', loginRouter);
 router.use('/profile', profileRouter);
 router.use('/clients', clientRouter);
-router.use('project', projectRouter);
+router.use('/projects', projectRouter);
 
 router.use(() => {
     throw new ApiError('API Route not found', { statusCode: 404 });

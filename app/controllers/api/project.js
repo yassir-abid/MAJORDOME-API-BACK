@@ -1,4 +1,4 @@
-const debug = require('debug')('ProfileController');
+const debug = require('debug')('ProjectController');
 const projectDataMapper = require('../../models/project');
 const { ApiError } = require('../../helpers/errorHandler');
 
@@ -27,12 +27,12 @@ const projectController = {
      * @returns {Profile} Route API JSON response
      */
     async getOne(request, response) {
-        const project = await projectDataMapper.findByPk(request.params.id);
+        const project = await projectDataMapper.findByPkWithClient(request.params.id);
 
         debug(project);
 
         if (!project) {
-            throw ApiError('Project not found', { statusCode: 404 });
+            throw new ApiError('Project not found', { statusCode: 404 });
         }
 
         return response.json(project);
@@ -43,7 +43,7 @@ const projectController = {
      * ExpressMiddleware signature
      * @param {object} request Express request object
      * @param {object} response Express response object
-     * @returns {ClientWithAddress} Route API JSON response
+     * @returns {Project} Route API JSON response
      */
     async create(request, response) {
         const project = await projectDataMapper.isUnique(request.body);
@@ -73,7 +73,7 @@ const projectController = {
         debug(project);
 
         if (!project) {
-            throw ApiError('Project not found', { statusCode: 404 });
+            throw new ApiError('Project not found', { statusCode: 404 });
         }
 
         if (request.body.title) {
@@ -93,7 +93,7 @@ const projectController = {
     },
 
     /**
-     * Project controller to delete one record.
+     * Project controller to delete a project record
      * ExpressMiddleware signature
      * @param {object} request Express request object
      * @param {object} response Express response object
@@ -103,7 +103,7 @@ const projectController = {
         const project = await projectDataMapper.findByPk(request.params.id);
 
         if (!project) {
-            throw ApiError('Project not found', { statusCode: 404 });
+            throw new ApiError('Project not found', { statusCode: 404 });
         }
 
         debug(project);

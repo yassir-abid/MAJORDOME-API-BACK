@@ -19,20 +19,21 @@ router
     /**
      * GET /api/projects
      * @summary Get all projects
-     * @tags Projects
+     * @tags Project
      * @security BearerAuth
      * @returns {array<CProjects>} 200 - success response - application/json
      */
     .get(authenticateToken, controllerHandler(projectController.getAll))
     /**
      * POST /api/projects
-     * @summary Create a projects
-     * @tags projects
+     * @summary Create a project
+     * @tags Project
      * @security BearerAuth
      * @param {InsertProject} request.body.required - project informations
-     * @returns {ClientWithAddress} 200 - success response - application/json
+     * @returns {Project} 200 - success response - application/json
      * @returns {ApiError} 400 - Bad request response - application/json
      * @returns {ApiError} 404 - Client not found - application/json
+     * @returns {ApiError} 409 - Conflict response - application/json
      */
     .post(authenticateToken, validate('body', createSchema), controllerHandler(projectController.create));
 
@@ -40,12 +41,13 @@ router
     .route('/:id(\\d+)')
     /**
      * GET /api/projects/{id}
-     * @summary Get all projects
-     * @tags Projects
+     * @summary Get one project and the linked client
+     * @tags Project
      * @security BearerAuth
-     * @returns {Project} 200 - success response - application/json
-     * @returns {ApiError} 400 - Bad request response - application/json
-     * @returns {ApiError} 404 - Profile not found - application/json
+     * @param {number} id.path.required - project identifier
+     * @returns {ClientWithAddress} 200 - success response - application/json
+     * @returns {ApiError} 409 - Conflict response - application/json
+     * @returns {ApiError} 404 - Client not found - application/json
      */
     .get(authenticateToken, controllerHandler(projectController.getOne))
     /**
@@ -53,10 +55,12 @@ router
      * @summary Update one project
      * @tags Project
      * @security BearerAuth
+     * @param {number} id.path.required - project identifier
      * @param {InputProject} request.body.required - project info
      * @returns {Project} 200 - success response - application/json
      * @returns {ApiError} 400 - Bad request response - application/json
      * @returns {ApiError} 404 - Profile not found - application/json
+     * @returns {ApiError} 409 - Conflict response - application/json
      */
     .patch(authenticateToken, validate('body', updateSchema), controllerHandler(projectController.update))
     /**
@@ -64,8 +68,9 @@ router
      * @summary Delete one project
      * @tags Project
      * @security BearerAuth
+     * @param {number} id.path.required - project identifier
      * @returns 204 - success response - application/json
-     * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 409 - Conflict response - application/json
      * @returns {ApiError} 404 - Profile not found - application/json
      */
 

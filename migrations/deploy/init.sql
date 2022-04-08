@@ -13,7 +13,7 @@ CREATE TABLE "provider" (
 CREATE TABLE "task" (
   "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "description" TEXT NOT NULL,
-  "status" TEXT NOT NULL DEFAULT 'A faire',
+  "status" TEXT DEFAULT 'A faire',
   "provider_id" INT NOT NULL REFERENCES "provider"("id") ON DELETE CASCADE
 );
 CREATE TABLE "supplier" (
@@ -59,8 +59,8 @@ CREATE TABLE "intervention" (
   "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "title" TEXT NOT NULL,
   "description" TEXT,
-  "date" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  "status" TEXT NOT NULL DEFAULT 'Programmée',
+  "date" TIMESTAMPTZ DEFAULT NOW(),
+  "status" TEXT DEFAULT 'Programmée',
   "comments" TEXT,
   "report" TEXT,
   "project_id" INT NOT NULL REFERENCES "project"("id") ON DELETE CASCADE
@@ -86,7 +86,7 @@ CREATE TABLE "notification" (
   "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "title" TEXT NOT NULL,
   "description" TEXT,
-  "date" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  "date" TIMESTAMPTZ DEFAULT NOW(),
   "supplier_id" INT REFERENCES "supplier"("id") ON DELETE CASCADE,
   "client_id" INT REFERENCES "client"("id") ON DELETE CASCADE,
   "project_id" INT REFERENCES "project"("id") ON DELETE CASCADE,
