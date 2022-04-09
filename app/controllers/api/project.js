@@ -27,7 +27,7 @@ const projectController = {
      * @returns {Profile} Route API JSON response
      */
     async getOne(request, response) {
-        const project = await projectDataMapper.findByPkWithClient(request.params.id);
+        const project = await projectDataMapper.findByPk(request.params.id);
 
         debug(project);
 
@@ -43,7 +43,7 @@ const projectController = {
      * ExpressMiddleware signature
      * @param {object} request Express request object
      * @param {object} response Express response object
-     * @returns {Project} Route API JSON response
+     * @returns {Projects} Route API JSON response
      */
     async create(request, response) {
         const project = await projectDataMapper.isUnique(request.body);
@@ -99,7 +99,7 @@ const projectController = {
      * @param {object} response Express response object
      * @returns {string} Route API JSON response
      */
-    async delete (request, response) {
+    async delete(request, response) {
         const project = await projectDataMapper.findByPk(request.params.id);
 
         if (!project) {

@@ -29,7 +29,7 @@ router
      * @summary Create a project
      * @tags Project
      * @security BearerAuth
-     * @param {InsertProject} request.body.required - project informations
+     * @param {InputProject} request.body.required - project informations
      * @returns {Project} 200 - success response - application/json
      * @returns {ApiError} 400 - Bad request response - application/json
      * @returns {ApiError} 404 - Client not found - application/json

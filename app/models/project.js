@@ -8,13 +8,6 @@
  */
 
 /**
- * @typedef {object} InputProject
- * @property {string} title - Project title
- * @property {string} description - Project description
- * @property {string} comments - Project comments
- */
-
-/**
  * @typedef {object} Client
  * @property {number} id - Client id
  * @property {string} firstname - Client firstname
@@ -26,6 +19,35 @@
  * @property {string} other_equipments - Client equipment installed by other providers
  * @property {string} needs - Client needs identified by the provider
  * @property {number} provider_id - Id of the provider linked to the client
+ */
+
+/**
+ * @typedef {object} ProjectWithClient
+ * @property {number} id - Project id
+ * @property {string} title - Project title
+ * @property {string} description - Project description
+ * @property {string} comments - Project comments
+ * @property {number} client_id - Id of the client linked to the project
+ * @property {array<client>} client - client
+ */
+
+/**
+ * @typedef {object} InputProject
+ * @property {string} title - Project title
+ * @property {string} description - Project description
+ * @property {string} comments - Project comments
+ */
+
+/**
+ * @typedef {Object} InputClient
+ * @property {string} firstname - Client firstname
+ * @property {string} lastname - Client lastname
+ * @property {string} email - Client email
+ * @property {string} phone - Client phone
+ * @property {string} comments - Client comments and specific informations
+ * @property {string} our_equipments - Client equipment installed by the provider
+ * @property {string} other_equipments - Client equipment installed by other providers
+ * @property {string} needs - Client needs identified by the provider
  */
 
 const debug = require('debug')('Project');
@@ -45,34 +67,12 @@ const dataMapper = {
     },
 
     /**
-     * Find project by id
-     * @param {number} projectId - id of the desired project
-     * @returns {(ProjectWithClient|undefined)} -
-     * The desired project or undefined if no project found with this id
-     */
-    async findByPk(projectId) {
-        const preparedQuery = {
-            text: 'SELECT * FROM project WHERE id = $1',
-            values: [projectId],
-        };
-
-        const result = await client.query(preparedQuery);
-
-        if (result.rowCount === 0) {
-            return undefined;
-        }
-        debug(result);
-
-        return result.rows[0];
-    },
-
-    /**
      * Find project by id with the associated client
      * @param {number} projectId - id of the desired project
      * @returns {(ProjectWithClient|undefined)} -
      * The desired project or undefined if no project found with this id
      */
-    async findByPkWithClient(projectId) {
+    async findByPk(projectId) {
         const preparedQuery = {
             text: 'SELECT * FROM project_with_client WHERE id = $1',
             values: [projectId],
@@ -89,11 +89,9 @@ const dataMapper = {
     },
 
     /**
-     * Project controller to create a new project
-     * ExpressMiddleware signature
-     * @param {object} request Express request object
-     * @param {object} response Express response object
-     * @returns {Project} Route API JSON response
+     * Add project in the database
+     * @param {InputProject} projectInfos - Data to insert
+     * @returns {Project} - Inserted project
      */
     async insert(projectInfos) {
         const preparedQuery = {
@@ -143,7 +141,7 @@ const dataMapper = {
      */
     async delete(id) {
         const preparedQuery = {
-            text: `SELECT * FROM project WHERE id = $1`,
+            text: `DELETE FROM project WHERE id = $1`,
             values: [id],
         };
 
