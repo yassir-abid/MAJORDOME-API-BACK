@@ -13,12 +13,12 @@ module.exports = Joi.object({
         our_equipments: Joi.string(),
         other_equipments: Joi.string(),
         needs: Joi.string(),
-    }),
+    }).required(),
     addresses: Joi.array().items(Joi.object({
         number: Joi.string().required(),
         street: Joi.string().required(),
         postal_code: Joi.string().required(),
         city: Joi.string().required(),
         comments: Joi.string(),
-    })),
+    }).required()),
 }).required();

@@ -54,7 +54,7 @@ router
      * @tags Intervention
      * @security BearerAuth
      * @param {number} id.path.required - intervention identifier
-     * @returns {Intervention} 200 - success response - application/json
+     * @returns {InterventionWithProjectAndClient} 200 - success response - application/json
      * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Intervention not found - application/json
      */

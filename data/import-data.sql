@@ -38,28 +38,29 @@ INSERT INTO "address" ("number", "street", "postal_code", "city", "comments", "c
 ('3', 'rue Beauvau', '13005', 'Marseille', 'Labore nisi quia dolores occaecati.', 1),
 ('64', 'boulevard Bryas', '92400', 'Courbevoie', 'Dignissimos illum libero mollitia autem natus omnis voluptatum iusto rerum.', 1),
 ('22', 'Rue Roussy', '45000', 'Orléans', 'Autem qui voluptas culpa dignissimos quod quis qui corporis omnis.', 3),
-('50bis', 'rue de la Hulotais', '69800', 'Saint-priest', 'Iste nihil dolorem est qui reprehenderit placeat consequatur aut.', 2),
-('35', 'rue de Strasbourg', '63000', 'Clermont-ferrand', 'Autem qui voluptas culpa dignissimos quod quis qui corporis omnis.', 3),
-('62', 'avenue de Provence', '26000', 'Valence', 'Iste nihil dolorem est qui reprehenderit placeat consequatur aut.', 2),
+('50bis', 'rue de la Hulotais', '69800', 'Saint-priest', 'Iste nihil dolorem est qui reprehenderit placeat consequatur aut.', 5),
+('35', 'rue de Strasbourg', '63000', 'Clermont-ferrand', 'Autem qui voluptas culpa dignissimos quod quis qui corporis omnis.', 4),
+('62', 'avenue de Provence', '26000', 'Valence', 'Iste nihil dolorem est qui reprehenderit placeat consequatur aut.', 6),
 ('64', 'rue des Dunes', '35400', 'Saint-malo', 'Autem qui voluptas culpa dignissimos quod quis qui corporis omnis.', 3),
-('53', 'quai Saint-Nicolas', '37100', 'Tours', 'Iste nihil dolorem est qui reprehenderit placeat consequatur aut.', 2);
+('53', 'quai Saint-Nicolas', '37100', 'Tours', 'Iste nihil dolorem est qui reprehenderit placeat consequatur aut.', 3);
+
 -- Table: project
 INSERT INTO "project" ("title", "description", "status", "comments", "client_id") VALUES
 ('Chaudière', 'Pariatur qui numquam ducimus e Pariatur qui numquam ducimus e', 'Ouvert', 'Modi vitae cumque quaerat debitis commodi.', 1),
 ('Piscine', 'Pariatur qui numquam ducimus e', 'Ouvert', 'Sit odit adipisci quasi rerum vel magni.', 6),
 ('Evier', 'Pariatur qui numquam ducimus e', 'Clôturé', 'Consequatur sint enim error.', 4),
-('Coupe et couleur', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', 'Clôturé', 'Consequatur sint enim error.', 1),
-('Jardin', 'Pariatur qui numquam ducimus e', 'Vide', 'Quis non sint eum iste aut ipsa.', 1);
+('Coupe et couleur', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', 'Clôturé', 'Consequatur sint enim error.', 2),
+('Jardin', 'Pariatur qui numquam ducimus e', 'Vide', 'Quis non sint eum iste aut ipsa.', 3);
 
 -- Table: intervention
-INSERT INTO "intervention" ("title", "description", "date", "status", "comments", "report", "project_id") VALUES
-('Installation chaudière', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-04-01T16:06:25.184Z"', 'Terminée', 'Sit consequatur earum optio.', 'Pariatur qui numquam ducimus eum iste dolores est dolorum voluptatem.', 1),
-('Entretien chaudière', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-10-15T16:06:25.184Z"', 'Programmée', 'Sit consequatur earum optio.', 'Pariatur qui numquam ducimus eum iste dolores est dolorum voluptatem.', 1),
-('Trou pour piscine', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-03-31T21:01:33.323Z"', 'Terminée', 'Asperiores sunt dignissimos unde.', 'Quia non cumque perspiciatis libero ut.', 2),
-('Sol piscine', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-04-28T12:52:07.648Z"', 'Programmée', 'Odit voluptas aut.', 'Perferendis et provident.', 2),
-('Remplissage piscine', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-05-02T16:29:54.788Z"', 'Programmée', 'Incidunt non aut porro quis esse.', 'Nihil libero consequatur eveniet consequatur recusandae neque provident cum.', 2),
-('Fuite eau', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-04-03T07:19:23.161Z"', 'Terminée', 'Ut dolores mollitia et architecto fuga placeat consequuntur natus placeat.', 'Officia et dolorem laboriosam reprehenderit consequuntur ea nam.', 3),
-('Coupe et couleur', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-03-28T12:12:50.355Z"', 'Annulée', 'Modi velit illo itaque quasi reiciendis molestiae veritatis.', 'Voluptates iusto aut et ipsa qui.', 4);
+INSERT INTO "intervention" ("title", "description", "date", "status", "comments", "report", "project_id", "address_id") VALUES
+('Installation chaudière', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-04-01T16:06:25.184Z"', 'Terminée', 'Sit consequatur earum optio.', 'Pariatur qui numquam ducimus eum iste dolores est dolorum voluptatem.', 1, 1),
+('Entretien chaudière', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-10-15T16:06:25.184Z"', 'Programmée', 'Sit consequatur earum optio.', 'Pariatur qui numquam ducimus eum iste dolores est dolorum voluptatem.', 1, 3),
+('Trou pour piscine', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-03-31T21:01:33.323Z"', 'Terminée', 'Asperiores sunt dignissimos unde.', 'Quia non cumque perspiciatis libero ut.', 2, null),
+('Sol piscine', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-04-28T12:52:07.648Z"', 'Programmée', 'Odit voluptas aut.', 'Perferendis et provident.', 2, null),
+('Remplissage piscine', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-05-02T16:29:54.788Z"', 'Programmée', 'Incidunt non aut porro quis esse.', 'Nihil libero consequatur eveniet consequatur recusandae neque provident cum.', 2, null),
+('Fuite eau', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-04-03T07:19:23.161Z"', 'Terminée', 'Ut dolores mollitia et architecto fuga placeat consequuntur natus placeat.', 'Officia et dolorem laboriosam reprehenderit consequuntur ea nam.', 3, 4),
+('Coupe et couleur', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-03-28T12:12:50.355Z"', 'Annulée', 'Modi velit illo itaque quasi reiciendis molestiae veritatis.', 'Voluptates iusto aut et ipsa qui.', 4, null);
 
 -- Table: picture
 INSERT INTO "picture" ("title", "status", "path", "intervention_id") VALUES

@@ -8,4 +8,5 @@ module.exports = Joi.object({
     comments: Joi.string(),
     report: Joi.string(),
     project_id: Joi.number().integer().min(1).required(),
+    address_id: Joi.number().integer().min(1).required(),
 }).required();

@@ -1,6 +1,9 @@
+/* eslint-disable max-len */
 const debug = require('debug')('InterventionController');
 
 const interventionDataMapper = require('../../models/intervention');
+const addressDataMapper = require('../../models/address');
+// const projectDataMapper = require('../../models/project');
 
 const { ApiError } = require('../../helpers/errorHandler');
 
@@ -40,7 +43,7 @@ const interventionController = {
      */
     async getOne(request, response) {
         debug('getOne');
-        const intervention = await interventionDataMapper.findByPk(request.params.id);
+        const intervention = await interventionDataMapper.findByPkWithDetails(request.params.id);
 
         if (!intervention) {
             throw new ApiError('Intervention not found', { statusCode: 404 });
@@ -58,6 +61,20 @@ const interventionController = {
      */
     async create(request, response) {
         debug('create');
+        // todo add project verification
+        // const project = await projectDataMapper.findByPk(request.body.project_id);
+        // if (!project) {
+        //     throw new ApiError('This project does not exists', { statusCode: 404 });
+        // }
+        const address = await addressDataMapper.findByPk(request.body.address_id);
+        if (!address) {
+            throw new ApiError('This address does not exists', { statusCode: 404 });
+        }
+        const clientAddresses = await interventionDataMapper.findClientAddresses(request.body.project_id);
+        const foundAddress = clientAddresses.find((clientAddress) => clientAddress.id === Number(request.body.address_id));
+        if (!foundAddress) {
+            throw new ApiError('This address_id does not match with any intervention client addresses', { statusCode: 409 });
+        }
         const savedintervention = await interventionDataMapper.insert(request.body);
         return response.json(savedintervention);
     },
@@ -75,10 +92,34 @@ const interventionController = {
         if (!intervention) {
             throw new ApiError('This intervention does not exists', { statusCode: 404 });
         }
+
+        if (request.body.address_id) {
+            const address = await addressDataMapper.findByPk(request.body.address_id);
+            if (!address) {
+                throw new ApiError('This address does not exists', { statusCode: 404 });
+            }
+            let clientAddresses;
+            if (request.body.project_id) {
+                // todo add project verification
+                // const project = await projectDataMapper.findByPk(request.body.project_id);
+                // if (!project) {
+                //     throw new ApiError('This project does not exists', { statusCode: 404 });
+                // }
+                clientAddresses = await interventionDataMapper.findClientAddresses(request.body.project_id);
+            } else {
+                clientAddresses = await interventionDataMapper.findClientAddresses(intervention.project_id);
+            }
+            const foundAddress = clientAddresses.find((clientAddress) => clientAddress.id === Number(request.body.address_id));
+            if (!foundAddress) {
+                throw new ApiError('This address_id does not match with any intervention client addresses', { statusCode: 409 });
+            }
+        }
+
         const savedIntervention = await interventionDataMapper.update(
             request.params.id,
             request.body,
         );
+
         return response.json(savedIntervention);
     },
 
