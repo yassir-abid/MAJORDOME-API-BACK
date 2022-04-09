@@ -59,7 +59,7 @@ const dataMapper = {
      * @returns {array<Projects>} - All projects of the database and their addresses
      */
     async findAll() {
-        const result = await client.query(`SELECT * FROM project`);
+        const result = await client.query('SELECT * FROM project ORDER BY title ASC');
 
         debug(result);
 
@@ -100,7 +100,7 @@ const dataMapper = {
             VALUES ($1, $2, $3, $4) RETURNING *`,
             values: [projectInfos.title, projectInfos.description,
                 projectInfos.comments, projectInfos.client_id],
-        }
+        };
         const savedProject = await client.query(preparedQuery);
 
         debug(savedProject);
@@ -141,7 +141,7 @@ const dataMapper = {
      */
     async delete(id) {
         const preparedQuery = {
-            text: `DELETE FROM project WHERE id = $1`,
+            text: 'DELETE FROM project WHERE id = $1',
             values: [id],
         };
 
@@ -182,5 +182,4 @@ const dataMapper = {
         return result.rows[0];
     },
 };
-
 module.exports = dataMapper;

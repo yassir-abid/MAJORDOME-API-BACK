@@ -39,7 +39,10 @@ const profileController = {
         debug(profile);
 
         if (request.body.email) {
-            const existingEmail = await profileDataMapper.isUnique(request.body, request.decoded.id);
+            const existingEmail = await profileDataMapper.isUnique(
+                request.body,
+                request.decoded.id,
+            );
 
             debug(existingEmail);
 
