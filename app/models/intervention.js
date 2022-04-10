@@ -75,6 +75,25 @@ const client = require('../config/db');
  * @property {number} address_id - Id of the address linked to the intervention
  */
 
+/**
+ * @typedef {object} Picture
+ * @property {number} id - Picture id
+ * @property {string} title - Picture title
+ * @property {string} status - Picture title (before/after intervention)
+ * @property {string} path - Picture path
+ * @property {number} intervention_id - Id of the intervention linked to the picture
+ */
+
+/**
+ * @typedef {object} Report
+ * @property {number} id - Intervention id
+ * @property {string} title - Intervention title
+ * @property {string} description - Intervention description
+ * @property {string} date - Intervention date (timestamptz)
+ * @property {string} report - Post-Intervention report
+ * @property {array<Picture>} pictures - project linked to the intervention
+ */
+
 const interventionDataMapper = {
     /**
      * @returns {array<Intervention>} - All interventions of the database
@@ -95,7 +114,7 @@ const interventionDataMapper = {
     },
 
     /**
-     * Find intervention by id
+     * Find intervention by id without project, client and address details
      * @param {number} interventionId - id of the desired intervention
      * @returns {(Intervention|undefined)} -
      * The desired intervention or undefined if no intervention found with this id
@@ -180,9 +199,9 @@ const interventionDataMapper = {
             (title, description, date, status, comments, report, project_id, address_id) VALUES
             ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;`,
             values: [intervention.title, intervention.description,
-                intervention.date, intervention.status,
-                intervention.comments, intervention.report,
-                intervention.project_id, intervention.address_id],
+            intervention.date, intervention.status,
+            intervention.comments, intervention.report,
+            intervention.project_id, intervention.address_id],
         };
         const savedIntervention = await client.query(preparedQuery);
 
@@ -229,23 +248,26 @@ const interventionDataMapper = {
         return !!result.rowCount;
     },
 
-    // /**
-    //  * Find all addresses linked to the intervention client
-    //  * @param {number} projectId - id of the intervention project
-    //  * @returns {array<id>} - id of the intervention client addresses
-    //  */
-    // async findClientAddresses(projectId) {
-    //     debug('clientAddresses');
-    //     const preparedQuery = {
-    //         text: `SELECT address.id FROM address
-    //         JOIN client ON client.id = address.client_id
-    //         JOIN project ON client.id = project.client_id
-    //         WHERE project.id = $1;`,
-    //         values: [projectId],
-    //     };
-    //     const result = await client.query(preparedQuery);
-    //     return !!result.rowCount;
-    // },
+    /**
+     * Find intervention report by intervention
+     * @param {number} interventionId - id of the desired intervention
+     * @returns {(Report|undefined)} -
+     * The desired report intervention or undefined if no intervention found with this id
+     */
+    async findReport(interventionId) {
+        debug('findReport');
+        const preparedQuery = {
+            text: 'SELECT * FROM report_and_pictures WHERE id = $1 ;',
+            values: [interventionId],
+        };
+        const result = await client.query(preparedQuery);
+
+        if (result.rowCount === 0) {
+            return undefined;
+        }
+
+        return result.rows[0];
+    },
 
     /**
      * Find all addresses linked to the intervention client by project id

@@ -47,6 +47,19 @@ router
     .get(authenticateToken, controllerHandler(controller.getAllOfDay));
 
 router
+    .route('/:id(\\d+)/report')
+    /**
+     * GET /api/interventions/{id}/report
+     * @summary Get intervention report
+     * @tags Intervention
+     * @security BearerAuth
+     * @param {number} id.path.required - intervention identifier
+     * @returns {Report} 200 - success response - application/json
+     * @returns {ApiError} 404 - Intervention not found - application/json
+     */
+    .get(authenticateToken, controllerHandler(controller.getReport));
+
+router
     .route('/:id(\\d+)')
     /**
      * GET /api/interventions/{id}
@@ -55,7 +68,6 @@ router
      * @security BearerAuth
      * @param {number} id.path.required - intervention identifier
      * @returns {InterventionWithProjectAndClient} 200 - success response - application/json
-     * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Intervention not found - application/json
      */
     .get(authenticateToken, controllerHandler(controller.getOne))
@@ -79,7 +91,6 @@ router
      * @security BearerAuth
      * @param {number} id.path.required - Intervention identifier
      * @returns 204 - success response - application/json
-     * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Intervention not found - application/json
      */
     .delete(authenticateToken, controllerHandler(controller.delete));

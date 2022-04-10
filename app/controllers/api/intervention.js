@@ -39,7 +39,7 @@ const interventionController = {
      * ExpressMiddleware signature
      * @param {object} request Express request object
      * @param {object} response Express response object
-     * @returns {Intervention} Route API JSON response
+     * @returns {InterventionWithProjectAndClient} Route API JSON response
      */
     async getOne(request, response) {
         debug('getOne');
@@ -139,6 +139,26 @@ const interventionController = {
 
         await interventionDataMapper.delete(request.params.id);
         return response.status(204).json();
+    },
+
+    /**
+     * Intervention controller to get intervention report by intervention id
+     * ExpressMiddleware signature
+     * @param {object} request Express request object
+     * @param {object} response Express response object
+     * @returns {Intervention} Route API JSON response
+     */
+    async getReport(request, response) {
+        debug('getReport');
+        const intervention = await interventionDataMapper.findByPk(request.params.id);
+
+        if (!intervention) {
+            throw new ApiError('Intervention not found', { statusCode: 404 });
+        }
+
+        const report = await interventionDataMapper.findReport(request.params.id);
+
+        return response.json(report);
     },
 };
 

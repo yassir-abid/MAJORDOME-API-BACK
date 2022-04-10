@@ -6,4 +6,7 @@ SELECT * FROM client_and_addresses WHERE false;
 SELECT * FROM client_without_addresses WHERE false;
 SELECT * FROM client_with_addresses WHERE false;
 
+SELECT * FROM report_with_pictures WHERE false;
+SELECT * FROM report_without_pictures WHERE false;
+SELECT * FROM report_and_pictures WHERE false;
 ROLLBACK;
