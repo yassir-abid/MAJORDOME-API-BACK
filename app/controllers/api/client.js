@@ -49,7 +49,7 @@ const clientController = {
         const clientInfos = request.body.client;
         const client = await clientDataMapper.isUnique(clientInfos);
         if (client) {
-            throw new ApiError('Client already exists with this email', { statusCode: 409 });
+            throw new ApiError('Client with this email already exists', { statusCode: 409 });
         }
         clientInfos.provider_id = request.decoded.id;
         const savedClient = await clientDataMapper.insert(clientInfos);
@@ -87,7 +87,7 @@ const clientController = {
                     request.params.id,
                 );
                 if (existingClient) {
-                    throw new ApiError('Client already exists with this email', { statusCode: 409 });
+                    throw new ApiError('Client with this email already exists', { statusCode: 409 });
                 }
             }
             await clientDataMapper.update(request.params.id, request.body.client);

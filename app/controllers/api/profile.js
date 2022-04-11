@@ -16,7 +16,7 @@ const profileController = {
 
         if (!profile) {
             throw ApiError('Profile not found', { statusCode: 404 });
-        };
+        }
 
         debug(profile);
 
