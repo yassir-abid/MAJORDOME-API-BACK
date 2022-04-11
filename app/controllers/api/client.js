@@ -154,12 +154,17 @@ const clientController = {
      */
     async deleteAddress(request, response) {
         debug('deleteAddress');
-        const address = await addressDataMapper.findByPk(request.params.id);
+        const address = await addressDataMapper.findByPk(request.params.addressId);
         if (!address) {
             throw new ApiError('This address does not exists', { statusCode: 404 });
         }
 
-        await addressDataMapper.delete(request.params.id);
+        const clientAddresses = await addressDataMapper.findByClient(request.params.clientId);
+        if (clientAddresses.length === 1) {
+            throw new ApiError('This address can not be deleted because it is the only valid address', { statusCode: 409 });
+        }
+
+        await addressDataMapper.delete(request.params.addressId);
         return response.status(204).json();
     },
 };
