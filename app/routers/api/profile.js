@@ -45,7 +45,6 @@ router
      * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Profile not found - application/json
      */
-
     .delete(authenticateToken, controllerHandler(profileController.delete));
 
 module.exports = router;

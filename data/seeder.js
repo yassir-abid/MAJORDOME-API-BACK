@@ -93,6 +93,7 @@ const tables = [
             comments: () => faker.lorem.sentence(),
             report: () => faker.lorem.sentence(),
             project_id: { to: 'project' },
+            address_id: { to: 'address' },
         },
     },
 

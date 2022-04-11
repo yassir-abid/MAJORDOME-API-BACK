@@ -1,4 +1,4 @@
-const debug = require('debug')('Profile');
+const debug = require('debug')('ProfileDataMapper');
 const client = require('../config/db');
 
 /**
