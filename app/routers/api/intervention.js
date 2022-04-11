@@ -1,10 +1,9 @@
 const express = require('express');
 
+const pictureRouter = require('./picture');
 const validate = require('../../validation/validator');
 const createSchema = require('../../validation/schemas/interventionCreateSchema');
 const updateSchema = require('../../validation/schemas/interventionUpdateSchema');
-const createPictureSchema = require('../../validation/schemas/pictureCreateSchema');
-const updatePictureSchema = require('../../validation/schemas/pictureUpdateSchema');
 
 const authenticateToken = require('../../middlewares/authenticateToken');
 
@@ -60,68 +59,7 @@ router
      */
     .get(authenticateToken, controllerHandler(controller.getReport));
 
-router
-    .route('/:id(\\d+)/pictures')
-    /**
-     * GET /api/interventions/{id}/pictures
-     * @summary Get intervention pictures
-     * @tags Intervention
-     * @security BearerAuth
-     * @param {number} id.path.required - intervention identifier
-     * @returns {array<Picture>} 200 - success response - application/json
-     * @returns {ApiError} 404 - Intervention not found - application/json
-     */
-    .get(authenticateToken, controllerHandler(controller.getAllPictures))
-    /**
-     * POST /api/interventions/{id}/pictures
-     * @summary Add new picture to intervention
-     * @tags Intervention
-     * @security BearerAuth
-     * @param {number} id.path.required - intervention identifier
-     * @param {InputPicture} request.body.required - Picture informations
-     * @returns {Picture} 201 - success response - application/json
-     * @returns {ApiError} 400 - Bad request response - application/json
-     * @returns {ApiError} 404 - Intervention not found - application/json
-     */
-    .post(authenticateToken, validate('body', createPictureSchema), controllerHandler(controller.addPicture));
-
-router
-    .route('/:interventionId(\\d+)/pictures/:pictureId(\\d+)')
-    /**
-     * GET /api/interventions/{interventionId}/pictures/{pictureId}
-     * @summary Get one picture
-     * @tags Intervention
-     * @security BearerAuth
-     * @param {number} interventionId.path.required - intervention identifier
-     * @param {number} pictureId.path.required - picture identifier
-     * @returns {Picture} 200 - success response - application/json
-     * @returns {ApiError} 404 - Intervention or Picture not found - application/json
-     */
-    .get(authenticateToken, controllerHandler(controller.getOnePicture))
-    /**
-     * PATCH /api/interventions/{interventionId}/pictures/{pictureId}
-     * @summary Update picture
-     * @tags Intervention
-     * @security BearerAuth
-     * @param {number} interventionId.path.required - intervention identifier
-     * @param {number} pictureId.path.required - picture identifier
-     * @param {InputPicture} request.body.required - picture informations
-     * @returns {Picture} 200 - success response - application/json
-     * @returns {ApiError} 400 - Bad request response - application/json
-     * @returns {ApiError} 404 - Intervention or Picture not found - application/json
-     */
-    .patch(authenticateToken, validate('body', updatePictureSchema), controllerHandler(controller.updatePicture))
-    /**
-     * DELETE /api/interventions/{interventionId}/pictures/{pictureId}
-     * @summary Delete one picture
-     * @tags Intervention
-     * @security BearerAuth
-     * @param {number} interventionId.path.required - intervention identifier
-     * @param {number} pictureId.path.required - picture identifier
-     * @returns 204 - success response - application/json
-     * @returns {ApiError} 404 - Intervention or Picture not found - application/json
-     */
-    .delete(authenticateToken, controllerHandler(controller.deletePicture));
+router.use(pictureRouter);
 
 router
     .route('/:id(\\d+)')

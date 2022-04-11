@@ -3,7 +3,6 @@ const debug = require('debug')('InterventionController');
 
 const interventionDataMapper = require('../../models/intervention');
 const addressDataMapper = require('../../models/address');
-const pictureDataMapper = require('../../models/picture');
 // const projectDataMapper = require('../../models/project');
 
 const { ApiError } = require('../../helpers/errorHandler');
@@ -160,118 +159,6 @@ const interventionController = {
         const report = await interventionDataMapper.findReport(request.params.id);
 
         return response.json(report);
-    },
-
-    /**
-     * Intervention controller to get intervention pictures by intervention id
-     * ExpressMiddleware signature
-     * @param {object} request Express request object
-     * @param {object} response Express response object
-     * @returns {array<Picture>} Route API JSON response
-     */
-    async getAllPictures(request, response) {
-        debug('getAllPictures');
-        const intervention = await interventionDataMapper.findByPk(request.params.id);
-
-        if (!intervention) {
-            throw new ApiError('Intervention not found', { statusCode: 404 });
-        }
-
-        const pictures = await pictureDataMapper.findAll(request.params.id);
-
-        return response.json(pictures);
-    },
-
-    /**
-     * Intervention controller to add a new picture
-     * ExpressMiddleware signature
-     * @param {object} request Express request object
-     * @param {object} response Express response object
-     * @returns {Picture} Route API JSON response
-     */
-    async addPicture(request, response) {
-        debug('addPicture');
-        const intervention = await interventionDataMapper.findByPk(request.params.id);
-
-        if (!intervention) {
-            throw new ApiError('Intervention not found', { statusCode: 404 });
-        }
-
-        const savedPicture = await pictureDataMapper.insert(request.body, request.params.id);
-        response.json(savedPicture);
-    },
-
-    /**
-     * Intervention controller to get intervention pictures by intervention id
-     * ExpressMiddleware signature
-     * @param {object} request Express request object
-     * @param {object} response Express response object
-     * @returns {array<Picture>} Route API JSON response
-     */
-    async getOnePicture(request, response) {
-        debug('getOnePicture');
-        const intervention = await interventionDataMapper.findByPk(request.params.interventionId);
-
-        if (!intervention) {
-            throw new ApiError('Intervention not found', { statusCode: 404 });
-        }
-
-        const picture = await pictureDataMapper.findByPk(request.params.pictureId);
-
-        if (!picture) {
-            throw new ApiError('Picture not found', { statusCode: 404 });
-        }
-
-        return response.json(picture);
-    },
-
-    /**
-     * Intervention controller to update a picture
-     * ExpressMiddleware signature
-     * @param {object} request Express request object
-     * @param {object} response Express response object
-     * @returns {Picture} Route API JSON response
-     */
-    async updatePicture(request, response) {
-        debug('updatePicture');
-        const intervention = await interventionDataMapper.findByPk(request.params.interventionId);
-        if (!intervention) {
-            throw new ApiError('This intervention does not exists', { statusCode: 404 });
-        }
-
-        const picture = await pictureDataMapper.findByPk(request.params.pictureId);
-
-        if (!picture) {
-            throw new ApiError('Picture not found', { statusCode: 404 });
-        }
-
-        const savecPicture = await pictureDataMapper.update(request.params.pictureId, request.body);
-
-        return response.json(savecPicture);
-    },
-
-    /**
-     * Intervention controller to delete picture.
-     * ExpressMiddleware signature
-     * @param {object} request Express request object
-     * @param {object} response Express response object
-     * @returns {string} Route API JSON response
-     */
-    async deletePicture(request, response) {
-        debug('deletePicture');
-        const intervention = await interventionDataMapper.findByPk(request.params.interventionId);
-        if (!intervention) {
-            throw new ApiError('This intervention does not exists', { statusCode: 404 });
-        }
-
-        const picture = await pictureDataMapper.findByPk(request.params.pictureId);
-
-        if (!picture) {
-            throw new ApiError('Picture not found', { statusCode: 404 });
-        }
-
-        await pictureDataMapper.delete(request.params.pictureId);
-        return response.status(204).json();
     },
 };
 
