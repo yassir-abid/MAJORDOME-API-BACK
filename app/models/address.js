@@ -73,7 +73,7 @@ const addressDataMapper = {
                     (number, street, postal_code, city, comments, client_id)
                     VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`,
             values: [address.number, address.street, address.postal_code,
-            address.city, address.comments, address.client_id],
+                address.city, address.comments, address.client_id],
         };
         const savedAddress = await client.query(preparedQuery);
 

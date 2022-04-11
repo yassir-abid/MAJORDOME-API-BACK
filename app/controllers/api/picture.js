@@ -36,11 +36,6 @@ const pictureController = {
      */
     async getOne(request, response) {
         debug('getOne');
-        const intervention = await interventionDataMapper.findByPk(request.params.interventionId);
-
-        if (!intervention) {
-            throw new ApiError('Intervention not found', { statusCode: 404 });
-        }
 
         const picture = await pictureDataMapper.findByPk(request.params.pictureId);
 
@@ -79,10 +74,6 @@ const pictureController = {
      */
     async update(request, response) {
         debug('update');
-        const intervention = await interventionDataMapper.findByPk(request.params.interventionId);
-        if (!intervention) {
-            throw new ApiError('This intervention does not exists', { statusCode: 404 });
-        }
 
         const picture = await pictureDataMapper.findByPk(request.params.pictureId);
 
@@ -104,10 +95,6 @@ const pictureController = {
      */
     async delete(request, response) {
         debug('delete');
-        const intervention = await interventionDataMapper.findByPk(request.params.interventionId);
-        if (!intervention) {
-            throw new ApiError('This intervention does not exists', { statusCode: 404 });
-        }
 
         const picture = await pictureDataMapper.findByPk(request.params.pictureId);
 

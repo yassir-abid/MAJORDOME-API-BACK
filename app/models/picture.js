@@ -40,10 +40,10 @@ const pictureDataMapper = {
     },
 
     /**
-     * Find intervention by id without project, client and address details
-     * @param {number} interventionId - id of the desired intervention
+     * Find picture by id
+     * @param {number} pictureId - id of the desired picture
      * @returns {(Intervention|undefined)} -
-     * The desired intervention or undefined if no intervention found with this id
+     * The desired picture or undefined if no picture found with this id
      */
     async findByPk(pictureId) {
         debug('findByPk');

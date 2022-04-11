@@ -12,6 +12,7 @@ const profileController = {
      * @returns {Profile} Route API JSON response
      */
     async getOne(request, response) {
+        debug('getOne');
         const profile = await profileDataMapper.findByPk(request.decoded.id);
 
         if (!profile) {
@@ -31,6 +32,7 @@ const profileController = {
      * @returns {Profile} Route API JSON response
      */
     async update(request, response) {
+        debug('update');
         const profile = await profileDataMapper.findByPk(request.decoded.id);
 
         if (!profile) {
@@ -66,6 +68,7 @@ const profileController = {
      * @returns {Profile} Route API JSON response
      */
     async delete(request, response) {
+        debug('delete');
         const profile = await profileDataMapper.findByPk(request.decoded.id);
 
         if (!profile) {

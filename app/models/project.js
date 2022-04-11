@@ -48,6 +48,7 @@ const dataMapper = {
      * @returns {array<ProjectWithClient>} - All projects of the database with their linked client
      */
     async findAll() {
+        debug('findAll');
         const result = await client.query('SELECT * FROM project_with_client ORDER BY title ASC');
 
         debug(result);
@@ -61,7 +62,9 @@ const dataMapper = {
      * @returns {(ProjectWithClient|undefined)} -
      * The desired project or undefined if no project found with this id
      */
+
     async findByPkWithClient(projectId) {
+        debug('findByPkWithClient');
         const preparedQuery = {
             text: 'SELECT * FROM project_with_client WHERE id = $1',
             values: [projectId],
@@ -85,6 +88,7 @@ const dataMapper = {
      * The desired project or undefined if no project found with this id
      */
     async findByPk(projectId) {
+        debug('findByPk');
         const preparedQuery = {
             text: 'SELECT * FROM project WHERE id = $1',
             values: [projectId],
@@ -107,6 +111,7 @@ const dataMapper = {
      * @returns {Project} - Inserted project
      */
     async insert(projectInfos) {
+        debug('insert');
         const preparedQuery = {
             text: `INSERT INTO project
             (title, description, comments, client_id)
@@ -128,6 +133,7 @@ const dataMapper = {
      * @returns {Project} - Updated project
      */
     async update(id, projectInfos) {
+        debug('update');
         const fields = Object.keys(projectInfos).map((prop, index) => `"${prop}" = $${index + 1}`);
         const values = Object.values(projectInfos);
 
@@ -153,6 +159,7 @@ const dataMapper = {
      * @returns {boolean} - Result of the delete operation
      */
     async delete(id) {
+        debug('delete');
         const preparedQuery = {
             text: 'DELETE FROM project WHERE id = $1',
             values: [id],
@@ -175,7 +182,7 @@ const dataMapper = {
     async isUnique(inputData) {
         debug('isUnique');
         const preparedQuery = {
-            text: `SELECT id, LOWER(title) AS title, client_id FROM project WHERE title = $1`,
+            text: 'SELECT id, LOWER(title) AS title, client_id FROM project WHERE title = $1',
             values: [inputData.title.toLowerCase()],
         };
 

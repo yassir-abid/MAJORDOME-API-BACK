@@ -14,6 +14,7 @@ const signupController = {
      * @returns {object} Route API JSON response
      */
     async signup(request, response) {
+        debug('signup');
         const user = await signupDataMapper.findByEmail(request.body);
 
         debug(user);
