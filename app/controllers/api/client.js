@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const debug = require('debug')('ClientController');
 
 const clientDataMapper = require('../../models/client');
@@ -98,15 +99,26 @@ const clientController = {
 
         if (request.body.addresses) {
             const promises = [];
+            const addressId = [];
             request.body.addresses.forEach((address) => {
                 const { id, ...addressInfos } = address;
                 if (id === null) {
                     addressInfos.client_id = request.params.id;
                     promises.push(addressDataMapper.insert(addressInfos));
                 } else {
+                    addressId.push(id);
                     promises.push(addressDataMapper.update(id, addressInfos));
                 }
             });
+
+            const clientAddresses = await addressDataMapper.findByClient(request.params.id);
+            addressId.forEach((id) => {
+                const foundAddress = clientAddresses.find((clientAddress) => clientAddress.id === Number(id));
+                if (!foundAddress) {
+                    throw new ApiError('Address_id does not match with any client addresses', { statusCode: 409 });
+                }
+            });
+
             await Promise.all(promises);
         }
 

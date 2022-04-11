@@ -45,6 +45,23 @@ const addressDataMapper = {
     },
 
     /**
+     * Find address by id
+     * @param {number} addressId - id of the desired client
+     * @returns {(Address|undefined)} -
+     * The desired address or undefined if no address found with this id
+     */
+    async findByClient(clientId) {
+        debug('findByClient');
+        const preparedQuery = {
+            text: 'SELECT * FROM address WHERE client_id = $1;',
+            values: [clientId],
+        };
+        const result = await client.query(preparedQuery);
+
+        return result.rows;
+    },
+
+    /**
      * Add address in the database
      * @param {InputAddress} address - Data to insert
      * @returns {Address} - Inserted address
@@ -56,7 +73,7 @@ const addressDataMapper = {
                     (number, street, postal_code, city, comments, client_id)
                     VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`,
             values: [address.number, address.street, address.postal_code,
-                address.city, address.comments, address.client_id],
+            address.city, address.comments, address.client_id],
         };
         const savedAddress = await client.query(preparedQuery);
 
