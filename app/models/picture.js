@@ -24,8 +24,8 @@ const pictureDataMapper = {
      * @returns {(array<Picture>|undefined)} -
      * The desired intervention pictures or undefined if no intervention found with this id
      */
-    async findPictures(interventionId) {
-        debug('findPictures');
+    async findAll(interventionId) {
+        debug('findAll');
         const preparedQuery = {
             text: 'SELECT * FROM picture WHERE intervention_id = $1;',
             values: [interventionId],
@@ -37,6 +37,27 @@ const pictureDataMapper = {
         }
 
         return result.rows;
+    },
+
+    /**
+     * Find intervention by id without project, client and address details
+     * @param {number} interventionId - id of the desired intervention
+     * @returns {(Intervention|undefined)} -
+     * The desired intervention or undefined if no intervention found with this id
+     */
+    async findByPk(pictureId) {
+        debug('findByPk');
+        const preparedQuery = {
+            text: 'SELECT * FROM picture WHERE id = $1;',
+            values: [pictureId],
+        };
+        const result = await client.query(preparedQuery);
+
+        if (result.rowCount === 0) {
+            return undefined;
+        }
+
+        return result.rows[0];
     },
 
     /**
@@ -54,6 +75,31 @@ const pictureDataMapper = {
             values: [picture.title, picture.status, picture.path, interventionId],
         };
         const savedPicture = await client.query(preparedQuery);
+
+        return savedPicture.rows[0];
+    },
+
+    /**
+     * Update picture
+     * @param {number} id - picture id
+     * @param {InputPicture} picture - Data to edit
+     * @returns {Picture} - Edited Profile
+     */
+    async update(id, picture) {
+        debug('update');
+
+        const fields = Object.keys(picture).map((prop, index) => `"${prop}" = $${index + 1}`);
+        const values = Object.values(picture);
+
+        const savedPicture = await client.query(
+            `
+                UPDATE picture SET
+                    ${fields}
+                WHERE id = $${fields.length + 1}
+                RETURNING *;
+            `,
+            [...values, id],
+        );
 
         return savedPicture.rows[0];
     },
