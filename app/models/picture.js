@@ -83,7 +83,7 @@ const pictureDataMapper = {
      * Update picture
      * @param {number} id - picture id
      * @param {InputPicture} picture - Data to edit
-     * @returns {Picture} - Edited Profile
+     * @returns {Picture} - Edited picture
      */
     async update(id, picture) {
         debug('update');
