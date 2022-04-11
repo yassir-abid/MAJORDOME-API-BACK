@@ -35,6 +35,7 @@ const dataMapper = {
      * Desired Profile or undefined if no Profile with that id
      */
     async findByPk(profileId) {
+        debug('findByPk');
         const preparedQuery = {
             text: 'SELECT firstname, lastname, email, phone, address, picture FROM provider WHERE id = $1',
             values: [profileId],
@@ -57,6 +58,7 @@ const dataMapper = {
      * @returns {Profile} - Inserted profile
      */
     async insert(profile) {
+        debug('insert');
         const preparedQuery = {
             text: `INSERT INTO provider
                     (firstname, lastname, email, phone, address, password, picture)
@@ -79,6 +81,7 @@ const dataMapper = {
      * @returns {Profile} - Edited Profile
      */
     async update(id, profile) {
+        debug('update');
         const fields = Object.keys(profile).map((prop, index) => `"${prop}" = $${index + 1}`);
         const values = Object.values(profile);
 
@@ -106,6 +109,7 @@ const dataMapper = {
      * @returns {boolean} - Deletion result
      */
     async delete(id) {
+        debug('delete');
         const preparedQuery = {
             text: 'DELETE FROM provider WHERE id = $1',
             values: [id],
@@ -125,6 +129,7 @@ const dataMapper = {
      * or null if no Profile with these data
      */
     async isUnique(inputData, profileId) {
+        debug('isUnique');
         const preparedQuery = {
             text: 'SELECT * FROM provider WHERE email = $1',
             values: [inputData.email],

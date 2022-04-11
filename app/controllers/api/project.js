@@ -12,6 +12,7 @@ const projectController = {
      * @returns {array<ProjectWithClient>} Route API JSON response
      */
     async getAll(request, response) {
+        debug('getAll');
         const projects = await projectDataMapper.findAll();
 
         debug(projects);
@@ -27,6 +28,7 @@ const projectController = {
      * @returns {ProjectWithClient} Route API JSON response
      */
     async getOne(request, response) {
+        debug('getOne');
         const project = await projectDataMapper.findByPk(request.params.id);
 
         debug(project);
@@ -46,6 +48,7 @@ const projectController = {
      * @returns {Project} Route API JSON response
      */
     async create(request, response) {
+        debug('create');
         const project = await projectDataMapper.isUnique(request.body);
 
         debug(project);
@@ -68,6 +71,7 @@ const projectController = {
      * @returns {Project} Route API JSON response
      */
     async update(request, response) {
+        debug('update');
         const project = await projectDataMapper.findByPk(request.params.id);
 
         debug(project);
@@ -101,6 +105,7 @@ const projectController = {
      * @returns {string} Route API JSON response
      */
     async delete(request, response) {
+        debug('delete');
         const project = await projectDataMapper.findByPk(request.params.id);
 
         if (!project) {
