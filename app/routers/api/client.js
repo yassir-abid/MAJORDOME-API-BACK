@@ -73,13 +73,12 @@ router
     .delete(authenticateToken, controllerHandler(controller.delete));
 
 router
-    .route('/:clientId(\\d+)/address/:addressId(\\d+)')
+    .route('/address/:addressId(\\d+)')
     /**
-     * DELETE /api/clients/{clientId}/address/{addressId}
+     * DELETE /api/clients/address/{addressId}
      * @summary Delete a client's address
      * @tags Client
      * @security BearerAuth
-     * @param {number} clientId.path.required - address identifier
      * @param {number} addressId.path.required - address identifier
      * @returns 204 - success response - application/json
      * @returns {ApiError} 409 - Bad request response - application/json

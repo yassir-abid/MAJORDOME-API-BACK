@@ -159,9 +159,9 @@ const clientController = {
             throw new ApiError('This address does not exists', { statusCode: 404 });
         }
 
-        const clientAddresses = await addressDataMapper.findByClient(request.params.clientId);
+        const clientAddresses = await addressDataMapper.findByClient(address.client_id);
         if (clientAddresses.length === 1) {
-            throw new ApiError('This address can not be deleted because it is the only valid address', { statusCode: 409 });
+            throw new ApiError('This address can not be deleted because it is the only client address', { statusCode: 409 });
         }
 
         await addressDataMapper.delete(request.params.addressId);
