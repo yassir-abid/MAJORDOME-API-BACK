@@ -60,6 +60,19 @@ router
     .get(authenticateToken, controllerHandler(controller.getReport));
 
 router
+    .route('/:id(\\d+)/pictures')
+    /**
+     * GET /api/interventions/{id}/pictures
+     * @summary Get intervention pictures
+     * @tags Intervention
+     * @security BearerAuth
+     * @param {number} id.path.required - intervention identifier
+     * @returns {array<Picture>} 200 - success response - application/json
+     * @returns {ApiError} 404 - Intervention not found - application/json
+     */
+    .get(authenticateToken, controllerHandler(controller.getPictures));
+
+router
     .route('/:id(\\d+)')
     /**
      * GET /api/interventions/{id}

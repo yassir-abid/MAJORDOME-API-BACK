@@ -199,9 +199,9 @@ const interventionDataMapper = {
             (title, description, date, status, comments, report, project_id, address_id) VALUES
             ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;`,
             values: [intervention.title, intervention.description,
-            intervention.date, intervention.status,
-            intervention.comments, intervention.report,
-            intervention.project_id, intervention.address_id],
+                intervention.date, intervention.status,
+                intervention.comments, intervention.report,
+                intervention.project_id, intervention.address_id],
         };
         const savedIntervention = await client.query(preparedQuery);
 
@@ -249,27 +249,6 @@ const interventionDataMapper = {
     },
 
     /**
-     * Find intervention report by intervention
-     * @param {number} interventionId - id of the desired intervention
-     * @returns {(Report|undefined)} -
-     * The desired report intervention or undefined if no intervention found with this id
-     */
-    async findReport(interventionId) {
-        debug('findReport');
-        const preparedQuery = {
-            text: 'SELECT * FROM report_and_pictures WHERE id = $1 ;',
-            values: [interventionId],
-        };
-        const result = await client.query(preparedQuery);
-
-        if (result.rowCount === 0) {
-            return undefined;
-        }
-
-        return result.rows[0];
-    },
-
-    /**
      * Find all addresses linked to the intervention client by project id
      * @param {number} projectId - id of the intervention project
      * @returns {array<id>} - id of the intervention client addresses
@@ -288,6 +267,27 @@ const interventionDataMapper = {
             return null;
         }
         return result.rows;
+    },
+
+    /**
+     * Find intervention report by intervention id
+     * @param {number} interventionId - id of the desired intervention
+     * @returns {(Report|undefined)} -
+     * The desired report intervention or undefined if no intervention found with this id
+     */
+    async findReport(interventionId) {
+        debug('findReport');
+        const preparedQuery = {
+            text: 'SELECT * FROM report_and_pictures WHERE id = $1 ;',
+            values: [interventionId],
+        };
+        const result = await client.query(preparedQuery);
+
+        if (result.rowCount === 0) {
+            return undefined;
+        }
+
+        return result.rows[0];
     },
 };
 

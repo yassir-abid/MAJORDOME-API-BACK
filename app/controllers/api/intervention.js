@@ -3,6 +3,7 @@ const debug = require('debug')('InterventionController');
 
 const interventionDataMapper = require('../../models/intervention');
 const addressDataMapper = require('../../models/address');
+const pictureDataMapper = require('../../models/picture');
 // const projectDataMapper = require('../../models/project');
 
 const { ApiError } = require('../../helpers/errorHandler');
@@ -146,7 +147,7 @@ const interventionController = {
      * ExpressMiddleware signature
      * @param {object} request Express request object
      * @param {object} response Express response object
-     * @returns {Intervention} Route API JSON response
+     * @returns {Report} Route API JSON response
      */
     async getReport(request, response) {
         debug('getReport');
@@ -159,6 +160,26 @@ const interventionController = {
         const report = await interventionDataMapper.findReport(request.params.id);
 
         return response.json(report);
+    },
+
+    /**
+     * Intervention controller to get intervention pictures by intervention id
+     * ExpressMiddleware signature
+     * @param {object} request Express request object
+     * @param {object} response Express response object
+     * @returns {array<Picture>} Route API JSON response
+     */
+    async getPictures(request, response) {
+        debug('getPictures');
+        const intervention = await interventionDataMapper.findByPk(request.params.id);
+
+        if (!intervention) {
+            throw new ApiError('Intervention not found', { statusCode: 404 });
+        }
+
+        const pictures = await pictureDataMapper.findPictures(request.params.id);
+
+        return response.json(pictures);
     },
 };
 
