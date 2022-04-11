@@ -37,24 +37,22 @@ router
     .post(authenticateToken, validate('body', createSchema), controllerHandler(controller.create));
 
 router
-    .route('/:interventionId(\\d+)/pictures/:pictureId(\\d+)')
+    .route('/pictures/:pictureId(\\d+)')
     /**
-     * GET /api/interventions/{interventionId}/pictures/{pictureId}
+     * GET /api/interventions/pictures/{pictureId}
      * @summary Get one picture
      * @tags Intervention Pictures
      * @security BearerAuth
-     * @param {number} interventionId.path.required - intervention identifier
      * @param {number} pictureId.path.required - picture identifier
      * @returns {Picture} 200 - success response - application/json
      * @returns {ApiError} 404 - Intervention or Picture not found - application/json
      */
     .get(authenticateToken, controllerHandler(controller.getOne))
     /**
-     * PATCH /api/interventions/{interventionId}/pictures/{pictureId}
+     * PATCH /api/interventions/pictures/{pictureId}
      * @summary Update picture
      * @tags Intervention Pictures
      * @security BearerAuth
-     * @param {number} interventionId.path.required - intervention identifier
      * @param {number} pictureId.path.required - picture identifier
      * @param {InputPicture} request.body.required - picture informations
      * @returns {Picture} 200 - success response - application/json
@@ -63,11 +61,10 @@ router
      */
     .patch(authenticateToken, validate('body', updateSchema), controllerHandler(controller.update))
     /**
-     * DELETE /api/interventions/{interventionId}/pictures/{pictureId}
+     * DELETE /api/interventions/pictures/{pictureId}
      * @summary Delete one picture
      * @tags Intervention Pictures
      * @security BearerAuth
-     * @param {number} interventionId.path.required - intervention identifier
      * @param {number} pictureId.path.required - picture identifier
      * @returns 204 - success response - application/json
      * @returns {ApiError} 404 - Intervention or Picture not found - application/json
