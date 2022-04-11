@@ -10,6 +10,13 @@ const client = require('../config/db');
  * @property {number} intervention_id - Id of the intervention linked to the picture
  */
 
+/**
+ * @typedef {object} InputPicture
+ * @property {string} title - Picture title
+ * @property {string} status - Picture title (before/after intervention)
+ * @property {string} path - Picture path
+ */
+
 const pictureDataMapper = {
     /**
      * Find intervention pictures by intervention id
@@ -30,6 +37,25 @@ const pictureDataMapper = {
         }
 
         return result.rows;
+    },
+
+    /**
+     * Add picture in the database
+     * @param {InputPicture} picture - Data to insert
+     * @param {number} interventionId - Intervention id linked to the picture
+     * @returns {Picture} - Inserted intervention
+     */
+    async insert(picture, interventionId) {
+        debug('insert');
+        const preparedQuery = {
+            text: ` INSERT INTO picture
+            (title, status, path, intervention_id) VALUES
+            ($1, $2, $3, $4) RETURNING *;`,
+            values: [picture.title, picture.status, picture.path, interventionId],
+        };
+        const savedPicture = await client.query(preparedQuery);
+
+        return savedPicture.rows[0];
     },
 };
 

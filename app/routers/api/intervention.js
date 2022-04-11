@@ -3,6 +3,7 @@ const express = require('express');
 const validate = require('../../validation/validator');
 const createSchema = require('../../validation/schemas/interventionCreateSchema');
 const updateSchema = require('../../validation/schemas/interventionUpdateSchema');
+const createPictureSchema = require('../../validation/schemas/pictureCreateSchema');
 
 const authenticateToken = require('../../middlewares/authenticateToken');
 
@@ -32,7 +33,6 @@ router
      * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Intervention not found - application/json
      */
-    // .post(authenticateToken, controllerHandler(controller.create));
     .post(authenticateToken, validate('body', createSchema), controllerHandler(controller.create));
 
 router
@@ -70,7 +70,19 @@ router
      * @returns {array<Picture>} 200 - success response - application/json
      * @returns {ApiError} 404 - Intervention not found - application/json
      */
-    .get(authenticateToken, controllerHandler(controller.getPictures));
+    .get(authenticateToken, controllerHandler(controller.getPictures))
+    /**
+     * POST /api/interventions/{id}/pictures
+     * @summary Add new picture to intervention
+     * @tags Intervention
+     * @security BearerAuth
+     * @param {number} id.path.required - intervention identifier
+     * @param {InputPicture} request.body.required - Picture informations
+     * @returns {Picture} 201 - success response - application/json
+     * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 404 - Intervention not found - application/json
+     */
+    .post(authenticateToken, validate('body', createPictureSchema), controllerHandler(controller.addPicture));
 
 router
     .route('/:id(\\d+)')

@@ -181,6 +181,25 @@ const interventionController = {
 
         return response.json(pictures);
     },
+
+    /**
+     * Intervention controller to add a new picture
+     * ExpressMiddleware signature
+     * @param {object} request Express request object
+     * @param {object} response Express response object
+     * @returns {Picture} Route API JSON response
+     */
+    async addPicture(request, response) {
+        debug('addPicture');
+        const intervention = await interventionDataMapper.findByPk(request.params.id);
+
+        if (!intervention) {
+            throw new ApiError('Intervention not found', { statusCode: 404 });
+        }
+
+        const savedPicture = await pictureDataMapper.insert(request.body, request.params.id);
+        response.json(savedPicture);
+    },
 };
 
 module.exports = interventionController;
