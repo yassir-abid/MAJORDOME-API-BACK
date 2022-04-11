@@ -20,7 +20,7 @@ const signupController = {
 
         if (user) {
             throw new ApiError('User with this email already exists', { statusCode: 409 });
-        };
+        }
 
         if (request.body.password !== request.body.passwordConfirm) {
             throw new ApiError('Confirmation password does not match password');

@@ -33,7 +33,7 @@ const projectController = {
 
         if (!project) {
             throw new ApiError('Project not found', { statusCode: 404 });
-        };
+        }
 
         return response.json(project);
     },
