@@ -2,6 +2,7 @@
 
 BEGIN;
 
+-- View to select client and addresses
 CREATE VIEW client_with_addresses AS
 SELECT
 	client.*,
@@ -23,6 +24,8 @@ SELECT * FROM client_with_addresses
 UNION ALL
 SELECT * FROM client_without_addresses;
 
+
+-- View to select project and client
 CREATE VIEW project_with_client AS
 SELECT
     project.*,
@@ -34,5 +37,31 @@ SELECT
 FROM project
 JOIN client on project.client_id = client.id
 GROUP BY project.id;
+
+
+-- View to select intervention report and pictures
+CREATE VIEW report_with_pictures AS
+SELECT intervention.id, intervention.title, intervention.description, intervention.date, intervention.report,
+json_agg(json_build_object('id', picture.id,
+				'title', picture.title,
+				'status', picture.status,
+				'path', picture.path,
+				'intervention_id', picture.intervention_id))
+				AS pictures
+FROM intervention
+JOIN picture ON picture.intervention_id = intervention.id
+GROUP BY intervention.id;
+
+CREATE VIEW report_without_pictures AS
+SELECT intervention.id, intervention.title, intervention.description, intervention.date, intervention.report,
+json_build_array() AS pictures FROM intervention
+WHERE intervention.id <> ALL (
+		SELECT picture.intervention_id FROM picture
+);
+
+CREATE VIEW report_and_pictures AS
+SELECT * FROM report_with_pictures 
+UNION ALL
+SELECT * FROM report_without_pictures;
 
 COMMIT;

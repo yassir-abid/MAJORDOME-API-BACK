@@ -4,6 +4,8 @@ const loginController = require('./login');
 const profileController = require('./profile');
 const clientController = require('./client');
 const projectController = require('./project');
+const interventionController = require('./intervention');
+const pictureController = require('./picture');
 
 const apiController = {
     /**
@@ -29,4 +31,6 @@ module.exports = {
     profileController,
     clientController,
     projectController,
+    interventionController,
+    pictureController,
 };

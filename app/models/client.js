@@ -55,25 +55,34 @@ const client = require('../config/db');
  */
 
 /**
- * @typedef {object} InputAddress
+ * @typedef {object} InsertInputAddress
  * @property {string} number - Number of the street
  * @property {string} street - Street
  * @property {string} postal_code - Postal_code
  * @property {string} city - City
  * @property {string} comments - Additionnal informations
- * @property {number} client_id - Id of the client linked to the address
+ */
+
+/**
+ * @typedef {object} UpdateInputAddress
+ * @property {number} id - Address id
+ * @property {string} number - Number of the street
+ * @property {string} street - Street
+ * @property {string} postal_code - Postal_code
+ * @property {string} city - City
+ * @property {string} comments - Additionnal informations
  */
 
 /**
  * @typedef {Object} InsertClientWithAddress
  * @property {InputClient} client - Client informations
- * @property {array<InputAddress>} addresses - Client's addresses informations
+ * @property {array<InsertInputAddress>} addresses - Client's addresses informations
  */
 
 /**
  * @typedef {Object} UpdateClientWithAddress
  * @property {InputClient} client - Client informations
- * @property {array<Address>} addresses - Client's addresses informations with their
+ * @property {array<UpdateInputAddress>} addresses - Client's addresses informations with their
  */
 
 const dataMapper = {

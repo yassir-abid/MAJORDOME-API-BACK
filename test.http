@@ -103,3 +103,11 @@ DELETE {{ endpoint }}/clients/2
 
 ### Delete client address
 DELETE {{ endpoint }}/clients/address/26
+
+
+
+{
+  "email": "test@test.com",
+  "password": "testTest!0"
+}
+

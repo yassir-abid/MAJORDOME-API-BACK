@@ -51,7 +51,7 @@ CREATE TABLE "project" (
   "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "title" TEXT NOT NULL,
   "description" TEXT,
-  "status" TEXT DEFAULT "Vide",
+  "status" TEXT DEFAULT 'Vide',
   "comments" TEXT,
   "client_id" INT NOT NULL REFERENCES "client"("id") ON DELETE CASCADE
 );
@@ -63,7 +63,8 @@ CREATE TABLE "intervention" (
   "status" TEXT DEFAULT 'Programmée',
   "comments" TEXT,
   "report" TEXT,
-  "project_id" INT NOT NULL REFERENCES "project"("id") ON DELETE CASCADE
+  "project_id" INT NOT NULL REFERENCES "project"("id") ON DELETE CASCADE,
+  "address_id" INT NOT NULL REFERENCES "address"("id") ON DELETE CASCADE
 );
 CREATE TABLE "picture" (
   "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,

@@ -54,6 +54,9 @@ const clientController = {
         clientInfos.provider_id = request.decoded.id;
         const savedClient = await clientDataMapper.insert(clientInfos);
 
+        if (request.body.addresses.length === 0) {
+            throw new ApiError('An address is required ', { statusCode: 409 });
+        }
         const promises = [];
         request.body.addresses.forEach((address) => {
             address.client_id = savedClient.id;
