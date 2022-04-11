@@ -76,6 +76,7 @@ const interventionController = {
             throw new ApiError('This address_id does not match with any intervention client addresses', { statusCode: 409 });
         }
         const savedintervention = await interventionDataMapper.insert(request.body);
+
         return response.json(savedintervention);
     },
 
@@ -134,10 +135,10 @@ const interventionController = {
         debug('delete');
         const intervention = await interventionDataMapper.findByPk(request.params.id);
         if (!intervention) {
-            throw new ApiError('This client does not exists', { statusCode: 404 });
+            throw new ApiError('This intervention does not exists', { statusCode: 404 });
         }
 
-        await interventionDataMapper.delete(request.params.id);
+        await interventionDataMapper.delete(request.params.id, intervention.project_id);
         return response.status(204).json();
     },
 

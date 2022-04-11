@@ -205,6 +205,8 @@ const interventionDataMapper = {
         };
         const savedIntervention = await client.query(preparedQuery);
 
+        await client.query('SELECT update_project_status($1)', [savedIntervention.rows[0].project_id]);
+
         return savedIntervention.rows[0];
     },
 
@@ -228,7 +230,8 @@ const interventionDataMapper = {
             `,
             [...values, id],
         );
-        debug(savedIntervention);
+
+        await client.query('SELECT update_project_status($1)', [savedIntervention.rows[0].project_id]);
 
         return savedIntervention.rows[0];
     },
@@ -238,13 +241,14 @@ const interventionDataMapper = {
      * @param {number} id - id of the intervention to delete
      * @returns {boolean} - Result of the delete operation
      */
-    async delete(id) {
+    async delete(interventionId, projectId) {
         debug('delete');
         const preparedQuery = {
             text: 'DELETE FROM intervention WHERE id = $1',
-            values: [id],
+            values: [interventionId],
         };
         const result = await client.query(preparedQuery);
+        await client.query('SELECT update_project_status($1)', [projectId]);
         return !!result.rowCount;
     },
 
