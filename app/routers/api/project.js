@@ -32,7 +32,7 @@ router
      * @param {InputProject} request.body.required - project informations
      * @returns {Project} 200 - success response - application/json
      * @returns {ApiError} 400 - Bad request response - application/json
-     * @returns {ApiError} 404 - Client not found - application/json
+     * @returns {ApiError} 404 - Project not found - application/json
      * @returns {ApiError} 409 - Conflict response - application/json
      */
     .post(authenticateToken, validate('body', createSchema), controllerHandler(projectController.create));
@@ -47,7 +47,7 @@ router
      * @param {number} id.path.required - project identifier
      * @returns {ClientWithAddress} 200 - success response - application/json
      * @returns {ApiError} 409 - Conflict response - application/json
-     * @returns {ApiError} 404 - Client not found - application/json
+     * @returns {ApiError} 404 - Project not found - application/json
      */
     .get(authenticateToken, controllerHandler(projectController.getOne))
     /**
@@ -59,7 +59,7 @@ router
      * @param {InputProject} request.body.required - project info
      * @returns {Project} 200 - success response - application/json
      * @returns {ApiError} 400 - Bad request response - application/json
-     * @returns {ApiError} 404 - Profile not found - application/json
+     * @returns {ApiError} 404 - Project not found - application/json
      * @returns {ApiError} 409 - Conflict response - application/json
      */
     .patch(authenticateToken, validate('body', updateSchema), controllerHandler(projectController.update))
@@ -71,7 +71,7 @@ router
      * @param {number} id.path.required - project identifier
      * @returns 204 - success response - application/json
      * @returns {ApiError} 409 - Conflict response - application/json
-     * @returns {ApiError} 404 - Profile not found - application/json
+     * @returns {ApiError} 404 - Project not found - application/json
      */
 
     .delete(authenticateToken, controllerHandler(projectController.delete));

@@ -9,7 +9,7 @@ const projectController = {
      * ExpressMiddleware signature
      * @param {object} request Express request object
      * @param {object} response Express response object
-     * @returns {Profile} Route API JSON response
+     * @returns {array<ProjectWithClient>} Route API JSON response
      */
     async getAll(request, response) {
         const projects = await projectDataMapper.findAll();
@@ -24,7 +24,7 @@ const projectController = {
      * ExpressMiddleware signature
      * @param {object} request Express request object
      * @param {object} response Express response object
-     * @returns {Profile} Route API JSON response
+     * @returns {ProjectWithClient} Route API JSON response
      */
     async getOne(request, response) {
         const project = await projectDataMapper.findByPk(request.params.id);
@@ -33,7 +33,7 @@ const projectController = {
 
         if (!project) {
             throw new ApiError('Project not found', { statusCode: 404 });
-        }
+        };
 
         return response.json(project);
     },
@@ -43,7 +43,7 @@ const projectController = {
      * ExpressMiddleware signature
      * @param {object} request Express request object
      * @param {object} response Express response object
-     * @returns {Projects} Route API JSON response
+     * @returns {Project} Route API JSON response
      */
     async create(request, response) {
         const project = await projectDataMapper.isUnique(request.body);
@@ -51,7 +51,7 @@ const projectController = {
         debug(project);
 
         if (project) {
-            throw new ApiError('Project with this title already exists', { statusCode: 409 });
+            throw new ApiError('Project with this title already exists for that client', { statusCode: 409 });
         }
         const savedProject = await projectDataMapper.insert(request.body);
 
@@ -65,7 +65,7 @@ const projectController = {
      * ExpressMiddleware signature
      * @param {object} request Express request object
      * @param {object} response Express response object
-     * @returns {string} Route API JSON response
+     * @returns {Project} Route API JSON response
      */
     async update(request, response) {
         const project = await projectDataMapper.findByPk(request.params.id);
@@ -79,10 +79,11 @@ const projectController = {
         if (request.body.title) {
             const existingProject = await projectDataMapper.isUnique(
                 request.body.title,
+                request.body.client_id,
                 request.params.id,
             );
             if (existingProject) {
-                throw new ApiError('Project with this title already exists', { statusCode: 409 });
+                throw new ApiError('Project with this title already exists for that client', { statusCode: 409 });
             }
         }
         const savedProject = await projectDataMapper.update(request.params.id, request.body);

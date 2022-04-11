@@ -1,3 +1,6 @@
+const debug = require('debug')('Project');
+
+const client = require('../config/db');
 /**
  * @typedef {object} Project
  * @property {number} id - Project id
@@ -38,28 +41,13 @@
  * @property {string} comments - Project comments
  */
 
-/**
- * @typedef {Object} InputClient
- * @property {string} firstname - Client firstname
- * @property {string} lastname - Client lastname
- * @property {string} email - Client email
- * @property {string} phone - Client phone
- * @property {string} comments - Client comments and specific informations
- * @property {string} our_equipments - Client equipment installed by the provider
- * @property {string} other_equipments - Client equipment installed by other providers
- * @property {string} needs - Client needs identified by the provider
- */
-
-const debug = require('debug')('Project');
-const client = require('../config/db');
-
 const dataMapper = {
 
     /**
-     * @returns {array<Projects>} - All projects of the database and their addresses
+     * @returns {array<ProjectWithClient>} - All projects of the database with their linked client
      */
     async findAll() {
-        const result = await client.query('SELECT * FROM project ORDER BY title ASC');
+        const result = await client.query('SELECT * FROM project_with_client ORDER BY title ASC');
 
         debug(result);
 
@@ -83,6 +71,7 @@ const dataMapper = {
         if (result.rowCount === 0) {
             return undefined;
         }
+
         debug(result);
 
         return result.rows[0];
@@ -162,12 +151,12 @@ const dataMapper = {
     async isUnique(inputData, projectId) {
         debug('isUnique');
         const preparedQuery = {
-            text: 'SELECT * FROM project WHERE title = $1',
-            values: [inputData.title],
+            text: 'SELECT * FROM project WHERE LOWER(title) = $1 AND client_id =$2',
+            values: [inputData.title.toLowerCase(), inputData.client_id],
         };
 
         if (projectId) {
-            preparedQuery.text += ' AND id <> $2;';
+            preparedQuery.text += ' AND id <> $3;';
             preparedQuery.values.push(projectId);
         }
 

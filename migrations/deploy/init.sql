@@ -51,7 +51,7 @@ CREATE TABLE "project" (
   "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   "title" TEXT NOT NULL,
   "description" TEXT,
-  "status" TEXT,
+  "status" TEXT DEFAULT "Vide",
   "comments" TEXT,
   "client_id" INT NOT NULL REFERENCES "client"("id") ON DELETE CASCADE
 );

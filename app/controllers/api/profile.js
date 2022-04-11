@@ -16,7 +16,7 @@ const profileController = {
 
         if (!profile) {
             throw ApiError('Profile not found', { statusCode: 404 });
-        }
+        };
 
         debug(profile);
 
@@ -28,7 +28,7 @@ const profileController = {
      * ExpressMiddleware signature
      * @param {object} request Express request object
      * @param {object} response Express response object
-     * @returns {string} Route API JSON response
+     * @returns {Profile} Route API JSON response
      */
     async update(request, response) {
         const profile = await profileDataMapper.findByPk(request.decoded.id);
@@ -63,7 +63,7 @@ const profileController = {
      * ExpressMiddleware signature
      * @param {object} request Express request object
      * @param {object} response Express response object
-     * @returns {string} Route API JSON response
+     * @returns {Profile} Route API JSON response
      */
     async delete(request, response) {
         const profile = await profileDataMapper.findByPk(request.decoded.id);
