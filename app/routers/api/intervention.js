@@ -110,7 +110,18 @@ router
      * @returns {ApiError} 400 - Bad request response - application/json
      * @returns {ApiError} 404 - Intervention or Picture not found - application/json
      */
-    .patch(authenticateToken, validate('body', updatePictureSchema), controllerHandler(controller.updatePicture));
+    .patch(authenticateToken, validate('body', updatePictureSchema), controllerHandler(controller.updatePicture))
+    /**
+     * DELETE /api/interventions/{interventionId}/pictures/{pictureId}
+     * @summary Delete one picture
+     * @tags Intervention
+     * @security BearerAuth
+     * @param {number} interventionId.path.required - intervention identifier
+     * @param {number} pictureId.path.required - picture identifier
+     * @returns 204 - success response - application/json
+     * @returns {ApiError} 404 - Intervention or Picture not found - application/json
+     */
+    .delete(authenticateToken, controllerHandler(controller.deletePicture));
 
 router
     .route('/:id(\\d+)')

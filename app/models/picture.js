@@ -103,6 +103,21 @@ const pictureDataMapper = {
 
         return savedPicture.rows[0];
     },
+
+    /**
+     * Remove picture from the database
+     * @param {number} id - id of the picture to delete
+     * @returns {boolean} - Result of the delete operation
+     */
+    async delete(id) {
+        debug('delete');
+        const preparedQuery = {
+            text: 'DELETE FROM picture WHERE id = $1',
+            values: [id],
+        };
+        const result = await client.query(preparedQuery);
+        return !!result.rowCount;
+    },
 };
 
 module.exports = pictureDataMapper;

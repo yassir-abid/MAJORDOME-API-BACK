@@ -249,6 +249,30 @@ const interventionController = {
 
         return response.json(savecPicture);
     },
+
+    /**
+     * Intervention controller to delete picture.
+     * ExpressMiddleware signature
+     * @param {object} request Express request object
+     * @param {object} response Express response object
+     * @returns {string} Route API JSON response
+     */
+    async deletePicture(request, response) {
+        debug('deletePicture');
+        const intervention = await interventionDataMapper.findByPk(request.params.interventionId);
+        if (!intervention) {
+            throw new ApiError('This intervention does not exists', { statusCode: 404 });
+        }
+
+        const picture = await pictureDataMapper.findByPk(request.params.pictureId);
+
+        if (!picture) {
+            throw new ApiError('Picture not found', { statusCode: 404 });
+        }
+
+        await pictureDataMapper.delete(request.params.pictureId);
+        return response.status(204).json();
+    },
 };
 
 module.exports = interventionController;
