@@ -15,7 +15,7 @@ const profileController = {
         const profile = await profileDataMapper.findByPk(request.decoded.id);
 
         if (!profile) {
-            throw ApiError('Profile not found', { statusCode: 404 });
+            throw new ApiError('Profile not found', { statusCode: 404 });
         }
 
         debug(profile);

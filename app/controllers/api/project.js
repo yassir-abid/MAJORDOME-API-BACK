@@ -27,7 +27,7 @@ const projectController = {
      * @returns {ProjectWithClient} Route API JSON response
      */
     async getOne(request, response) {
-        const project = await projectDataMapper.findByPk(request.params.id);
+        const project = await projectDataMapper.findByPkWithClient(request.params.id);
 
         debug(project);
 
@@ -78,9 +78,7 @@ const projectController = {
 
         if (request.body.title) {
             const existingProject = await projectDataMapper.isUnique(
-                request.body.title,
-                request.body.client_id,
-                request.params.id,
+                request.body,
             );
             if (existingProject) {
                 throw new ApiError('Project with this title already exists for that client', { statusCode: 409 });

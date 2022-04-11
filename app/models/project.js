@@ -7,7 +7,7 @@ const client = require('../config/db');
  * @property {string} title - Project title
  * @property {string} description - Project description
  * @property {string} comments - Project comments
- * @property {string} client_id - Client id linked to the client
+ * @property {number} client_id - Client id linked to the client
  */
 
 /**
@@ -39,6 +39,7 @@ const client = require('../config/db');
  * @property {string} title - Project title
  * @property {string} description - Project description
  * @property {string} comments - Project comments
+ * @property {number} client_id - Client id linked to the client
  */
 
 const dataMapper = {
@@ -60,9 +61,32 @@ const dataMapper = {
      * @returns {(ProjectWithClient|undefined)} -
      * The desired project or undefined if no project found with this id
      */
-    async findByPk(projectId) {
+    async findByPkWithClient(projectId) {
         const preparedQuery = {
             text: 'SELECT * FROM project_with_client WHERE id = $1',
+            values: [projectId],
+        };
+
+        const result = await client.query(preparedQuery);
+
+        if (result.rowCount === 0) {
+            return undefined;
+        }
+
+        debug(result);
+
+        return result.rows[0];
+    },
+
+    /**
+     * Find project by id
+     * @param {number} projectId - id of the desired project
+     * @returns {(Project|undefined)} -
+     * The desired project or undefined if no project found with this id
+     */
+    async findByPk(projectId) {
+        const preparedQuery = {
+            text: 'SELECT * FROM project WHERE id = $1',
             values: [projectId],
         };
 
@@ -148,16 +172,16 @@ const dataMapper = {
      * @returns {(Project|null)} - The existing project
      * or null if no project exists with this data
      */
-    async isUnique(inputData, projectId) {
+    async isUnique(inputData) {
         debug('isUnique');
         const preparedQuery = {
-            text: 'SELECT * FROM project WHERE LOWER(title) = $1 AND client_id =$2',
-            values: [inputData.title.toLowerCase(), inputData.client_id],
+            text: `SELECT id, LOWER(title) AS title, client_id FROM project WHERE title = $1`,
+            values: [inputData.title.toLowerCase()],
         };
 
-        if (projectId) {
-            preparedQuery.text += ' AND id <> $3;';
-            preparedQuery.values.push(projectId);
+        if (inputData.client_id) {
+            preparedQuery.text += ' AND id <> $2;';
+            preparedQuery.values.push(inputData.client_id);
         }
 
         const result = await client.query(preparedQuery);
