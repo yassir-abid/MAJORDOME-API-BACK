@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const debug = require('debug')('ProfileController');
 const path = require('path');
 const profileDataMapper = require('../../models/profile');
@@ -40,7 +41,11 @@ const profileController = {
             throw new ApiError('Profile not found', { statusCode: 404 });
         }
 
-        return response.download(profile.picture);
+        const directoryPath = path.join(__dirname, '/../../assets/uploads/');
+        const picturePath = directoryPath + profile.picture;
+        const pictureName = profile.picture.split('-')[1];
+
+        return response.download(picturePath, pictureName);
     },
 
     /**
@@ -94,9 +99,7 @@ const profileController = {
             throw new ApiError('Profile not found', { statusCode: 404 });
         }
 
-        const directoryPath = path.join(__dirname, '/../../assets/uploads/');
-        const picturePath = directoryPath + request.file.customName;
-        const savedProfile = await profileDataMapper.updatePicture(request.decoded.id, picturePath);
+        const savedProfile = await profileDataMapper.updatePicture(request.decoded.id, request.file.customName);
 
         debug(savedProfile);
 
