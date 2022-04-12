@@ -24,14 +24,10 @@ const signupController = {
         }
 
         if (request.body.password !== request.body.passwordConfirm) {
-            throw new ApiError('Confirmation password does not match password');
+            throw new ApiError('Password and its confirmation do not match', { statusCode: 409 });
         }
 
-        if (request.body.password !== request.body.passwordConfirm) {
-            throw new ApiError('Password and its confirmation does not match', { statusCode: 409 });
-        }
-
-        const passwordHashed = await bcrypt.hash(request.body.password, 10);
+        const passwordHashed = await bcrypt.hash(request.body.password, process.env.BCRYPT_SALT);
 
         const newUser = await profileDataMapper.insert(
             {

@@ -6,6 +6,8 @@ const updateSchema = require('../../validation/schemas/profileUpdateSchema');
 
 const profileController = require('../../controllers/api/profile');
 
+const resetPasswordController = require('../../controllers/api/resetPassword');
+
 const authenticateToken = require('../../middlewares/authenticateToken');
 
 const controllerHandler = require('../../helpers/controllerHandler');
@@ -46,5 +48,12 @@ router
      * @returns {ApiError} 404 - Profile not found - application/json
      */
     .delete(authenticateToken, controllerHandler(profileController.delete));
+
+router
+    .route('/resetpassword')
+    .post(controllerHandler(resetPasswordController.askResetPassword));
+router
+    .route('/setnewpassword')
+    .post(controllerHandler(resetPasswordController.changePassword));
 
 module.exports = router;
