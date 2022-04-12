@@ -51,6 +51,15 @@ router
 router
     .route('/picture')
     /**
+     * GET /api/profile/picture
+     * @summary Download profile picture
+     * @tags Profile
+     * @security BearerAuth
+     * @returns 200 - success response - application/json
+     * @returns {ApiError} 404 - Profile not found - application/json
+     */
+    .get(authenticateToken, controllerHandler(profileController.getPicture))
+    /**
      * PATCH /api/profile/picture
      * @summary Upload profile picture
      * @tags Profile
@@ -66,8 +75,7 @@ router
      * @summary Delete profile picture
      * @tags Profile
      * @security BearerAuth
-     * @returns {Profile} 204 - success response - application/json
-     * @returns {ApiError} 409 - Conflict - application/json
+     * @returns {Profile} 200 - success response - application/json
      * @returns {ApiError} 404 - Profile not found - application/json
      */
     .delete(authenticateToken, controllerHandler(profileController.deletePicture));

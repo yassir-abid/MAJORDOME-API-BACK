@@ -26,6 +26,24 @@ const profileController = {
     },
 
     /**
+     * Profile controller to download picture
+     * ExpressMiddleware signature
+     * @param {object} request Express request object
+     * @param {object} response Express response object
+     * @returns Route API JSON response
+     */
+    async getPicture(request, response) {
+        debug('getPicture');
+        const profile = await profileDataMapper.findByPk(request.decoded.id);
+
+        if (!profile) {
+            throw new ApiError('Profile not found', { statusCode: 404 });
+        }
+
+        return response.download(profile.picture);
+    },
+
+    /**
      * Profile controller to update one record.
      * ExpressMiddleware signature
      * @param {object} request Express request object
@@ -84,6 +102,7 @@ const profileController = {
 
         return response.json(savedProfile);
     },
+
     /**
      * Profile controller to delete one record.
      * ExpressMiddleware signature
@@ -105,6 +124,7 @@ const profileController = {
 
         return response.status(204).json();
     },
+
     /**
      * Profile controller to delete profile picture.
      * ExpressMiddleware signature

@@ -1,3 +1,4 @@
+const debug = require('debug')('uploadMiddleware');
 /**
  * This middleware will use Multer for handling multipart/form-data along with uploading files.
  */
@@ -13,7 +14,8 @@ const { ApiError } = require('../helpers/errorHandler');
 // max file size (in bytes)
 const maxSize = 2 * 1024 * 1024;
 
-const directoryPath = path.join(__dirname, '/../../assets/uploads/');
+debug('dirname', __dirname);
+const directoryPath = path.join(__dirname, '../assets/uploads/');
 
 const storage = multer.diskStorage({
     destination: (request, file, cb) => {
