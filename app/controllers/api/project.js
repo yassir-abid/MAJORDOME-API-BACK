@@ -29,7 +29,9 @@ const projectController = {
      */
     async getOne(request, response) {
         debug('getOne');
+
         const project = await projectDataMapper.findByPkWithClient(request.params.id);
+
 
         debug(project);
 

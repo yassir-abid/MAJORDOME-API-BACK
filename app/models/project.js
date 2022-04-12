@@ -65,6 +65,7 @@ const dataMapper = {
 
     async findByPkWithClient(projectId) {
         debug('findByPkWithClient');
+
         const preparedQuery = {
             text: 'SELECT * FROM project_with_client WHERE id = $1',
             values: [projectId],
