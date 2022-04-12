@@ -24,10 +24,6 @@ const signupController = {
         }
 
         if (request.body.password !== request.body.passwordConfirm) {
-            throw new ApiError('Confirmation password does not match password');
-        }
-
-        if (request.body.password !== request.body.passwordConfirm) {
             throw new ApiError('Password and its confirmation does not match', { statusCode: 409 });
         }
 
