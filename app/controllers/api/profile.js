@@ -43,9 +43,8 @@ const profileController = {
 
         const directoryPath = path.join(__dirname, '/../../assets/uploads/');
         const picturePath = directoryPath + profile.picture;
-        const pictureName = profile.picture.split('-')[1];
 
-        return response.download(picturePath, pictureName);
+        return response.download(picturePath);
     },
 
     /**

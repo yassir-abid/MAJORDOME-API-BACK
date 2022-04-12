@@ -14,7 +14,7 @@ const client = require('../config/db');
  * @typedef {object} InputPicture
  * @property {string} title - Picture title
  * @property {string} status - Picture title (before/after intervention)
- * @property {string} path - Picture path
+ * @property {string} file - Picture path - binary
  */
 
 const pictureDataMapper = {

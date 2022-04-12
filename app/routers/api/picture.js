@@ -5,6 +5,7 @@ const createSchema = require('../../validation/schemas/pictureCreateSchema');
 const updateSchema = require('../../validation/schemas/pictureUpdateSchema');
 
 const authenticateToken = require('../../middlewares/authenticateToken');
+const upload = require('../../middlewares/upload');
 
 const { pictureController: controller } = require('../../controllers/api');
 const controllerHandler = require('../../helpers/controllerHandler');
@@ -29,12 +30,13 @@ router
      * @tags Intervention Pictures
      * @security BearerAuth
      * @param {number} interventionId.path.required - intervention identifier
-     * @param {InputPicture} request.body.required - Picture informations
+     * @param {InputPicture} request.body.required - Picture informations - multipart/form-data
      * @returns {Picture} 201 - success response - application/json
      * @returns {ApiError} 400 - Bad request response - application/json
      * @returns {ApiError} 404 - Intervention not found - application/json
      */
-    .post(authenticateToken, validate('body', createSchema), controllerHandler(controller.create));
+    // .post(authenticateToken, validate('body', createSchema), controllerHandler(controller.create));
+    .post(authenticateToken, upload, controllerHandler(controller.create));
 
 router
     .route('/pictures/:pictureId(\\d+)')

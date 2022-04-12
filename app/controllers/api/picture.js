@@ -61,6 +61,8 @@ const pictureController = {
             throw new ApiError('Intervention not found', { statusCode: 404 });
         }
 
+        request.body.path = request.file.customName;
+
         const savedPicture = await pictureDataMapper.insert(request.body, request.params.interventionId);
         response.json(savedPicture);
     },
