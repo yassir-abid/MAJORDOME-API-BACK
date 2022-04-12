@@ -91,7 +91,7 @@ const dataMapper = {
      */
     async findAll() {
         debug('findAll');
-        const result = await client.query('SELECT * FROM client_and_addresses ORDER BY id;');
+        const result = await client.query('SELECT * FROM client_and_addresses ORDER BY lastname, firstname;');
         return result.rows;
     },
 
@@ -128,8 +128,8 @@ const dataMapper = {
                     (firstname, lastname, email, phone, comments, our_equipments, other_equipments, needs, provider_id)
                     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;`,
             values: [clientInfos.firstname, clientInfos.lastname, clientInfos.email,
-                clientInfos.phone, clientInfos.comments, clientInfos.our_equipments,
-                clientInfos.other_equipments, clientInfos.needs, clientInfos.provider_id],
+            clientInfos.phone, clientInfos.comments, clientInfos.our_equipments,
+            clientInfos.other_equipments, clientInfos.needs, clientInfos.provider_id],
         };
         const savedClient = await client.query(preparedQuery);
 
