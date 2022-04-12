@@ -8,6 +8,7 @@ const client = require('../config/db');
  * @property {string} lastname - Profile lastname
  * @property {string} email - Profile email
  * @property {string} phone - Profile phone number
+ * @property {string} picture - Profile picture
  */
 
 /**
@@ -17,7 +18,11 @@ const client = require('../config/db');
  * @property {string} email - Profile email
  * @property {string} phone - Profile phone number
  * @property {string} password - Profile password
- * @property {string} picture - Profile picture
+ */
+
+/**
+ * @typedef {object} InputProfilePicture
+ * @property {string} file - Profile picture - binary
  */
 
 /**
@@ -65,7 +70,7 @@ const dataMapper = {
                     VALUES ($1, $2, $3, $4, $5, $6, $7)
                     RETURNING id, firstname, lastname, email, phone, address, picture;`,
             values: [profile.firstname, profile.lastname, profile.email,
-                profile.phone, profile.address, profile.password, profile.picture],
+            profile.phone, profile.address, profile.password, profile.picture],
         };
         const savedProfile = await client.query(preparedQuery);
 
@@ -103,6 +108,27 @@ const dataMapper = {
         return savedProfile.rows[0];
     },
 
+    /**
+     * Edit in database
+     * @param {number} id - Id of the entity to edit
+     * @param {string} picturePath - Data to edit
+     * @returns {Profile} - Edited Profile
+     */
+    async updatePicture(id, picturePath) {
+        debug('update');
+
+        const savedProfile = await client.query(
+            `
+                UPDATE provider SET
+                    picture = $1
+                WHERE id = $2
+                RETURNING firstname, lastname, email, phone, address, picture
+            `,
+            [picturePath, id],
+        );
+
+        return savedProfile.rows[0];
+    },
     /**
      * Remove profile from database
      * @param {number} id - Id to delete

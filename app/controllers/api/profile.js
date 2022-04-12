@@ -1,4 +1,5 @@
 const debug = require('debug')('ProfileController');
+const path = require('path');
 const profileDataMapper = require('../../models/profile');
 const { ApiError } = require('../../helpers/errorHandler');
 
@@ -60,6 +61,29 @@ const profileController = {
         return response.json(savedProfile);
     },
 
+    /**
+     * Profile controller to update picture.
+     * ExpressMiddleware signature
+     * @param {object} request Express request object
+     * @param {object} response Express response object
+     * @returns {Profile} Route API JSON response
+     */
+    async updatePicture(request, response) {
+        debug('updatePicture');
+        const profile = await profileDataMapper.findByPk(request.decoded.id);
+
+        if (!profile) {
+            throw new ApiError('Profile not found', { statusCode: 404 });
+        }
+
+        const directoryPath = path.join(__dirname, '/../../assets/uploads/');
+        const picturePath = directoryPath + request.file.customName;
+        const savedProfile = await profileDataMapper.updatePicture(request.decoded.id, picturePath);
+
+        debug(savedProfile);
+
+        return response.json({ savedProfile });
+    },
     /**
      * Profile controller to delete one record.
      * ExpressMiddleware signature
