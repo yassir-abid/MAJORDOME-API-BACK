@@ -132,7 +132,7 @@ const dataMapper = {
       */
     async findByIntervention(interventionId) {
         const preparedQuery = {
-            text: 'SELECT * FROM document WHERE project_id = $1',
+            text: 'SELECT * FROM document WHERE intervention_id = $1',
             values: [interventionId],
         };
 
