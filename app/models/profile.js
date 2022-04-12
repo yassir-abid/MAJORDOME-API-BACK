@@ -48,8 +48,6 @@ const dataMapper = {
 
         const result = await client.query(preparedQuery);
 
-        debug(result);
-
         if (result.rowsCount === 0) {
             return undefined;
         }
@@ -70,7 +68,7 @@ const dataMapper = {
                     VALUES ($1, $2, $3, $4, $5, $6, $7)
                     RETURNING id, firstname, lastname, email, phone, address, picture;`,
             values: [profile.firstname, profile.lastname, profile.email,
-            profile.phone, profile.address, profile.password, profile.picture],
+                profile.phone, profile.address, profile.password, profile.picture],
         };
         const savedProfile = await client.query(preparedQuery);
 
@@ -146,7 +144,6 @@ const dataMapper = {
 
         return !!result.rowCount;
     },
-
     /**
      * Checks if a Profile with the same email already exists
      * @param {object} inputData - Data provided by client

@@ -82,14 +82,14 @@ const profileController = {
 
         debug(savedProfile);
 
-        return response.json({ savedProfile });
+        return response.json(savedProfile);
     },
     /**
      * Profile controller to delete one record.
      * ExpressMiddleware signature
      * @param {object} request Express request object
      * @param {object} response Express response object
-     * @returns {Profile} Route API JSON response
+     * @returns {string} Route API JSON response
      */
     async delete(request, response) {
         debug('delete');
@@ -104,6 +104,25 @@ const profileController = {
         await profileDataMapper.delete(request.decoded.id);
 
         return response.status(204).json();
+    },
+    /**
+     * Profile controller to delete profile picture.
+     * ExpressMiddleware signature
+     * @param {object} request Express request object
+     * @param {object} response Express response object
+     * @returns {Profile} Route API JSON response
+     */
+    async deletePicture(request, response) {
+        debug('deletePicture');
+        const profile = await profileDataMapper.findByPk(request.decoded.id);
+
+        if (!profile) {
+            throw new ApiError('Profile not found', { statusCode: 404 });
+        }
+
+        const savedProfile = await profileDataMapper.updatePicture(request.decoded.id);
+
+        return response.json(savedProfile);
     },
 };
 

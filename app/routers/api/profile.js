@@ -60,6 +60,16 @@ router
      * @returns {ApiError} 400 - Bad request response - application/json
      * @returns {ApiError} 404 - Profile not found - application/json
      */
-    .patch(authenticateToken, upload, controllerHandler(profileController.updatePicture));
+    .patch(authenticateToken, upload, controllerHandler(profileController.updatePicture))
+    /**
+     * DELETE /api/profile/picture
+     * @summary Delete profile picture
+     * @tags Profile
+     * @security BearerAuth
+     * @returns {Profile} 204 - success response - application/json
+     * @returns {ApiError} 409 - Conflict - application/json
+     * @returns {ApiError} 404 - Profile not found - application/json
+     */
+    .delete(authenticateToken, controllerHandler(profileController.deletePicture));
 
 module.exports = router;
