@@ -2,7 +2,7 @@ const debug = require('debug')('LoginDataMapper');
 const client = require('../config/db');
 
 /**
- * @typedef {object} Profile
+ * @typedef {object} LoginProfile
  * @property {number} id - Profile id
  * @property {string} firstname - Profile firstname
  * @property {string} lastname - Profile lastname
@@ -28,7 +28,7 @@ const dataMapper = {
     /**
      * Find a Profile by email
      * @param {InputLogin} inputData - Data provided by client
-     * @returns {(Profile|null)} - Existing Profile
+     * @returns {(LoginProfile|null)} - Existing Profile
      * or null if no Profile with these data
      */
     async findByEmail(inputData) {

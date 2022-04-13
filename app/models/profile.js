@@ -8,6 +8,7 @@ const client = require('../config/db');
  * @property {string} lastname - Profile lastname
  * @property {string} email - Profile email
  * @property {string} phone - Profile phone number
+ * @property {string} picture - Profile picture
  */
 
 /**
@@ -17,7 +18,11 @@ const client = require('../config/db');
  * @property {string} email - Profile email
  * @property {string} phone - Profile phone number
  * @property {string} password - Profile password
- * @property {string} picture - Profile picture
+ */
+
+/**
+ * @typedef {object} InputProfilePicture
+ * @property {string} file - Profile picture - binary
  */
 
 /**
@@ -42,8 +47,6 @@ const dataMapper = {
         };
 
         const result = await client.query(preparedQuery);
-
-        debug(result);
 
         if (result.rowsCount === 0) {
             return undefined;
@@ -122,6 +125,28 @@ const dataMapper = {
     },
 
     /**
+     * Insert or update profile picture in database
+     * @param {number} id - Id of the entity to edit
+     * @param {string} picturePath - Data to edit
+     * @returns {Profile} - Edited Profile
+     */
+    async updatePicture(id, picturePath) {
+        debug('update');
+
+        const savedProfile = await client.query(
+            `
+                UPDATE provider SET
+                    picture = $1
+                WHERE id = $2
+                RETURNING firstname, lastname, email, phone, address, picture
+            `,
+            [picturePath, id],
+        );
+
+        return savedProfile.rows[0];
+    },
+
+    /**
      * Checks if a Profile with the same email already exists
      * @param {object} inputData - Data provided by client
      * @param {number} profileId - Profile id (optional)
@@ -150,7 +175,6 @@ const dataMapper = {
 
         return result.rows[0];
     },
-
 };
 
 module.exports = dataMapper;
