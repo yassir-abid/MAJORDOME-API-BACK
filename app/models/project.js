@@ -88,7 +88,7 @@ const dataMapper = {
      * @returns {(Project|undefined)} -
      * The desired project or undefined if no project found with this id
      */
-    async findByPk(projectId) {
+    async findByPk(projectId, providerId) {
         debug('findByPk');
         const preparedQuery = {
             text: 'SELECT * FROM project WHERE id = $1',
