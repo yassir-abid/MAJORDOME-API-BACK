@@ -27,3 +27,6 @@ package-lock.json
 #config
 .env
 sqitch.conf
+
+#Assets-Uploads
+app/assets/uploads

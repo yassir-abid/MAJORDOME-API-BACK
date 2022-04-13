@@ -45,11 +45,15 @@ const pictureDataMapper = {
      * @returns {(Intervention|undefined)} -
      * The desired picture or undefined if no picture found with this id
      */
-    async findByPk(pictureId) {
+    async findByPk(pictureId, providerId) {
         debug('findByPk');
         const preparedQuery = {
-            text: 'SELECT * FROM picture WHERE id = $1;',
-            values: [pictureId],
+            text: `SELECT picture.* FROM picture
+            JOIN intervention ON intervention.id = picture.intervention_id
+            JOIN project ON project.id = intervention.project_id
+            JOIN client ON client.id = project.client_id
+            WHERE picture.id = $1 AND client.provider_id = $2;`,
+            values: [pictureId, providerId],
         };
         const result = await client.query(preparedQuery);
 

@@ -16,7 +16,7 @@ const pictureController = {
      */
     async getAll(request, response) {
         debug('getAll');
-        const intervention = await interventionDataMapper.findByPk(request.params.interventionId);
+        const intervention = await interventionDataMapper.findByPk(request.params.interventionId, request.decoded.id);
 
         if (!intervention) {
             throw new ApiError('Intervention not found', { statusCode: 404 });
@@ -37,7 +37,7 @@ const pictureController = {
     async getOne(request, response) {
         debug('getOne');
 
-        const picture = await pictureDataMapper.findByPk(request.params.pictureId);
+        const picture = await pictureDataMapper.findByPk(request.params.pictureId, request.decoded.id);
 
         if (!picture) {
             throw new ApiError('Picture not found', { statusCode: 404 });
@@ -55,7 +55,7 @@ const pictureController = {
      */
     async create(request, response) {
         debug('create');
-        const intervention = await interventionDataMapper.findByPk(request.params.interventionId);
+        const intervention = await interventionDataMapper.findByPk(request.params.interventionId, request.decoded.id);
 
         if (!intervention) {
             throw new ApiError('Intervention not found', { statusCode: 404 });
@@ -75,7 +75,7 @@ const pictureController = {
     async update(request, response) {
         debug('update');
 
-        const picture = await pictureDataMapper.findByPk(request.params.pictureId);
+        const picture = await pictureDataMapper.findByPk(request.params.pictureId, request.decoded.id);
 
         if (!picture) {
             throw new ApiError('Picture not found', { statusCode: 404 });
@@ -96,7 +96,7 @@ const pictureController = {
     async delete(request, response) {
         debug('delete');
 
-        const picture = await pictureDataMapper.findByPk(request.params.pictureId);
+        const picture = await pictureDataMapper.findByPk(request.params.pictureId, request.decoded.id);
 
         if (!picture) {
             throw new ApiError('Picture not found', { statusCode: 404 });

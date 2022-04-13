@@ -98,18 +98,32 @@ const interventionDataMapper = {
     /**
      * @returns {array<Intervention>} - All interventions of the database
      */
-    async findAll() {
+    async findAll(providerId) {
         debug('findAll');
-        const result = await client.query('SELECT * FROM intervention;');
+        const preparedQuery = {
+            text: `SELECT intervention.* FROM intervention
+            JOIN project ON project.id = intervention.project_id
+            JOIN client ON client.id = project.client_id
+            WHERE client.provider_id = $1;`,
+            values: [providerId],
+        };
+        const result = await client.query(preparedQuery);
         return result.rows;
     },
 
     /**
      * @returns {array<Intervention>} - All interventions of the day in database
      */
-    async findAllOfDay() {
+    async findAllOfDay(providerId) {
         debug('findAllOfDay');
-        const result = await client.query('SELECT * FROM intervention WHERE date::date = current_date;');
+        const preparedQuery = {
+            text: `SELECT intervention.* FROM intervention
+            JOIN project ON project.id = intervention.project_id
+            JOIN client ON client.id = project.client_id
+            WHERE intervention.date::date = current_date AND client.provider_id = $1;`,
+            values: [providerId],
+        };
+        const result = await client.query(preparedQuery);
         return result.rows;
     },
 
@@ -119,11 +133,14 @@ const interventionDataMapper = {
      * @returns {(Intervention|undefined)} -
      * The desired intervention or undefined if no intervention found with this id
      */
-    async findByPk(interventionId) {
+    async findByPk(interventionId, providerId) {
         debug('findByPk');
         const preparedQuery = {
-            text: 'SELECT * FROM intervention WHERE id = $1;',
-            values: [interventionId],
+            text: `SELECT intervention.* FROM intervention
+            JOIN project ON project.id = intervention.project_id
+            JOIN client ON client.id = project.client_id
+            WHERE intervention.id = $1 AND client.provider_id = $2;`,
+            values: [interventionId, providerId],
         };
         const result = await client.query(preparedQuery);
 
@@ -140,7 +157,7 @@ const interventionDataMapper = {
      * @returns {(InterventionWithProjectAndClient|undefined)} -
      * The desired intervention or undefined if no intervention found with this id
      */
-    async findByPkWithDetails(interventionId) {
+    async findByPkWithDetails(interventionId, providerId) {
         debug('findByPk');
         const preparedQuery = {
             text: `
@@ -174,9 +191,9 @@ const interventionDataMapper = {
             JOIN project ON intervention.project_id = project.id
             JOIN client ON project.client_id = client.id
             LEFT JOIN address ON intervention.address_id = address.id
-            WHERE intervention.id = $1;
+            WHERE intervention.id = $1 AND client.provider_id = $2;
             `,
-            values: [interventionId],
+            values: [interventionId, providerId],
         };
         const result = await client.query(preparedQuery);
 
