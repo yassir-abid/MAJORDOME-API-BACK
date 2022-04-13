@@ -87,6 +87,7 @@ const client = require('../config/db');
 
 const dataMapper = {
     /**
+     * @param {number} providerId - provider id
      * @returns {array<ClientWithAddress>} - All clients of the database and their addresses
      */
     async findAll(providerId) {
@@ -102,6 +103,7 @@ const dataMapper = {
     /**
      * Find client by id
      * @param {number} clientId - id of the desired client
+     * @param {number} providerId - provider id
      * @returns {(ClientWithAddress|undefined)} -
      * The desired client or undefined if no client found with this id
      */

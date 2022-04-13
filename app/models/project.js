@@ -45,11 +45,18 @@ const client = require('../config/db');
 const dataMapper = {
 
     /**
+     * @param {number} providerId - provider id
      * @returns {array<ProjectWithClient>} - All projects of the database with their linked client
      */
-    async findAll() {
+    async findAll(providerId) {
         debug('findAll');
-        const result = await client.query('SELECT * FROM project_with_client ORDER BY title ASC');
+        const preparedQuery = {
+            text: `SELECT project_with_client.* FROM project_with_client
+            JOIN client ON client.id = project_with_client.client_id
+            WHERE client.provider_id = $1`,
+            values: [providerId],
+        };
+        const result = await client.query(preparedQuery);
 
         debug(result);
 
@@ -59,16 +66,19 @@ const dataMapper = {
     /**
      * Find project by id with the associated client
      * @param {number} projectId - id of the desired project
+     * @param {number} providerId - provider id
      * @returns {(ProjectWithClient|undefined)} -
      * The desired project or undefined if no project found with this id
      */
 
-    async findByPkWithClient(projectId) {
+    async findByPkWithClient(projectId, providerId) {
         debug('findByPkWithClient');
 
         const preparedQuery = {
-            text: 'SELECT * FROM project_with_client WHERE id = $1',
-            values: [projectId],
+            text: `SELECT project_with_client.* FROM project_with_client 
+            JOIN client ON client.id = project_with_client.client_id
+            WHERE project_with_client.id = $1 AND client.provider_id = $2`,
+            values: [projectId, providerId],
         };
 
         const result = await client.query(preparedQuery);
@@ -85,14 +95,17 @@ const dataMapper = {
     /**
      * Find project by id
      * @param {number} projectId - id of the desired project
+     * @param {number} providerId - provider id
      * @returns {(Project|undefined)} -
      * The desired project or undefined if no project found with this id
      */
-    async findByPk(projectId) {
+    async findByPk(projectId, providerId) {
         debug('findByPk');
         const preparedQuery = {
-            text: 'SELECT * FROM project WHERE id = $1',
-            values: [projectId],
+            text: `SELECT project.* FROM project 
+            JOIN client ON client.id = project.client_id
+            WHERE project.id = $1 AND client.provider_id = $2;`,
+            values: [projectId, providerId],
         };
 
         const result = await client.query(preparedQuery);
