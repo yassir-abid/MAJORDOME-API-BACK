@@ -107,7 +107,25 @@ const dataMapper = {
     },
 
     /**
-     * Edit in database
+     * Remove profile from database
+     * @param {number} id - Id to delete
+     * @returns {boolean} - Deletion result
+     */
+    async delete(id) {
+        debug('delete');
+        const preparedQuery = {
+            text: 'DELETE FROM provider WHERE id = $1',
+            values: [id],
+        };
+        const result = await client.query(preparedQuery);
+
+        debug(result);
+
+        return !!result.rowCount;
+    },
+
+    /**
+     * Insert or update profile picture in database
      * @param {number} id - Id of the entity to edit
      * @param {string} picturePath - Data to edit
      * @returns {Profile} - Edited Profile
@@ -127,23 +145,7 @@ const dataMapper = {
 
         return savedProfile.rows[0];
     },
-    /**
-     * Remove profile from database
-     * @param {number} id - Id to delete
-     * @returns {boolean} - Deletion result
-     */
-    async delete(id) {
-        debug('delete');
-        const preparedQuery = {
-            text: 'DELETE FROM provider WHERE id = $1',
-            values: [id],
-        };
-        const result = await client.query(preparedQuery);
 
-        debug(result);
-
-        return !!result.rowCount;
-    },
     /**
      * Checks if a Profile with the same email already exists
      * @param {object} inputData - Data provided by client
@@ -173,7 +175,6 @@ const dataMapper = {
 
         return result.rows[0];
     },
-
 };
 
 module.exports = dataMapper;

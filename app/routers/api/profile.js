@@ -69,7 +69,7 @@ router
      * @returns {ApiError} 400 - Bad request response - application/json
      * @returns {ApiError} 404 - Profile not found - application/json
      */
-    .patch(authenticateToken, upload, controllerHandler(profileController.updatePicture))
+    .patch(authenticateToken, upload, controllerHandler(profileController.addPicture))
     /**
      * DELETE /api/profile/picture
      * @summary Delete profile picture

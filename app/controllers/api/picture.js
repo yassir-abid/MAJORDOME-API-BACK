@@ -6,6 +6,8 @@ const pictureDataMapper = require('../../models/picture');
 
 const { ApiError } = require('../../helpers/errorHandler');
 
+const baseUrl = process.env.BASE_URL;
+
 const pictureController = {
     /**
      * Intervention controller to get intervention pictures by intervention id
@@ -23,6 +25,16 @@ const pictureController = {
         }
 
         const pictures = await pictureDataMapper.findAll(request.params.interventionId);
+
+        pictures.forEach((picture) => {
+            let url;
+            if (!picture.path || picture.path === '') {
+                url = null;
+            } else {
+                url = `${baseUrl}avatar/${picture.path}`;
+            }
+            picture.path = url;
+        });
 
         return response.json(pictures);
     },
@@ -42,6 +54,14 @@ const pictureController = {
         if (!picture) {
             throw new ApiError('Picture not found', { statusCode: 404 });
         }
+
+        let url;
+        if (!picture.path || picture.path === '') {
+            url = null;
+        } else {
+            url = `${baseUrl}avatar/${picture.path}`;
+        }
+        picture.path = url;
 
         return response.json(picture);
     },
