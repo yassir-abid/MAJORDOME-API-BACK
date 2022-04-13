@@ -16,7 +16,7 @@ const clientController = {
      */
     async getAll(request, response) {
         debug('getAll');
-        const clients = await clientDataMapper.findAll();
+        const clients = await clientDataMapper.findAll(request.decoded.id);
         return response.json(clients);
     },
 
@@ -29,7 +29,7 @@ const clientController = {
      */
     async getOne(request, response) {
         debug('getOne');
-        const client = await clientDataMapper.findByPk(request.params.id);
+        const client = await clientDataMapper.findByPk(request.params.id, request.decoded.id);
 
         if (!client) {
             throw new ApiError('Client not found', { statusCode: 404 });
@@ -79,9 +79,9 @@ const clientController = {
      */
     async update(request, response) {
         debug('update');
-        const client = await clientDataMapper.findByPk(request.params.id);
+        const client = await clientDataMapper.findByPk(request.params.id, request.decoded.id);
         if (!client) {
-            throw new ApiError('This client does not exists', { statusCode: 404 });
+            throw new ApiError('Client not found', { statusCode: 404 });
         }
 
         if (request.body.client) {
@@ -122,7 +122,7 @@ const clientController = {
             await Promise.all(promises);
         }
 
-        const savedClient = await clientDataMapper.findByPk(request.params.id);
+        const savedClient = await clientDataMapper.findByPk(request.params.id, request.decoded.id);
 
         return response.json(savedClient);
     },
@@ -136,9 +136,9 @@ const clientController = {
      */
     async delete(request, response) {
         debug('delete');
-        const client = await clientDataMapper.findByPk(request.params.id);
+        const client = await clientDataMapper.findByPk(request.params.id, request.decoded.id);
         if (!client) {
-            throw new ApiError('This client does not exists', { statusCode: 404 });
+            throw new ApiError('Client not found', { statusCode: 404 });
         }
 
         await clientDataMapper.delete(request.params.id);
@@ -154,9 +154,9 @@ const clientController = {
      */
     async deleteAddress(request, response) {
         debug('deleteAddress');
-        const address = await addressDataMapper.findByPk(request.params.addressId);
+        const address = await addressDataMapper.findByPk(request.params.addressId, request.decoded.id);
         if (!address) {
-            throw new ApiError('This address does not exists', { statusCode: 404 });
+            throw new ApiError('Address not found', { statusCode: 404 });
         }
 
         const clientAddresses = await addressDataMapper.findByClient(address.client_id);

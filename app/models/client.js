@@ -89,9 +89,13 @@ const dataMapper = {
     /**
      * @returns {array<ClientWithAddress>} - All clients of the database and their addresses
      */
-    async findAll() {
+    async findAll(providerId) {
         debug('findAll');
-        const result = await client.query('SELECT * FROM client_and_addresses ORDER BY lastname, firstname;');
+        const preparedQuery = {
+            text: 'SELECT * FROM client_and_addresses WHERE provider_id = $1 ORDER BY lastname, firstname;',
+            values: [providerId],
+        };
+        const result = await client.query(preparedQuery);
         return result.rows;
     },
 
@@ -101,11 +105,11 @@ const dataMapper = {
      * @returns {(ClientWithAddress|undefined)} -
      * The desired client or undefined if no client found with this id
      */
-    async findByPk(clientId) {
+    async findByPk(clientId, providerId) {
         debug('findByPk');
         const preparedQuery = {
-            text: 'SELECT * FROM client_and_addresses WHERE id = $1;',
-            values: [clientId],
+            text: 'SELECT * FROM client_and_addresses WHERE id = $1 AND provider_id = $2;',
+            values: [clientId, providerId],
         };
         const result = await client.query(preparedQuery);
 
@@ -128,8 +132,8 @@ const dataMapper = {
                     (firstname, lastname, email, phone, comments, our_equipments, other_equipments, needs, provider_id)
                     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;`,
             values: [clientInfos.firstname, clientInfos.lastname, clientInfos.email,
-            clientInfos.phone, clientInfos.comments, clientInfos.our_equipments,
-            clientInfos.other_equipments, clientInfos.needs, clientInfos.provider_id],
+                clientInfos.phone, clientInfos.comments, clientInfos.our_equipments,
+                clientInfos.other_equipments, clientInfos.needs, clientInfos.provider_id],
         };
         const savedClient = await client.query(preparedQuery);
 
@@ -165,11 +169,11 @@ const dataMapper = {
      * @param {number} id - id of the client to delete
      * @returns {boolean} - Result of the delete operation
      */
-    async delete(id) {
+    async delete(clientId) {
         debug('delete');
         const preparedQuery = {
             text: 'DELETE FROM client WHERE id = $1',
-            values: [id],
+            values: [clientId],
         };
         const result = await client.query(preparedQuery);
         return !!result.rowCount;

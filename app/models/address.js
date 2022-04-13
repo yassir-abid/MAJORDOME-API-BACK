@@ -29,11 +29,13 @@ const addressDataMapper = {
      * @returns {(Address|undefined)} -
      * The desired address or undefined if no address found with this id
      */
-    async findByPk(addressId) {
+    async findByPk(addressId, providerId) {
         debug('findByPk');
         const preparedQuery = {
-            text: 'SELECT * FROM address WHERE id = $1;',
-            values: [addressId],
+            text: `SELECT address.* FROM address 
+            JOIN client ON client.id = address.client_id
+            WHERE address.id = $1 AND client.provider_id = $2;`,
+            values: [addressId, providerId],
         };
         const result = await client.query(preparedQuery);
 
