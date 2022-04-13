@@ -1,5 +1,9 @@
+/* eslint-disable max-len */
 const debug = require('debug')('DocumentController');
 const documentDataMapper = require('../../models/document');
+const clientDataMapper = require('../../models/client');
+const projectDataMapper = require('../../models/project');
+const interventionDataMapper = require('../../models/intervention');
 const { ApiError } = require('../../helpers/errorHandler');
 
 const documentController = {
@@ -12,7 +16,8 @@ const documentController = {
      * @returns {array<Document>} Route API JSON response
      */
     async getAll(request, response) {
-        const documents = await documentDataMapper.findAll();
+        debug('getAll');
+        const documents = await documentDataMapper.findAll(request.decoded.id);
 
         debug(documents);
 
@@ -27,7 +32,8 @@ const documentController = {
      * @returns {Document} Route API JSON response
      */
     async getOne(request, response) {
-        const document = await documentDataMapper.findByPk(request.params.id);
+        debug('getOne');
+        const document = await documentDataMapper.findByPk(request.params.id, request.decoded.id);
 
         debug(document);
 
@@ -46,15 +52,16 @@ const documentController = {
      * @returns {Document} Route API JSON response
      */
     async getBySupplier(request, response) {
-        const document = await documentDataMapper.findBySupplier(request.params.id);
+        debug('getBySupplier');
+        const documents = await documentDataMapper.findBySupplier(request.params.id, request.decoded.id);
 
-        debug(document);
+        debug(documents);
 
-        if (!document) {
-            throw new ApiError('Document not found', { statusCode: 404 });
+        if (documents.length === 0) {
+            throw new ApiError('Nothing found', { statusCode: 404 });
         }
 
-        return response.json(document);
+        return response.json(documents);
     },
 
     /**
@@ -65,15 +72,16 @@ const documentController = {
      * @returns {Document} Route API JSON response
      */
     async getByClient(request, response) {
-        const document = await documentDataMapper.findByClient(request.params.id);
+        debug('getByClient');
+        const documents = await documentDataMapper.findByClient(request.params.id, request.decoded.id);
 
-        debug(document);
+        debug(documents);
 
-        if (!document) {
-            throw new ApiError('Document not found', { statusCode: 404 });
+        if (documents.length === 0) {
+            throw new ApiError('Nothing found', { statusCode: 404 });
         }
 
-        return response.json(document);
+        return response.json(documents);
     },
 
     /**
@@ -84,15 +92,16 @@ const documentController = {
      * @returns {Document} Route API JSON response
      */
     async getByProject(request, response) {
-        const document = await documentDataMapper.findByProject(request.params.id);
+        debug('getByProject');
+        const documents = await documentDataMapper.findByProject(request.params.id, request.decoded.id);
 
-        debug(document);
+        debug(documents);
 
-        if (!document) {
-            throw new ApiError('Document not found', { statusCode: 404 });
+        if (documents.length === 0) {
+            throw new ApiError('Nothing found', { statusCode: 404 });
         }
 
-        return response.json(document);
+        return response.json(documents);
     },
 
     /**
@@ -103,15 +112,16 @@ const documentController = {
      * @returns {Document} Route API JSON response
      */
     async getByIntervention(request, response) {
-        const document = await documentDataMapper.findByIntervention(request.params.id);
+        debug('getByIntervention');
+        const documents = await documentDataMapper.findByIntervention(request.params.id, request.decoded.id);
 
-        debug(document);
+        debug(documents);
 
-        if (!document) {
-            throw new ApiError('Document not found', { statusCode: 404 });
+        if (documents.length === 0) {
+            throw new ApiError('Nothing found', { statusCode: 404 });
         }
 
-        return response.json(document);
+        return response.json(documents);
     },
 
     /**
@@ -122,6 +132,34 @@ const documentController = {
      * @returns {Document} Route API JSON response
      */
     async create(request, response) {
+        debug('create');
+        if (!request.body.client_id && !request.body.project_id && !request.body.intervention_id && !request.body.supplier_id) {
+            throw new ApiError('Document must be attached to a client, a project, an intervention or a supplier', { statusCode: 409 });
+        }
+        if (request.body.client_id) {
+            const client = await clientDataMapper.findByPk(request.body.client_id, request.decoded.id);
+            if (!client) {
+                throw new ApiError('Client not found', { statusCode: 404 });
+            }
+        }
+        if (request.body.project_id) {
+            const project = await projectDataMapper.findByPk(request.body.project_id, request.decoded.id);
+            if (!project) {
+                throw new ApiError('Project not found', { statusCode: 404 });
+            }
+        }
+        if (request.body.intervention_id) {
+            const intervention = await interventionDataMapper.findByPk(request.body.intervention_id, request.decoded.id);
+            if (!intervention) {
+                throw new ApiError('Intervention not found', { statusCode: 404 });
+            }
+        }
+        // if (request.body.supplier_id) {
+        //     const supplier = await supplierDataMapper.findByPk(request.body.supplier_id, request.decoded.id);
+        //     if (!supplier) {
+        //         throw new ApiError('Client not found', { statusCode: 404 });
+        //     }
+        // }
         const savedDocument = await documentDataMapper.insert(request.body);
 
         debug(savedDocument);
@@ -137,7 +175,8 @@ const documentController = {
      * @returns {Document} Route API JSON response
      */
     async update(request, response) {
-        const document = await documentDataMapper.findByPk(request.params.id);
+        debug('update');
+        const document = await documentDataMapper.findByPk(request.params.id, request.decoded.id);
 
         debug(document);
 
@@ -145,14 +184,29 @@ const documentController = {
             throw new ApiError('Document not found', { statusCode: 404 });
         }
 
-        // if (request.body.title) {
-        //    const existingProject = await projectDataMapper.isUnique(
-        //        request.body.title,
-        //        request.params.id,
-        //    );
-        //    if (existingProject) {
-        //        throw new ApiError('Project with this title already exists', { statusCode: 409 });
-        //    }
+        if (request.body.client_id) {
+            const client = await clientDataMapper.findByPk(request.body.client_id, request.decoded.id);
+            if (!client) {
+                throw new ApiError('Client not found', { statusCode: 404 });
+            }
+        }
+        if (request.body.project_id) {
+            const project = await projectDataMapper.findByPk(request.body.project_id, request.decoded.id);
+            if (!project) {
+                throw new ApiError('Project not found', { statusCode: 404 });
+            }
+        }
+        if (request.body.intervention_id) {
+            const intervention = await interventionDataMapper.findByPk(request.body.intervention_id, request.decoded.id);
+            if (!intervention) {
+                throw new ApiError('Intervention not found', { statusCode: 404 });
+            }
+        }
+        // if (request.body.supplier_id) {
+        //     const supplier = await supplierDataMapper.findByPk(request.body.supplier_id, request.decoded.id);
+        //     if (!supplier) {
+        //         throw new ApiError('Client not found', { statusCode: 404 });
+        //     }
         // }
         const savedDocument = await documentDataMapper.update(request.params.id, request.body);
 
@@ -169,7 +223,8 @@ const documentController = {
      * @returns {string} Route API JSON response
      */
     async delete(request, response) {
-        const document = await documentDataMapper.findByPk(request.params.id);
+        debug('delete');
+        const document = await documentDataMapper.findByPk(request.params.id, request.decoded.id);
 
         if (!document) {
             throw new ApiError('Document not found', { statusCode: 404 });

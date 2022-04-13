@@ -113,7 +113,7 @@ router
      * @tags Document
      * @security BearerAuth
      * @param {number} id.path.required - document identifier
-     * @param {Inputupplier} request.body.required - document info
+     * @param {InputDocument} request.body.required - document info
      * @returns {Document} 200 - success response - application/json
      * @returns {ApiError} 400 - Bad request response - application/json
      * @returns {ApiError} 404 - Document not found - application/json

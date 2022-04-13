@@ -15,6 +15,10 @@
  * @property {string} title - Document title
  * @property {string} description - Document description
  * @property {string} path - Document path
+ * @property {number} supplier_id - Id of the supplier linked to the document
+ * @property {number} client_id - Id of the client linked to the document
+ * @property {number} project_id - Id of the project linked to the document
+ * @property {number} intervention_id - Id of the intervention linked to the document
  */
 
 const debug = require('debug')('Document');
@@ -25,8 +29,13 @@ const dataMapper = {
     /**
       * @returns {array<Documents>} - All documents of the database
       */
-    async findAll() {
-        const result = await client.query('SELECT * FROM document ORDER BY title ASC');
+    async findAll(providerId) {
+        debug('findAll');
+        const preparedQuery = {
+            text: 'SELECT * FROM provider_documents($1) ORDER BY title ASC',
+            values: [providerId],
+        };
+        const result = await client.query(preparedQuery);
 
         debug(result);
 
@@ -39,10 +48,11 @@ const dataMapper = {
       * @returns {(Document|undefined)} -
       * The desired document or undefined if no document found with this id
       */
-    async findByPk(documentId) {
+    async findByPk(documentId, providerId) {
+        debug('findByPk');
         const preparedQuery = {
-            text: 'SELECT * FROM document WHERE id = $1',
-            values: [documentId],
+            text: 'SELECT * FROM provider_documents($2) WHERE id = $1',
+            values: [documentId, providerId],
         };
 
         const result = await client.query(preparedQuery);
@@ -61,21 +71,18 @@ const dataMapper = {
       * @returns {(Document|undefined)} -
       * The desired document or undefined if no document found with this id
       */
-    async findBySupplier(supplierId) {
+    async findBySupplier(supplierId, providerId) {
+        debug('findBySupplier');
         const preparedQuery = {
-            text: 'SELECT * FROM document WHERE supplier_id = $1',
-            values: [supplierId],
+            text: 'SELECT * FROM provider_documents($2) WHERE supplier_id = $1',
+            values: [supplierId, providerId],
         };
 
         const result = await client.query(preparedQuery);
 
-        if (result.rowCount === 0) {
-            return undefined;
-        }
-
         debug(result);
 
-        return result.rows[0];
+        return result.rows;
     },
 
     /**
@@ -84,21 +91,18 @@ const dataMapper = {
       * @returns {(Document|undefined)} -
       * The desired document or undefined if no document found with this id
       */
-    async findByClient(clientId) {
+    async findByClient(clientId, providerId) {
+        debug('findByClient');
         const preparedQuery = {
-            text: 'SELECT * FROM document WHERE client_id = $1',
-            values: [clientId],
+            text: 'SELECT * FROM provider_documents($2) WHERE client_id = $1',
+            values: [clientId, providerId],
         };
 
         const result = await client.query(preparedQuery);
 
-        if (result.rowCount === 0) {
-            return undefined;
-        }
-
         debug(result);
 
-        return result.rows[0];
+        return result.rows;
     },
 
     /**
@@ -107,21 +111,18 @@ const dataMapper = {
       * @returns {(Document|undefined)} -
       * The desired document or undefined if no document found with this id
       */
-    async findByProject(projectId) {
+    async findByProject(projectId, providerId) {
+        debug('findByProject');
         const preparedQuery = {
-            text: 'SELECT * FROM document WHERE project_id = $1',
-            values: [projectId],
+            text: 'SELECT * FROM provider_documents($2) WHERE project_id = $1',
+            values: [projectId, providerId],
         };
 
         const result = await client.query(preparedQuery);
 
-        if (result.rowCount === 0) {
-            return undefined;
-        }
-
         debug(result);
 
-        return result.rows[0];
+        return result.rows;
     },
 
     /**
@@ -130,29 +131,27 @@ const dataMapper = {
       * @returns {(Document|undefined)} -
       * The desired document or undefined if no document found with this id
       */
-    async findByIntervention(interventionId) {
+    async findByIntervention(interventionId, providerId) {
+        debug('findByIntervention');
         const preparedQuery = {
-            text: 'SELECT * FROM document WHERE intervention_id = $1',
-            values: [interventionId],
+            text: 'SELECT * FROM provider_documents($2) WHERE intervention_id = $1',
+            values: [interventionId, providerId],
         };
 
         const result = await client.query(preparedQuery);
 
-        if (result.rowCount === 0) {
-            return undefined;
-        }
-
         debug(result);
 
-        return result.rows[0];
+        return result.rows;
     },
 
     /**
       * Add document in the database
       * @param {InputDocument} documentInfos - Data to insert
-      * @returns {Supplier} - Inserted document
+      * @returns {Document} - Inserted document
       */
     async insert(documentInfos) {
+        debug('insert');
         const preparedQuery = {
             text: `INSERT INTO document
              (title, description, path, supplier_id, client_id, project_id, intervention_id)
@@ -172,9 +171,10 @@ const dataMapper = {
       * Update document
       * @param {number} id - id of the document to update
       * @param {InputDocument} documentInfos - Data to update
-      * @returns {Project} - Updated project
+      * @returns {Document} - Updated project
       */
     async update(id, documentInfos) {
+        debug('update');
         const fields = Object.keys(documentInfos).map((prop, index) => `"${prop}" = $${index + 1}`);
         const values = Object.values(documentInfos);
 
@@ -200,6 +200,7 @@ const dataMapper = {
       * @returns {boolean} - Result of the delete operation
       */
     async delete(id) {
+        debug('delete');
         const preparedQuery = {
             text: 'DELETE FROM document WHERE id = $1',
             values: [id],
