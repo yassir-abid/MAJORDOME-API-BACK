@@ -1,5 +1,6 @@
 const express = require('express');
 
+const upload = require('../../middlewares/upload');
 const validate = require('../../validation/validator');
 
 const createSchema = require('../../validation/schemas/documentCreateSchema');
@@ -29,13 +30,14 @@ router
      * @summary Create a document
      * @tags Document
      * @security BearerAuth
-     * @param {InputDocument} request.body.required - document informations
+     * @param {InputDocument} request.body.required - document informations - multipart/form-data
      * @returns {Document} 200 - success response - application/json
      * @returns {ApiError} 400 - Bad request response - application/json
      * @returns {ApiError} 404 - Document not found - application/json
      * @returns {ApiError} 409 - Conflict response - application/json
      */
-    .post(authenticateToken, validate('body', createSchema), controllerHandler(documentController.create));
+    .post(authenticateToken, upload, controllerHandler(documentController.create));
+// .post(authenticateToken, validate('body', createSchema), upload, controllerHandler(documentController.create));
 
 router
     .route('/clients/:id(\\d+)')
@@ -54,16 +56,16 @@ router
 router
     .route('/projects/:id(\\d+)')
 
-/**
-      * GET /api/documents/projects/{id}
-      * @summary Get documents by project id
-      * @tags Document
-      * @security BearerAuth
-      * @param {number} id.path.required - project identifier
-      * @returns {Document} 200 - success response - application/json
-      * @returns {ApiError} 409 - Conflict response - application/json
-      * @returns {ApiError} 404 - Document not found - application/json
-      */
+    /**
+          * GET /api/documents/projects/{id}
+          * @summary Get documents by project id
+          * @tags Document
+          * @security BearerAuth
+          * @param {number} id.path.required - project identifier
+          * @returns {Document} 200 - success response - application/json
+          * @returns {ApiError} 409 - Conflict response - application/json
+          * @returns {ApiError} 404 - Document not found - application/json
+          */
     .get(authenticateToken, controllerHandler(documentController.getByProject));
 
 router

@@ -49,9 +49,9 @@ router
     .delete(authenticateToken, controllerHandler(profileController.delete));
 
 router
-    .route('/picture')
+    .route('/avatar')
     /**
-     * GET /api/profile/picture
+     * GET /api/profile/avatar
      * @summary Download profile picture
      * @tags Profile
      * @security BearerAuth
@@ -60,7 +60,7 @@ router
      */
     .get(authenticateToken, controllerHandler(profileController.getPicture))
     /**
-     * PATCH /api/profile/picture
+     * PATCH /api/profile/avatar
      * @summary Upload profile picture
      * @tags Profile
      * @security BearerAuth
@@ -71,7 +71,7 @@ router
      */
     .patch(authenticateToken, upload, controllerHandler(profileController.addPicture))
     /**
-     * DELETE /api/profile/picture
+     * DELETE /api/profile/avatar
      * @summary Delete profile picture
      * @tags Profile
      * @security BearerAuth

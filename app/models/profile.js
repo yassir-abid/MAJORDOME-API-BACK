@@ -22,7 +22,7 @@ const client = require('../config/db');
 
 /**
  * @typedef {object} InputProfilePicture
- * @property {string} file - Profile picture - binary
+ * @property {string} file - Profile picture to upload - binary
  */
 
 /**

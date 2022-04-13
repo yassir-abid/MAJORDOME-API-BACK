@@ -14,7 +14,7 @@
  * @typedef {object} InputDocument
  * @property {string} title - Document title
  * @property {string} description - Document description
- * @property {string} path - Document path
+ * @property {string} file - Document to upload - binary
  * @property {number} supplier_id - Id of the supplier linked to the document
  * @property {number} client_id - Id of the client linked to the document
  * @property {number} project_id - Id of the project linked to the document
@@ -157,8 +157,8 @@ const dataMapper = {
              (title, description, path, supplier_id, client_id, project_id, intervention_id)
                     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`,
             values: [documentInfos.title, documentInfos.description, documentInfos.path,
-                documentInfos.supplier_id, documentInfos.client_id, documentInfos.project_id,
-                documentInfos.intervention_id],
+            documentInfos.supplier_id, documentInfos.client_id, documentInfos.project_id,
+            documentInfos.intervention_id],
         };
         const savedDocument = await client.query(preparedQuery);
 

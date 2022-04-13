@@ -6,6 +6,8 @@ const projectDataMapper = require('../../models/project');
 const interventionDataMapper = require('../../models/intervention');
 const { ApiError } = require('../../helpers/errorHandler');
 
+const baseUrl = process.env.BASE_URL;
+
 const documentController = {
 
     /**
@@ -19,7 +21,15 @@ const documentController = {
         debug('getAll');
         const documents = await documentDataMapper.findAll(request.decoded.id);
 
-        debug(documents);
+        documents.forEach((document) => {
+            let url;
+            if (!document.path || document.path === '') {
+                url = null;
+            } else {
+                url = `${baseUrl}avatar/${document.path}`;
+            }
+            document.path = url;
+        });
 
         return response.json(documents);
     },
@@ -41,6 +51,14 @@ const documentController = {
             throw new ApiError('Document not found', { statusCode: 404 });
         }
 
+        let url;
+        if (!document.path || document.path === '') {
+            url = null;
+        } else {
+            url = `${baseUrl}avatar/${document.path}`;
+        }
+        document.path = url;
+
         return response.json(document);
     },
 
@@ -55,11 +73,19 @@ const documentController = {
         debug('getBySupplier');
         const documents = await documentDataMapper.findBySupplier(request.params.id, request.decoded.id);
 
-        debug(documents);
-
         if (documents.length === 0) {
             throw new ApiError('Nothing found', { statusCode: 404 });
         }
+
+        documents.forEach((document) => {
+            let url;
+            if (!document.path || document.path === '') {
+                url = null;
+            } else {
+                url = `${baseUrl}avatar/${document.path}`;
+            }
+            document.path = url;
+        });
 
         return response.json(documents);
     },
@@ -75,11 +101,19 @@ const documentController = {
         debug('getByClient');
         const documents = await documentDataMapper.findByClient(request.params.id, request.decoded.id);
 
-        debug(documents);
-
         if (documents.length === 0) {
             throw new ApiError('Nothing found', { statusCode: 404 });
         }
+
+        documents.forEach((document) => {
+            let url;
+            if (!document.path || document.path === '') {
+                url = null;
+            } else {
+                url = `${baseUrl}avatar/${document.path}`;
+            }
+            document.path = url;
+        });
 
         return response.json(documents);
     },
@@ -95,11 +129,19 @@ const documentController = {
         debug('getByProject');
         const documents = await documentDataMapper.findByProject(request.params.id, request.decoded.id);
 
-        debug(documents);
-
         if (documents.length === 0) {
             throw new ApiError('Nothing found', { statusCode: 404 });
         }
+
+        documents.forEach((document) => {
+            let url;
+            if (!document.path || document.path === '') {
+                url = null;
+            } else {
+                url = `${baseUrl}avatar/${document.path}`;
+            }
+            document.path = url;
+        });
 
         return response.json(documents);
     },
@@ -115,11 +157,19 @@ const documentController = {
         debug('getByIntervention');
         const documents = await documentDataMapper.findByIntervention(request.params.id, request.decoded.id);
 
-        debug(documents);
-
         if (documents.length === 0) {
             throw new ApiError('Nothing found', { statusCode: 404 });
         }
+
+        documents.forEach((document) => {
+            let url;
+            if (!document.path || document.path === '') {
+                url = null;
+            } else {
+                url = `${baseUrl}avatar/${document.path}`;
+            }
+            document.path = url;
+        });
 
         return response.json(documents);
     },
@@ -154,6 +204,9 @@ const documentController = {
                 throw new ApiError('Intervention not found', { statusCode: 404 });
             }
         }
+
+        request.body.path = request.file.customName;
+
         // if (request.body.supplier_id) {
         //     const supplier = await supplierDataMapper.findByPk(request.body.supplier_id, request.decoded.id);
         //     if (!supplier) {
