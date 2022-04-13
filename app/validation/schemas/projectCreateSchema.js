@@ -5,4 +5,4 @@ module.exports = Joi.object({
     description: Joi.string().allow(null, '').optional(),
     comments: Joi.string().allow(null, '').optional(),
     client_id: Joi.string().required(),
-});
+}).required();

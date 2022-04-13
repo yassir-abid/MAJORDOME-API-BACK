@@ -101,8 +101,6 @@ const dataMapper = {
             return undefined;
         }
 
-        debug(result);
-
         return result.rows[0];
     },
 
@@ -168,8 +166,6 @@ const dataMapper = {
 
         const result = await client.query(preparedQuery);
 
-        debug(result);
-
         return !!result.rowCount;
     },
 
@@ -193,8 +189,6 @@ const dataMapper = {
         }
 
         const result = await client.query(preparedQuery);
-
-        debug(result);
 
         if (result.rowCount === 0) {
             return null;

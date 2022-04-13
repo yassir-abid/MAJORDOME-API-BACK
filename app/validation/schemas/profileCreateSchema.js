@@ -11,4 +11,4 @@ module.exports = Joi.object({
     passwordConfirm: Joi.string()
         .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)
         .required(),
-});
+}).required();
