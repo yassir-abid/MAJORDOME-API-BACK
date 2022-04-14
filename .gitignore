@@ -32,3 +32,6 @@ sqitch.conf
 app/assets/avatar/**
 app/assets/file/**
 app/assets/picture/**
+!app/assets/avatar/.empty
+!app/assets/file/.empty
+!app/assets/picture/.empty
