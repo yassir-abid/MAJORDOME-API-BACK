@@ -5,9 +5,10 @@ const createSchema = require('../../validation/schemas/pictureCreateSchema');
 const updateSchema = require('../../validation/schemas/pictureUpdateSchema');
 
 const authenticateToken = require('../../middlewares/authenticateToken');
+const { cache, flush } = require('../../middlewares/cache');
+const controllerHandler = require('../../helpers/controllerHandler');
 
 const { pictureController: controller } = require('../../controllers/api');
-const controllerHandler = require('../../helpers/controllerHandler');
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ router
      * @returns {array<Picture>} 200 - success response - application/json
      * @returns {ApiError} 404 - Intervention not found - application/json
      */
-    .get(authenticateToken, controllerHandler(controller.getAll))
+    .get(authenticateToken, cache, controllerHandler(controller.getAll))
     /**
      * POST /api/interventions/{interventionId}/pictures
      * @summary Add new picture to intervention
@@ -34,8 +35,9 @@ router
      * @returns {ApiError} 400 - Bad request response - application/json
      * @returns {ApiError} 404 - Intervention not found - application/json
      */
-    .post(authenticateToken, validate('body', createSchema), controllerHandler(controller.create));
+    .post(authenticateToken, validate('body', createSchema), flush, controllerHandler(controller.create));
 
+// todo Add flush to patch
 router
     .route('/pictures/:pictureId(\\d+)')
     /**
@@ -47,7 +49,7 @@ router
      * @returns {Picture} 200 - success response - application/json
      * @returns {ApiError} 404 - Intervention or Picture not found - application/json
      */
-    .get(authenticateToken, controllerHandler(controller.getOne))
+    .get(authenticateToken, cache, controllerHandler(controller.getOne))
     /**
      * PATCH /api/interventions/pictures/{pictureId}
      * @summary Update picture
@@ -69,6 +71,6 @@ router
      * @returns 204 - success response - application/json
      * @returns {ApiError} 404 - Intervention or Picture not found - application/json
      */
-    .delete(authenticateToken, controllerHandler(controller.delete));
+    .delete(authenticateToken, flush, controllerHandler(controller.delete));
 
 module.exports = router;

@@ -1,16 +1,14 @@
 const express = require('express');
 
 const validate = require('../../validation/validator');
-
 const createSchema = require('../../validation/schemas/documentCreateSchema');
-
 const updateSchema = require('../../validation/schemas/documentUpdateSchema');
 
-const documentController = require('../../controllers/api/document');
-
 const authenticateToken = require('../../middlewares/authenticateToken');
-
+const { cache, flush } = require('../../middlewares/cache');
 const controllerHandler = require('../../helpers/controllerHandler');
+
+const documentController = require('../../controllers/api/document');
 
 const router = express.Router();
 
@@ -23,7 +21,7 @@ router
      * @security BearerAuth
      * @returns {array<Document>} 200 - success response - application/json
      */
-    .get(authenticateToken, controllerHandler(documentController.getAll))
+    .get(authenticateToken, cache, controllerHandler(documentController.getAll))
     /**
      * POST /api/documents
      * @summary Create a document
@@ -35,7 +33,7 @@ router
      * @returns {ApiError} 404 - Document not found - application/json
      * @returns {ApiError} 409 - Conflict response - application/json
      */
-    .post(authenticateToken, validate('body', createSchema), controllerHandler(documentController.create));
+    .post(authenticateToken, validate('body', createSchema), flush, controllerHandler(documentController.create));
 
 router
     .route('/clients/:id(\\d+)')
@@ -49,12 +47,11 @@ router
      * @returns {ApiError} 409 - Conflict response - application/json
      * @returns {ApiError} 404 - Document not found - application/json
      */
-    .get(authenticateToken, controllerHandler(documentController.getByClient));
+    .get(authenticateToken, cache, controllerHandler(documentController.getByClient));
 
 router
     .route('/projects/:id(\\d+)')
-
-/**
+    /**
       * GET /api/documents/projects/{id}
       * @summary Get documents by project id
       * @tags Document
@@ -64,7 +61,7 @@ router
       * @returns {ApiError} 409 - Conflict response - application/json
       * @returns {ApiError} 404 - Document not found - application/json
       */
-    .get(authenticateToken, controllerHandler(documentController.getByProject));
+    .get(authenticateToken, cache, controllerHandler(documentController.getByProject));
 
 router
     .route('/interventions/:id(\\d+)')
@@ -78,7 +75,7 @@ router
      * @returns {ApiError} 409 - Conflict response - application/json
      * @returns {ApiError} 404 - Document not found - application/json
      */
-    .get(authenticateToken, controllerHandler(documentController.getByIntervention));
+    .get(authenticateToken, cache, controllerHandler(documentController.getByIntervention));
 
 router
     .route('/suppliers/:id(\\d+)')
@@ -92,8 +89,9 @@ router
      * @returns {ApiError} 409 - Conflict response - application/json
      * @returns {ApiError} 404 - Document not found - application/json
      */
-    .get(authenticateToken, controllerHandler(documentController.getBySupplier));
+    .get(authenticateToken, cache, controllerHandler(documentController.getBySupplier));
 
+// todo Add flush to patch
 router
     .route('/:id(\\d+)')
     /**
@@ -106,7 +104,7 @@ router
      * @returns {ApiError} 409 - Conflict response - application/json
      * @returns {ApiError} 404 - Document not found - application/json
      */
-    .get(authenticateToken, controllerHandler(documentController.getOne))
+    .get(authenticateToken, cache, controllerHandler(documentController.getOne))
     /**
      * PATCH /api/documents/{id}
      * @summary Update one document
@@ -131,6 +129,6 @@ router
      * @returns {ApiError} 404 - ocument not found - application/json
      */
 
-    .delete(authenticateToken, controllerHandler(documentController.delete));
+    .delete(authenticateToken, flush, controllerHandler(documentController.delete));
 
 module.exports = router;

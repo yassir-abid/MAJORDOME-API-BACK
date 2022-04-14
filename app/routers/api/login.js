@@ -1,10 +1,10 @@
 const express = require('express');
 
 const authenticateToken = require('../../middlewares/authenticateToken');
-
-const loginController = require('../../controllers/api/login');
-
 const controllerHandler = require('../../helpers/controllerHandler');
+
+const { flush } = require('../../middlewares/cache');
+const loginController = require('../../controllers/api/login');
 
 const router = express.Router();
 
@@ -18,7 +18,7 @@ router
      * @returns {Token} 200 - success response - application/json
      * @returns {ApiError} 401 - Invalid credentials - application/json
      */
-    .post(controllerHandler(loginController.login));
+    .post(flush, controllerHandler(loginController.login));
 
 router
     .route('/checkuser')

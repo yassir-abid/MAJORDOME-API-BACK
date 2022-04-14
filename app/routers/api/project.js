@@ -1,16 +1,14 @@
 const express = require('express');
 
 const validate = require('../../validation/validator');
-
 const createSchema = require('../../validation/schemas/projectCreateSchema');
-
 const updateSchema = require('../../validation/schemas/projectUpdateSchema');
 
-const projectController = require('../../controllers/api/project');
-
 const authenticateToken = require('../../middlewares/authenticateToken');
-
+const { cache, flush } = require('../../middlewares/cache');
 const controllerHandler = require('../../helpers/controllerHandler');
+
+const projectController = require('../../controllers/api/project');
 
 const router = express.Router();
 
@@ -23,7 +21,7 @@ router
      * @security BearerAuth
      * @returns {array<ProjectWithClient>} 200 - success response - application/json
      */
-    .get(authenticateToken, controllerHandler(projectController.getAll))
+    .get(authenticateToken, cache, controllerHandler(projectController.getAll))
     /**
      * POST /api/projects
      * @summary Create a project
@@ -35,7 +33,7 @@ router
      * @returns {ApiError} 404 - Project not found - application/json
      * @returns {ApiError} 409 - Conflict response - application/json
      */
-    .post(authenticateToken, validate('body', createSchema), controllerHandler(projectController.create));
+    .post(authenticateToken, validate('body', createSchema), flush, controllerHandler(projectController.create));
 
 router
     .route('/:id(\\d+)')
@@ -49,7 +47,7 @@ router
      * @returns {ApiError} 409 - Conflict response - application/json
      * @returns {ApiError} 404 - Project not found - application/json
      */
-    .get(authenticateToken, controllerHandler(projectController.getOne))
+    .get(authenticateToken, cache, controllerHandler(projectController.getOne))
     /**
      * PATCH /api/projects/{id}
      * @summary Update one project
@@ -62,7 +60,7 @@ router
      * @returns {ApiError} 404 - Project not found - application/json
      * @returns {ApiError} 409 - Conflict response - application/json
      */
-    .patch(authenticateToken, validate('body', updateSchema), controllerHandler(projectController.update))
+    .patch(authenticateToken, validate('body', updateSchema), flush, controllerHandler(projectController.update))
     /**
      * DELETE /api/projects/{id}
      * @summary Delete one project
@@ -74,6 +72,6 @@ router
      * @returns {ApiError} 404 - Project not found - application/json
      */
 
-    .delete(authenticateToken, controllerHandler(projectController.delete));
+    .delete(authenticateToken, flush, controllerHandler(projectController.delete));
 
 module.exports = router;

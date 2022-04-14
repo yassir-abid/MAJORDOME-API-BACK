@@ -5,6 +5,7 @@ const createSchema = require('../../validation/schemas/clientCreateSchema');
 const updateSchema = require('../../validation/schemas/clientUpdateSchema');
 
 const authenticateToken = require('../../middlewares/authenticateToken');
+const { cache, flush } = require('../../middlewares/cache');
 
 const { clientController: controller } = require('../../controllers/api');
 const controllerHandler = require('../../helpers/controllerHandler');
@@ -20,7 +21,7 @@ router
      * @security BearerAuth
      * @returns {array<ClientWithAddress>} 200 - success response - application/json
      */
-    .get(authenticateToken, controllerHandler(controller.getAll))
+    .get(authenticateToken, cache, controllerHandler(controller.getAll))
     /**
      * POST /api/clients
      * @summary Create a client and his addresses
@@ -32,7 +33,7 @@ router
      * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Client not found - application/json
      */
-    .post(authenticateToken, validate('body', createSchema), controllerHandler(controller.create));
+    .post(authenticateToken, validate('body', createSchema), flush, controllerHandler(controller.create));
 
 router
     .route('/:id(\\d+)')
@@ -46,7 +47,7 @@ router
      * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Client not found - application/json
      */
-    .get(authenticateToken, controllerHandler(controller.getOne))
+    .get(authenticateToken, cache, controllerHandler(controller.getOne))
     /**
      * PATCH /api/clients/{id}
      * @summary Update one client and update or create his addresses
@@ -59,7 +60,7 @@ router
      * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Client not found - application/json
      */
-    .patch(authenticateToken, validate('body', updateSchema), controllerHandler(controller.update))
+    .patch(authenticateToken, validate('body', updateSchema), flush, controllerHandler(controller.update))
     /**
      * DELETE /api/clients/{id}
      * @summary Delete one client
@@ -70,7 +71,7 @@ router
      * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Client not found - application/json
      */
-    .delete(authenticateToken, controllerHandler(controller.delete));
+    .delete(authenticateToken, flush, controllerHandler(controller.delete));
 
 router
     .route('/address/:addressId(\\d+)')
@@ -84,6 +85,6 @@ router
      * @returns {ApiError} 409 - Bad request response - application/json
      * @returns {ApiError} 404 - Client not found - application/json
      */
-    .delete(authenticateToken, controllerHandler(controller.deleteAddress));
+    .delete(authenticateToken, flush, controllerHandler(controller.deleteAddress));
 
 module.exports = router;

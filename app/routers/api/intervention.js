@@ -5,10 +5,11 @@ const validate = require('../../validation/validator');
 const createSchema = require('../../validation/schemas/interventionCreateSchema');
 const updateSchema = require('../../validation/schemas/interventionUpdateSchema');
 
+const controllerHandler = require('../../helpers/controllerHandler');
 const authenticateToken = require('../../middlewares/authenticateToken');
+const { cache, flush } = require('../../middlewares/cache');
 
 const { interventionController: controller } = require('../../controllers/api');
-const controllerHandler = require('../../helpers/controllerHandler');
 
 const router = express.Router();
 
@@ -21,7 +22,7 @@ router
      * @security BearerAuth
      * @returns {array<Intervention>} 200 - success response - application/json
      */
-    .get(authenticateToken, controllerHandler(controller.getAll))
+    .get(authenticateToken, cache, controllerHandler(controller.getAll))
     /**
      * POST /api/interventions
      * @summary Create intervention
@@ -33,7 +34,7 @@ router
      * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Intervention not found - application/json
      */
-    .post(authenticateToken, validate('body', createSchema), controllerHandler(controller.create));
+    .post(authenticateToken, validate('body', createSchema), flush, controllerHandler(controller.create));
 
 router
     .route('/today')
@@ -57,7 +58,7 @@ router
      * @returns {Report} 200 - success response - application/json
      * @returns {ApiError} 404 - Intervention not found - application/json
      */
-    .get(authenticateToken, controllerHandler(controller.getReport));
+    .get(authenticateToken, cache, controllerHandler(controller.getReport));
 
 router.use(pictureRouter);
 
@@ -72,7 +73,7 @@ router
      * @returns {InterventionWithProjectAndClient} 200 - success response - application/json
      * @returns {ApiError} 404 - Intervention not found - application/json
      */
-    .get(authenticateToken, controllerHandler(controller.getOne))
+    .get(authenticateToken, cache, controllerHandler(controller.getOne))
     /**
      * PATCH /api/interventions/{id}
      * @summary Update intervention
@@ -85,7 +86,7 @@ router
      * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Intervention not found - application/json
      */
-    .patch(authenticateToken, validate('body', updateSchema), controllerHandler(controller.update))
+    .patch(authenticateToken, validate('body', updateSchema), flush, controllerHandler(controller.update))
     /**
      * DELETE /api/interventions/{id}
      * @summary Delete one intervention
@@ -95,6 +96,6 @@ router
      * @returns 204 - success response - application/json
      * @returns {ApiError} 404 - Intervention not found - application/json
      */
-    .delete(authenticateToken, controllerHandler(controller.delete));
+    .delete(authenticateToken, flush, controllerHandler(controller.delete));
 
 module.exports = router;
