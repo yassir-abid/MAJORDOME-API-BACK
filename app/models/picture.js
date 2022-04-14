@@ -17,6 +17,17 @@ const client = require('../config/db');
  * @property {string} file - Picture to upload - binary
  */
 
+/**
+ * @typedef {object} InputPictureDetails
+ * @property {string} title - Picture title
+ * @property {string} status - Picture title (before/after intervention)
+ */
+
+/**
+ * @typedef {object} InputPictureFile
+ * @property {string} file - Picture to upload - binary
+ */
+
 const pictureDataMapper = {
     /**
      * Find intervention pictures by intervention id

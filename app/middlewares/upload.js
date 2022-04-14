@@ -14,19 +14,15 @@ const { ApiError } = require('../helpers/errorHandler');
 // max file size (in bytes)
 const maxSize = 2 * 1024 * 1024;
 
-debug('dirname', __dirname);
-
 let directoryPath;
 
 const storage = multer.diskStorage({
     destination: (request, file, cb) => {
-        if (request.url === '/avatar') {
+        if (request.url.includes('/avatar')) {
             directoryPath = path.join(__dirname, '../assets/avatar/');
-        }
-        else if (request.url.includes('/pictures')) {
+        } else if (request.url.includes('/pictures')) {
             directoryPath = path.join(__dirname, '../assets/picture/');
-        }
-        else {
+        } else {
             directoryPath = path.join(__dirname, '../assets/file/');
         }
         cb(null, directoryPath);
@@ -48,11 +44,13 @@ const uploadFile = multer({
 const uploadFileMiddleware = util.promisify(uploadFile);
 
 const upload = async (request, response, next) => {
+    debug('upload');
     try {
         await uploadFileMiddleware(request, response);
         if (request.file === undefined) {
             throw new ApiError('Please upload a file!', { statusCode: 400 });
         }
+        debug(request.file);
         next();
     } catch (error) {
         // handle the error by checking error code (LIMIT_FILE_SIZE)

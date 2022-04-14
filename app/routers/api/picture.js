@@ -1,7 +1,8 @@
+/* eslint-disable max-len */
 const express = require('express');
 
 const validate = require('../../validation/validator');
-const createSchema = require('../../validation/schemas/pictureCreateSchema');
+// const createSchema = require('../../validation/schemas/pictureCreateSchema');
 const updateSchema = require('../../validation/schemas/pictureUpdateSchema');
 
 const authenticateToken = require('../../middlewares/authenticateToken');
@@ -39,6 +40,35 @@ router
     .post(authenticateToken, upload, controllerHandler(controller.create));
 
 router
+    .route('/pictures/:pictureId(\\d+)/details')
+    /**
+     * PATCH /api/interventions/pictures/{pictureId}/details
+     * @summary Update picture details (title and status)
+     * @tags Intervention Pictures
+     * @security BearerAuth
+     * @param {number} pictureId.path.required - picture identifier
+     * @param {InputPictureDetails} request.body.required - picture informations
+     * @returns {Picture} 200 - success response - application/json
+     * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 404 - Intervention or Picture not found - application/json
+     */
+    .patch(authenticateToken, validate('body', updateSchema), controllerHandler(controller.updateDetails));
+
+router
+    .route('/pictures/:pictureId(\\d+)/file')
+    /**
+     * PATCH /api/interventions/pictures/{pictureId}/file
+     * @summary Upload new picture file
+     * @tags Intervention Pictures
+     * @security BearerAuth
+     * @param {number} pictureId.path.required - picture identifier
+     * @param {InputPictureFile} request.body.required - new picture file to upload - multipart/form-data
+     * @returns {Picture} 200 - success response - application/json
+     * @returns {ApiError} 404 - Intervention or Picture not found - application/json
+     */
+    .patch(authenticateToken, upload, controllerHandler(controller.updateFile));
+
+router
     .route('/pictures/:pictureId(\\d+)')
     /**
      * GET /api/interventions/pictures/{pictureId}
@@ -50,18 +80,6 @@ router
      * @returns {ApiError} 404 - Intervention or Picture not found - application/json
      */
     .get(authenticateToken, controllerHandler(controller.getOne))
-    /**
-     * PATCH /api/interventions/pictures/{pictureId}
-     * @summary Update picture
-     * @tags Intervention Pictures
-     * @security BearerAuth
-     * @param {number} pictureId.path.required - picture identifier
-     * @param {InputPicture} request.body.required - picture informations - multipart/form-data
-     * @returns {Picture} 200 - success response - application/json
-     * @returns {ApiError} 400 - Bad request response - application/json
-     * @returns {ApiError} 404 - Intervention or Picture not found - application/json
-     */
-    .patch(authenticateToken, validate('body', updateSchema), upload, controllerHandler(controller.update))
     /**
      * DELETE /api/interventions/pictures/{pictureId}
      * @summary Delete one picture

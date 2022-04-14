@@ -3,7 +3,7 @@ const debug = require('debug')('ProfileController');
 const profileDataMapper = require('../../models/profile');
 const { ApiError } = require('../../helpers/errorHandler');
 
-const baseUrl = process.env.BASE_URL;
+const baseUrl = process.env.BASE_FILE_URL;
 
 const profileController = {
 
@@ -102,6 +102,8 @@ const profileController = {
 
         const savedProfile = await profileDataMapper.updatePicture(request.decoded.id, request.file.customName);
 
+        savedProfile.picture = `${baseUrl}avatar/${profile.picture}`;
+
         return response.json(savedProfile);
     },
 
@@ -120,7 +122,7 @@ const profileController = {
             throw new ApiError('Profile not found', { statusCode: 404 });
         }
 
-        if (!profile.picture) {
+        if (!profile.picture || profile.picture === '') {
             throw new ApiError('Picture Profile not found', { statusCode: 404 });
         }
 

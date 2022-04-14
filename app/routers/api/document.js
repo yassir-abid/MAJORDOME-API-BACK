@@ -1,17 +1,15 @@
+/* eslint-disable max-len */
 const express = require('express');
 
+const authenticateToken = require('../../middlewares/authenticateToken');
 const upload = require('../../middlewares/upload');
+const controllerHandler = require('../../helpers/controllerHandler');
+
 const validate = require('../../validation/validator');
-
-const createSchema = require('../../validation/schemas/documentCreateSchema');
-
+// const createSchema = require('../../validation/schemas/documentCreateSchema');
 const updateSchema = require('../../validation/schemas/documentUpdateSchema');
 
 const documentController = require('../../controllers/api/document');
-
-const authenticateToken = require('../../middlewares/authenticateToken');
-
-const controllerHandler = require('../../helpers/controllerHandler');
 
 const router = express.Router();
 
@@ -97,6 +95,38 @@ router
     .get(authenticateToken, controllerHandler(documentController.getBySupplier));
 
 router
+    .route('/:id(\\d+)/details')
+    /**
+     * PATCH /api/documents/{id}/details
+     * @summary Update one document details (title, description, supplier/client/project/intervention id)
+     * @tags Document
+     * @security BearerAuth
+     * @param {number} id.path.required - document identifier
+     * @param {InputDocumentDetails} request.body.required - document informations to update
+     * @returns {Document} 200 - success response - application/json
+     * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 404 - Document not found - application/json
+     * @returns {ApiError} 409 - Conflict response - application/json
+     */
+    .patch(authenticateToken, validate('body', updateSchema), controllerHandler(documentController.updateDetails));
+
+router
+    .route('/:id(\\d+)/file')
+    /**
+     * PATCH /api/documents/{id}/file
+     * @summary Upload new document file
+     * @tags Document
+     * @security BearerAuth
+     * @param {number} id.path.required - document identifier
+     * @param {InputDocumentFile} request.body.required - new document file to upload - multipart/form-data
+     * @returns {Document} 200 - success response - application/json
+     * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 404 - Document not found - application/json
+     * @returns {ApiError} 409 - Conflict response - application/json
+     */
+    .patch(authenticateToken, upload, controllerHandler(documentController.updateFile));
+
+router
     .route('/:id(\\d+)')
     /**
      * GET /api/documents/{id}
@@ -109,19 +139,6 @@ router
      * @returns {ApiError} 404 - Document not found - application/json
      */
     .get(authenticateToken, controllerHandler(documentController.getOne))
-    /**
-     * PATCH /api/documents/{id}
-     * @summary Update one document
-     * @tags Document
-     * @security BearerAuth
-     * @param {number} id.path.required - document identifier
-     * @param {InputDocument} request.body.required - document info
-     * @returns {Document} 200 - success response - application/json
-     * @returns {ApiError} 400 - Bad request response - application/json
-     * @returns {ApiError} 404 - Document not found - application/json
-     * @returns {ApiError} 409 - Conflict response - application/json
-     */
-    .patch(authenticateToken, validate('body', updateSchema), controllerHandler(documentController.update))
     /**
      * DELETE /api/documents/{id}
      * @summary Delete one document
