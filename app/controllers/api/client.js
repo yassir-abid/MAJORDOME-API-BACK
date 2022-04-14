@@ -25,7 +25,7 @@ const clientController = {
      * ExpressMiddleware signature
      * @param {object} request Express request object
      * @param {object} response Express response object
-     * @returns {ClientWithAddress} Route API JSON response
+     * @returns {ClientAddressesProject} Route API JSON response
      */
     async getOne(request, response) {
         debug('getOne');

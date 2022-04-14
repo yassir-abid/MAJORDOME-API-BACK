@@ -27,12 +27,12 @@ const projectController = {
      * ExpressMiddleware signature
      * @param {object} request Express request object
      * @param {object} response Express response object
-     * @returns {ProjectWithClient} Route API JSON response
+     * @returns {ProjectClientInterventions} Route API JSON response
      */
     async getOne(request, response) {
         debug('getOne');
 
-        const project = await projectDataMapper.findByPkWithClient(request.params.id, request.decoded.id);
+        const project = await projectDataMapper.findByPkWithDetails(request.params.id, request.decoded.id);
 
         debug(project);
 

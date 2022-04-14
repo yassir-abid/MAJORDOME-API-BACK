@@ -38,11 +38,11 @@ router
     .route('/:id(\\d+)')
     /**
      * GET /api/clients/{id}
-     * @summary Get one client and his addresses
+     * @summary Get one client, his addresses, his projects and interventions
      * @tags Client
      * @security BearerAuth
      * @param {number} id.path.required - client identifier
-     * @returns {ClientWithAddress} 200 - success response - application/json
+     * @returns {ClientAddressesProject} 200 - success response - application/json
      * @returns {ApiError} 409 - Conflict - application/json
      * @returns {ApiError} 404 - Client not found - application/json
      */

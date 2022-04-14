@@ -28,6 +28,16 @@ const client = require('../config/db');
  */
 
 /**
+ * @typedef {object} ProjectWithIntervention
+ * @property {number} id - Project id
+ * @property {string} title - Project title
+ * @property {string} description - Project description
+ * @property {string} comments - Project comments
+ * @property {number} client_id - Id of the client linked to the project
+ * @property {array<Intervention>} interventions - client interventions
+ */
+
+/**
  * @typedef {object} ClientWithAddress
  * @property {number} id - Client id
  * @property {string} firstname - Client firstname
@@ -40,6 +50,22 @@ const client = require('../config/db');
  * @property {string} needs - Client needs identified by the provider
  * @property {number} provider_id - Id of the provider linked to the client
  * @property {array<Address>} addresses - client addresses
+ */
+
+/**
+ * @typedef {object} ClientAddressesProject
+ * @property {number} id - Client id
+ * @property {string} firstname - Client firstname
+ * @property {string} lastname - Client lastname
+ * @property {string} email - Client email
+ * @property {string} phone - Client phone
+ * @property {string} comments - Client comments and specific informations
+ * @property {string} our_equipments - Client equipment installed by the provider
+ * @property {string} other_equipments - Client equipment installed by other providers
+ * @property {string} needs - Client needs identified by the provider
+ * @property {number} provider_id - Id of the provider linked to the client
+ * @property {array<Address>} addresses - client addresses
+ * @property {array<ProjectWithIntervention>} projects - client projects
  */
 
 /**
@@ -110,7 +136,7 @@ const dataMapper = {
     async findByPk(clientId, providerId) {
         debug('findByPk');
         const preparedQuery = {
-            text: 'SELECT * FROM client_and_addresses WHERE id = $1 AND provider_id = $2;',
+            text: 'SELECT * FROM client_addresses_projects WHERE id = $1 AND provider_id = $2;',
             values: [clientId, providerId],
         };
         const result = await client.query(preparedQuery);

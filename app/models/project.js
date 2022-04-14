@@ -31,7 +31,18 @@ const client = require('../config/db');
  * @property {string} description - Project description
  * @property {string} comments - Project comments
  * @property {number} client_id - Id of the client linked to the project
- * @property {array<client>} client - client
+ * @property {Client} client - project client
+ */
+
+/**
+ * @typedef {object} ProjectClientInterventions
+ * @property {number} id - Project id
+ * @property {string} title - Project title
+ * @property {string} description - Project description
+ * @property {string} comments - Project comments
+ * @property {number} client_id - Id of the client linked to the project
+ * @property {Client} client - project client
+ * @property {array<Intervention>} interventions - project interventions
  */
 
 /**
@@ -67,17 +78,17 @@ const dataMapper = {
      * Find project by id with the associated client
      * @param {number} projectId - id of the desired project
      * @param {number} providerId - provider id
-     * @returns {(ProjectWithClient|undefined)} -
+     * @returns {(ProjectClientInterventions|undefined)} -
      * The desired project or undefined if no project found with this id
      */
 
-    async findByPkWithClient(projectId, providerId) {
-        debug('findByPkWithClient');
+    async findByPkWithDetails(projectId, providerId) {
+        debug('findByPkWithDetails');
 
         const preparedQuery = {
-            text: `SELECT project_with_client.* FROM project_with_client 
-            JOIN client ON client.id = project_with_client.client_id
-            WHERE project_with_client.id = $1 AND client.provider_id = $2`,
+            text: `SELECT project_client_interventions.* FROM project_client_interventions 
+            JOIN client ON client.id = project_client_interventions.client_id
+            WHERE project_client_interventions.id = $1 AND client.provider_id = $2`,
             values: [projectId, providerId],
         };
 
