@@ -5,7 +5,7 @@ const client = require('../config/db');
  * @typedef {object} Picture
  * @property {number} id - Picture id
  * @property {string} title - Picture title
- * @property {string} status - Picture title (before/after intervention)
+ * @property {string} status - Picture title (avant/après intervention)
  * @property {string} path - Picture path
  * @property {number} intervention_id - Id of the intervention linked to the picture
  */
@@ -14,7 +14,18 @@ const client = require('../config/db');
  * @typedef {object} InputPicture
  * @property {string} title - Picture title
  * @property {string} status - Picture title (before/after intervention)
- * @property {string} path - Picture path
+ * @property {string} file - Picture to upload - binary
+ */
+
+/**
+ * @typedef {object} InputPictureDetails
+ * @property {string} title - Picture title
+ * @property {string} status - Picture title (before/after intervention)
+ */
+
+/**
+ * @typedef {object} InputPictureFile
+ * @property {string} file - Picture to upload - binary
  */
 
 const pictureDataMapper = {

@@ -14,11 +14,26 @@
  * @typedef {object} InputDocument
  * @property {string} title - Document title
  * @property {string} description - Document description
- * @property {string} path - Document path
+ * @property {string} file - Document to upload - binary
  * @property {number} supplier_id - Id of the supplier linked to the document
  * @property {number} client_id - Id of the client linked to the document
  * @property {number} project_id - Id of the project linked to the document
  * @property {number} intervention_id - Id of the intervention linked to the document
+ */
+
+/**
+ * @typedef {object} InputDocumentDetails
+ * @property {string} title - Document title
+ * @property {string} description - Document description
+ * @property {number} supplier_id - Id of the supplier linked to the document
+ * @property {number} client_id - Id of the client linked to the document
+ * @property {number} project_id - Id of the project linked to the document
+ * @property {number} intervention_id - Id of the intervention linked to the document
+ */
+
+/**
+ * @typedef {object} InputDocumentFile
+ * @property {string} file - Document to upload - binary
  */
 
 const debug = require('debug')('Document');

@@ -30,6 +30,7 @@
     "express-jsdoc-swagger": "^1.6.7",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
+    "multer": "^1.4.4",
     "pg": "^8.7.3",
     "pug": "^3.0.2",
     "sanitizer": "^0.1.3",

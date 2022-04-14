@@ -7,6 +7,7 @@ const updateSchema = require('../../validation/schemas/profileUpdateSchema');
 const profileController = require('../../controllers/api/profile');
 
 const authenticateToken = require('../../middlewares/authenticateToken');
+const upload = require('../../middlewares/upload');
 
 const controllerHandler = require('../../helpers/controllerHandler');
 
@@ -46,5 +47,37 @@ router
      * @returns {ApiError} 404 - Profile not found - application/json
      */
     .delete(authenticateToken, controllerHandler(profileController.delete));
+
+router
+    .route('/avatar')
+    /**
+     * GET /api/profile/avatar
+     * @summary Download profile picture
+     * @tags Profile
+     * @security BearerAuth
+     * @returns 200 - success response - application/json
+     * @returns {ApiError} 404 - Profile not found - application/json
+     */
+    .get(authenticateToken, controllerHandler(profileController.getPicture))
+    /**
+     * PATCH /api/profile/avatar
+     * @summary Upload profile picture
+     * @tags Profile
+     * @security BearerAuth
+     * @param {InputProfilePicture} request.body.required - profile picture - multipart/form-data
+     * @returns {Profile} 200 - success response - application/json
+     * @returns {ApiError} 400 - Bad request response - application/json
+     * @returns {ApiError} 404 - Profile not found - application/json
+     */
+    .patch(authenticateToken, upload, controllerHandler(profileController.addPicture))
+    /**
+     * DELETE /api/profile/avatar
+     * @summary Delete profile picture
+     * @tags Profile
+     * @security BearerAuth
+     * @returns {Profile} 200 - success response - application/json
+     * @returns {ApiError} 404 - Profile not found - application/json
+     */
+    .delete(authenticateToken, controllerHandler(profileController.deletePicture));
 
 module.exports = router;

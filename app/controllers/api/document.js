@@ -6,6 +6,8 @@ const projectDataMapper = require('../../models/project');
 const interventionDataMapper = require('../../models/intervention');
 const { ApiError } = require('../../helpers/errorHandler');
 
+const baseUrl = process.env.BASE_FILE_URL;
+
 const documentController = {
 
     /**
@@ -19,7 +21,15 @@ const documentController = {
         debug('getAll');
         const documents = await documentDataMapper.findAll(request.decoded.id);
 
-        debug(documents);
+        documents.forEach((document) => {
+            let url;
+            if (!document.path || document.path === '') {
+                url = null;
+            } else {
+                url = `${baseUrl}file/${document.path}`;
+            }
+            document.path = url;
+        });
 
         return response.json(documents);
     },
@@ -41,6 +51,14 @@ const documentController = {
             throw new ApiError('Document not found', { statusCode: 404 });
         }
 
+        let url;
+        if (!document.path || document.path === '') {
+            url = null;
+        } else {
+            url = `${baseUrl}file/${document.path}`;
+        }
+        document.path = url;
+
         return response.json(document);
     },
 
@@ -55,11 +73,19 @@ const documentController = {
         debug('getBySupplier');
         const documents = await documentDataMapper.findBySupplier(request.params.id, request.decoded.id);
 
-        debug(documents);
-
         if (documents.length === 0) {
             throw new ApiError('Nothing found', { statusCode: 404 });
         }
+
+        documents.forEach((document) => {
+            let url;
+            if (!document.path || document.path === '') {
+                url = null;
+            } else {
+                url = `${baseUrl}file/${document.path}`;
+            }
+            document.path = url;
+        });
 
         return response.json(documents);
     },
@@ -75,11 +101,19 @@ const documentController = {
         debug('getByClient');
         const documents = await documentDataMapper.findByClient(request.params.id, request.decoded.id);
 
-        debug(documents);
-
         if (documents.length === 0) {
             throw new ApiError('Nothing found', { statusCode: 404 });
         }
+
+        documents.forEach((document) => {
+            let url;
+            if (!document.path || document.path === '') {
+                url = null;
+            } else {
+                url = `${baseUrl}file/${document.path}`;
+            }
+            document.path = url;
+        });
 
         return response.json(documents);
     },
@@ -95,11 +129,19 @@ const documentController = {
         debug('getByProject');
         const documents = await documentDataMapper.findByProject(request.params.id, request.decoded.id);
 
-        debug(documents);
-
         if (documents.length === 0) {
             throw new ApiError('Nothing found', { statusCode: 404 });
         }
+
+        documents.forEach((document) => {
+            let url;
+            if (!document.path || document.path === '') {
+                url = null;
+            } else {
+                url = `${baseUrl}file/${document.path}`;
+            }
+            document.path = url;
+        });
 
         return response.json(documents);
     },
@@ -115,11 +157,19 @@ const documentController = {
         debug('getByIntervention');
         const documents = await documentDataMapper.findByIntervention(request.params.id, request.decoded.id);
 
-        debug(documents);
-
         if (documents.length === 0) {
             throw new ApiError('Nothing found', { statusCode: 404 });
         }
+
+        documents.forEach((document) => {
+            let url;
+            if (!document.path || document.path === '') {
+                url = null;
+            } else {
+                url = `${baseUrl}file/${document.path}`;
+            }
+            document.path = url;
+        });
 
         return response.json(documents);
     },
@@ -154,15 +204,23 @@ const documentController = {
                 throw new ApiError('Intervention not found', { statusCode: 404 });
             }
         }
+
         // if (request.body.supplier_id) {
         //     const supplier = await supplierDataMapper.findByPk(request.body.supplier_id, request.decoded.id);
         //     if (!supplier) {
         //         throw new ApiError('Client not found', { statusCode: 404 });
         //     }
         // }
+
+        request.body.path = request.file.customName;
+
         const savedDocument = await documentDataMapper.insert(request.body);
 
-        debug(savedDocument);
+        if (!savedDocument.path || savedDocument.path === '') {
+            savedDocument.path = null;
+        } else {
+            savedDocument.path = `${baseUrl}file/${savedDocument.path}`;
+        }
 
         return response.json(savedDocument);
     },
@@ -174,11 +232,9 @@ const documentController = {
      * @param {object} response Express response object
      * @returns {Document} Route API JSON response
      */
-    async update(request, response) {
-        debug('update');
+    async updateDetails(request, response) {
+        debug('updateDetails');
         const document = await documentDataMapper.findByPk(request.params.id, request.decoded.id);
-
-        debug(document);
 
         if (!document) {
             throw new ApiError('Document not found', { statusCode: 404 });
@@ -210,7 +266,39 @@ const documentController = {
         // }
         const savedDocument = await documentDataMapper.update(request.params.id, request.body);
 
-        debug(savedDocument);
+        if (!savedDocument.path || savedDocument.path === '') {
+            savedDocument.path = null;
+        } else {
+            savedDocument.path = `${baseUrl}file/${savedDocument.path}`;
+        }
+
+        return response.json(savedDocument);
+    },
+
+    /**
+     * Document controller to update one record.
+     * ExpressMiddleware signature
+     * @param {object} request Express request object
+     * @param {object} response Express response object
+     * @returns {Document} Route API JSON response
+     */
+    async updateFile(request, response) {
+        debug('updateFile');
+        const document = await documentDataMapper.findByPk(request.params.id, request.decoded.id);
+
+        if (!document) {
+            throw new ApiError('Document not found', { statusCode: 404 });
+        }
+
+        request.body.path = request.file.customName;
+
+        const savedDocument = await documentDataMapper.update(request.params.id, request.body);
+
+        if (!savedDocument.path || savedDocument.path === '') {
+            savedDocument.path = null;
+        } else {
+            savedDocument.path = `${baseUrl}file/${savedDocument.path}`;
+        }
 
         return response.json(savedDocument);
     },

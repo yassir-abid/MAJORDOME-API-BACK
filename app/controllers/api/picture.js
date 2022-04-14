@@ -6,6 +6,8 @@ const pictureDataMapper = require('../../models/picture');
 
 const { ApiError } = require('../../helpers/errorHandler');
 
+const baseUrl = process.env.BASE_FILE_URL;
+
 const pictureController = {
     /**
      * Intervention controller to get intervention pictures by intervention id
@@ -23,6 +25,16 @@ const pictureController = {
         }
 
         const pictures = await pictureDataMapper.findAll(request.params.interventionId);
+
+        pictures.forEach((picture) => {
+            let url;
+            if (!picture.path || picture.path === '') {
+                url = null;
+            } else {
+                url = `${baseUrl}picture/${picture.path}`;
+            }
+            picture.path = url;
+        });
 
         return response.json(pictures);
     },
@@ -43,6 +55,14 @@ const pictureController = {
             throw new ApiError('Picture not found', { statusCode: 404 });
         }
 
+        let url;
+        if (!picture.path || picture.path === '') {
+            url = null;
+        } else {
+            url = `${baseUrl}picture/${picture.path}`;
+        }
+        picture.path = url;
+
         return response.json(picture);
     },
 
@@ -61,7 +81,20 @@ const pictureController = {
             throw new ApiError('Intervention not found', { statusCode: 404 });
         }
 
+        if (request.body.status !== 'Avant' && request.body.status !== 'Après') {
+            throw new ApiError(`"status" with value "${request.body.status}" fails to match the required pattern: /^Avant|Après$/`, { statusCode: 400 });
+        }
+
+        request.body.path = request.file.customName;
+
         const savedPicture = await pictureDataMapper.insert(request.body, request.params.interventionId);
+
+        if (!savedPicture.path || savedPicture.path === '') {
+            savedPicture.path = null;
+        } else {
+            savedPicture.path = `${baseUrl}picture/${savedPicture.path}`;
+        }
+
         response.json(savedPicture);
     },
 
@@ -72,8 +105,8 @@ const pictureController = {
      * @param {object} response Express response object
      * @returns {Picture} Route API JSON response
      */
-    async update(request, response) {
-        debug('update');
+    async updateDetails(request, response) {
+        debug('updateDetails');
 
         const picture = await pictureDataMapper.findByPk(request.params.pictureId, request.decoded.id);
 
@@ -81,9 +114,44 @@ const pictureController = {
             throw new ApiError('Picture not found', { statusCode: 404 });
         }
 
-        const savecPicture = await pictureDataMapper.update(request.params.pictureId, request.body);
+        const savedPicture = await pictureDataMapper.update(request.params.pictureId, request.body);
 
-        return response.json(savecPicture);
+        if (!savedPicture.path || savedPicture.path === '') {
+            savedPicture.path = null;
+        } else {
+            savedPicture.path = `${baseUrl}picture/${savedPicture.path}`;
+        }
+
+        return response.json(savedPicture);
+    },
+
+    /**
+     * Intervention controller to upload new picture file
+     * ExpressMiddleware signature
+     * @param {object} request Express request object
+     * @param {object} response Express response object
+     * @returns {Picture} Route API JSON response
+     */
+    async updateFile(request, response) {
+        debug('updatePicture');
+
+        const picture = await pictureDataMapper.findByPk(request.params.pictureId, request.decoded.id);
+
+        if (!picture) {
+            throw new ApiError('Picture not found', { statusCode: 404 });
+        }
+
+        request.body.path = request.file.customName;
+
+        const savedPicture = await pictureDataMapper.update(request.params.pictureId, request.body);
+
+        if (!savedPicture.path || savedPicture.path === '') {
+            savedPicture.path = null;
+        } else {
+            savedPicture.path = `${baseUrl}picture/${savedPicture.path}`;
+        }
+
+        return response.json(savedPicture);
     },
 
     /**
