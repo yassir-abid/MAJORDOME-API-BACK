@@ -29,4 +29,6 @@ package-lock.json
 sqitch.conf
 
 #Assets-Uploads
-app/assets/**
+app/assets/avatar/**
+app/assets/file/**
+app/assets/picture/**
