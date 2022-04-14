@@ -19,11 +19,11 @@ let directoryPath;
 const storage = multer.diskStorage({
     destination: (request, file, cb) => {
         if (request.originalUrl.includes('/avatar')) {
-            directoryPath = path.join(__dirname, '../assets/avatar/');
+            directoryPath = path.join(__dirname, './../assets/avatar/');
         } else if (request.originalUrl.includes('/pictures')) {
-            directoryPath = path.join(__dirname, '../assets/picture/');
+            directoryPath = path.join(__dirname, './../assets/picture/');
         } else if (request.originalUrl.includes('/documents')) {
-            directoryPath = path.join(__dirname, '../assets/file/');
+            directoryPath = path.join(__dirname, './../assets/file/');
         }
         cb(null, directoryPath);
     },
