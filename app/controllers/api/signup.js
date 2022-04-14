@@ -1,4 +1,5 @@
 const debug = require('debug')('account');
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const signupDataMapper = require('../../models/signup');

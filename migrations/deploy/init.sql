@@ -93,4 +93,13 @@ CREATE TABLE "notification" (
   "project_id" INT REFERENCES "project"("id") ON DELETE CASCADE,
   "intervention_id" INT REFERENCES "intervention"("id") ON DELETE CASCADE
 );
+
+CREATE TABLE "token" (
+  "id" INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  "token" TEXT NOT NULL,
+  "creation_date" TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+  "expiring_date" TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+  "provider_id" INT REFERENCES "provider"("id") ON DELETE CASCADE
+);
+
 COMMIT;

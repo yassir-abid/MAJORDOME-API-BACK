@@ -150,7 +150,7 @@ const dataMapper = {
     /**
       * Add document in the database
       * @param {InputDocument} documentInfos - Data to insert
-      * @returns {Supplier} - Inserted document
+      * @returns {Document} - Inserted document
       */
     async insert(documentInfos) {
         const preparedQuery = {
@@ -172,7 +172,7 @@ const dataMapper = {
       * Update document
       * @param {number} id - id of the document to update
       * @param {InputDocument} documentInfos - Data to update
-      * @returns {Project} - Updated project
+      * @returns {Document} - Updated document
       */
     async update(id, documentInfos) {
         const fields = Object.keys(documentInfos).map((prop, index) => `"${prop}" = $${index + 1}`);

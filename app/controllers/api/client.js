@@ -81,7 +81,7 @@ const clientController = {
         debug('update');
         const client = await clientDataMapper.findByPk(request.params.id);
         if (!client) {
-            throw new ApiError('This client does not exists', { statusCode: 404 });
+            throw new ApiError('Client not found', { statusCode: 404 });
         }
 
         if (request.body.client) {
@@ -138,7 +138,7 @@ const clientController = {
         debug('delete');
         const client = await clientDataMapper.findByPk(request.params.id);
         if (!client) {
-            throw new ApiError('This client does not exists', { statusCode: 404 });
+            throw new ApiError('Client not found', { statusCode: 404 });
         }
 
         await clientDataMapper.delete(request.params.id);
@@ -156,7 +156,7 @@ const clientController = {
         debug('deleteAddress');
         const address = await addressDataMapper.findByPk(request.params.addressId);
         if (!address) {
-            throw new ApiError('This address does not exists', { statusCode: 404 });
+            throw new ApiError('Address not found', { statusCode: 404 });
         }
 
         const clientAddresses = await addressDataMapper.findByClient(address.client_id);

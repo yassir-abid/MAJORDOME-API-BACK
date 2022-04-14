@@ -21,7 +21,7 @@ router
      * @summary Get all projects
      * @tags Project
      * @security BearerAuth
-     * @returns {array<CProjects>} 200 - success response - application/json
+     * @returns {array<ProjectWithClient>} 200 - success response - application/json
      */
     .get(authenticateToken, controllerHandler(projectController.getAll))
     /**
@@ -41,11 +41,11 @@ router
     .route('/:id(\\d+)')
     /**
      * GET /api/projects/{id}
-     * @summary Get one project and the linked client
+     * @summary Get one project, the linked client with address and the linked intervention
      * @tags Project
      * @security BearerAuth
      * @param {number} id.path.required - project identifier
-     * @returns {ClientWithAddress} 200 - success response - application/json
+     * @returns {ProjectWithInterventionAddressAndClient} 200 - success response - application/json
      * @returns {ApiError} 409 - Conflict response - application/json
      * @returns {ApiError} 404 - Project not found - application/json
      */

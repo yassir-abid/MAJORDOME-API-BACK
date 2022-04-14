@@ -16,10 +16,8 @@ const sendEmail = async (email, subject, text) => {
             from: process.env.USER,
             to: email,
             subject,
-            text: '',
+            text,
         });
-
-        transporter.close();
 
         console.log('email sent sucessfully');
     } catch (error) {

@@ -63,11 +63,11 @@ const interventionController = {
         debug('create');
         const project = await projectDataMapper.findByPk(request.body.project_id);
         if (!project) {
-            throw new ApiError('This project does not exists', { statusCode: 404 });
+            throw new ApiError('Project not found', { statusCode: 404 });
         }
         const address = await addressDataMapper.findByPk(request.body.address_id);
         if (!address) {
-            throw new ApiError('This address does not exists', { statusCode: 404 });
+            throw new ApiError('Address not found', { statusCode: 404 });
         }
         const clientAddresses = await interventionDataMapper.findClientAddresses(request.body.project_id);
         const foundAddress = clientAddresses.find((clientAddress) => clientAddress.id === Number(request.body.address_id));
@@ -91,20 +91,20 @@ const interventionController = {
 
         const intervention = await interventionDataMapper.findByPk(request.params.id);
         if (!intervention) {
-            throw new ApiError('This intervention does not exists', { statusCode: 404 });
+            throw new ApiError('Intervention not found', { statusCode: 404 });
         }
 
         if (request.body.address_id) {
             const address = await addressDataMapper.findByPk(request.body.address_id);
             if (!address) {
-                throw new ApiError('This address does not exists', { statusCode: 404 });
+                throw new ApiError('Address not found', { statusCode: 404 });
             }
         }
 
         if (request.body.project_id) {
             const project = await projectDataMapper.findByPk(request.body.project_id);
             if (!project) {
-                throw new ApiError('This project does not exists', { statusCode: 404 });
+                throw new ApiError('Project not found', { statusCode: 404 });
             }
         }
 
@@ -145,7 +145,7 @@ const interventionController = {
         debug('delete');
         const intervention = await interventionDataMapper.findByPk(request.params.id);
         if (!intervention) {
-            throw new ApiError('This intervention does not exists', { statusCode: 404 });
+            throw new ApiError('Intervention not found', { statusCode: 404 });
         }
 
         await interventionDataMapper.delete(request.params.id, intervention.project_id);

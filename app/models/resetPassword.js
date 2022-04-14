@@ -76,13 +76,12 @@ const dataMapper = {
         return result.rows[0];
     },
 
-    async createToken(tokenInfos) {
+    async createToken(token, expiring_date, provider_id) {
         const preparedQuery = {
             text: `INSERT INTO token
-            (token, created_at, expires, provider_id)
-            VALUES ($1, $2, $3, $4) RETURNING *`,
-            values: [tokenInfos.token, tokenInfos.created_at,
-                tokenInfos.expires, tokenInfos.provider_id],
+            (token, expiring_date, provider_id)
+            VALUES ($1, $2, $3) RETURNING *`,
+            values: [token, expiring_date, provider_id],
         };
         const savedToken = await client.query(preparedQuery);
 
