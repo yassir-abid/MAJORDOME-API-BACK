@@ -107,7 +107,12 @@ DELETE {{ endpoint }}/clients/address/26
 
 
 {
-  "email": "test@test.com",
-  "password": "testTest!0"
+  "email": "majordome@gmail.com",
+  "password": "Majordome!2022",
 }
 
+
+{
+  "email": "jean.dupont@gmail.com",
+  "password": "JeanDupont!2022"
+}

@@ -37,4 +37,7 @@ SELECT * FROM report_with_pictures WHERE false;
 SELECT * FROM report_without_pictures WHERE false;
 SELECT * FROM report_and_pictures WHERE false;
 
+-- View to select intervention, project, client, and address
+SELECT * FROM intervention_project_client_address WHERE false;
+
 ROLLBACK;

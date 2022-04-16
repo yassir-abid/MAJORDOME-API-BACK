@@ -89,6 +89,7 @@ const tables = [
             title: () => faker.lorem.sentence(),
             description: () => faker.lorem.sentence(),
             date: () => faker.date.between('2022-03-28T00:00:00.000Z', '2022-04-10T00:00:00.000Z'),
+            duration: '2 hours',
             status: () => faker.word.verb(),
             comments: () => faker.lorem.sentence(),
             report: () => faker.lorem.sentence(),

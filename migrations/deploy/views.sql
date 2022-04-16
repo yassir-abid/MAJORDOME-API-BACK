@@ -9,6 +9,7 @@ SELECT project.*, json_agg(json_build_object(
 								   'title', intervention.title,
 								   'description', intervention.description,
 								   'date', intervention.date,
+                                   'end_date', intervention.date + intervention.duration,
 								   'status', intervention.status,
 								   'comments', intervention.comments,
 								   'report', intervention.report,
@@ -114,7 +115,7 @@ FROM project;
 
 -- View to select intervention report and pictures
 CREATE VIEW report_with_pictures AS
-SELECT intervention.id, intervention.title, intervention.description, intervention.date, intervention.report,
+SELECT intervention.id, intervention.title, intervention.description, intervention.date, (intervention.date + intervention.duration) as end_date, intervention.report,
 json_agg(json_build_object('id', picture.id,
 				'title', picture.title,
 				'status', picture.status,
@@ -126,7 +127,7 @@ JOIN picture ON picture.intervention_id = intervention.id
 GROUP BY intervention.id;
 
 CREATE VIEW report_without_pictures AS
-SELECT intervention.id, intervention.title, intervention.description, intervention.date, intervention.report,
+SELECT intervention.id, intervention.title, intervention.description, intervention.date, (intervention.date + intervention.duration) as end_date, intervention.report,
 json_build_array() AS pictures FROM intervention
 WHERE intervention.id <> ALL (
 		SELECT picture.intervention_id FROM picture
@@ -136,5 +137,40 @@ CREATE VIEW report_and_pictures AS
 SELECT * FROM report_with_pictures 
 UNION ALL
 SELECT * FROM report_without_pictures;
+
+-- View to select intervention, project, client, and address
+CREATE VIEW intervention_project_client_address AS
+SELECT intervention.*, (intervention.date + intervention.duration) as end_date,
+            json_build_object('id', project.id,
+                            'title', project.title,
+                            'description', project.description,
+                            'status', project.status,
+                            'comments', project.comments,
+                            'client_id', project.client_id)
+                            AS project,
+            json_build_object('id', client.id,
+                            'firstname', client.firstname,
+                            'lastname', client.lastname,
+                            'email', client.email,
+                            'phone', client.phone,
+                            'comments', client.comments,
+                            'our_equipments', client.our_equipments,
+                            'other_equipments', client.other_equipments,
+                            'needs', client.needs,
+                            'provider_id', client.provider_id) AS client,
+            json_build_object('id', address.id,
+                            'number', address.number,
+                            'street', address.street,
+                            'postal_code', address.postal_code,
+                            'city', address.city,
+                            'comments', address.comments,
+                            'client_id', address.client_id)
+                            AS address
+            FROM intervention
+            JOIN project ON intervention.project_id = project.id
+            JOIN client ON project.client_id = client.id
+            LEFT JOIN address ON intervention.address_id = address.id;
+
+
 
 COMMIT;

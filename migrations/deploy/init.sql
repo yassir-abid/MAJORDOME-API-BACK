@@ -60,6 +60,7 @@ CREATE TABLE "intervention" (
   "title" TEXT NOT NULL,
   "description" TEXT,
   "date" TIMESTAMPTZ DEFAULT NOW(),
+  "duration" INTERVAL DEFAULT '2 hours' NOT NULL,
   "status" TEXT DEFAULT 'Programmée',
   "comments" TEXT,
   "report" TEXT,
