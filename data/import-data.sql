@@ -25,11 +25,7 @@ INSERT INTO "supplier" ("firstname", "lastname", "email", "phone", "address", "c
 -- Table: client
 INSERT INTO "client" ("firstname", "lastname", "email", "phone", "comments", "our_equipments", "other_equipments", "needs", "provider_id") VALUES
 ('Eric', 'Buckridge', 'Thora.Auer@hotmail.com', '0645789542', 'Tenetur autem molestiae modi aut quos rem corporis.', 'Autem ut repellendus omnis.', 'Iste et tenetur repellat est quisquam.', 'Rem aut et facilis.', 1),
-('Otho', 'Prohaska', 'Mikayla_Robel@gmail.com', '0587996245', 'Iste praesentium totam cumque assumenda fuga odio nemo vel.', 'Quae magni accusantium vero tenetur saepe nostrum ipsam incidunt.', 'Mollitia quia et fugiat occaecati sunt sed rem.', 'Quis dolores autem quae dolore praesentium nihil ut aperiam voluptatibus.', 1),
-('Laurie', 'Glover', 'Maybelle48@gmail.com', '0765988524', 'Voluptatibus cumque consectetur quae incidunt sequi aut voluptas.', 'Magni assumenda minima suscipit maiores.', 'Maxime dolor quis aut est.', 'Dolorem facere laudantium laboriosam magni ut.', 1),
-('Maryse', 'Stamm', 'Alysha62@yahoo.com', '0659877895', 'Quaerat exercitationem quaerat.', 'Dolor inventore a tenetur et dolorem.', 'Qui dicta voluptas.', 'Est quia magnam reprehenderit illo quae et ut.', 2),
-('Bulah', 'Greenholt', 'Lamont_Mosciski@hotmail.com', '0659865898', 'Maiores blanditiis in eius consectetur temporibus error sunt.', 'Pariatur inventore vel sint facilis voluptas.', 'Modi in iusto alias dolor a hic.', 'Aut et sequi numquam.', 2),
-('Madaline', 'Pfeffer', 'Brody98@gmail.com', '0658963298', 'Debitis vel unde.', 'Aut sed quae esse ut.', 'Reprehenderit nam fugiat repudiandae ducimus est nobis inventore est ut.', 'Quas dolores dolore aspernatur qui placeat consequatur quaerat nostrum.', 2);
+('Otho', 'Prohaska', 'Mikayla_Robel@gmail.com', '0587996245', 'Iste praesentium totam cumque assumenda fuga odio nemo vel.', 'Quae magni accusantium vero tenetur saepe nostrum ipsam incidunt.', 'Mollitia quia et fugiat occaecati sunt sed rem.', 'Quis dolores autem quae dolore praesentium nihil ut aperiam voluptatibus.', 2);
 
 -- Table: address
 INSERT INTO "address" ("number", "street", "postal_code", "city", "comments", "client_id") VALUES
@@ -48,10 +44,10 @@ INSERT INTO "project" ("title", "description", "status", "comments", "client_id"
 INSERT INTO "intervention" ("title", "description", "date", "duration", "status", "comments", "report", "project_id", "address_id") VALUES
 ('Installation chaudière', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-04-14T16:06:25.184Z"', '2 hours', 'Terminée', 'Sit consequatur earum optio.', 'Pariatur qui numquam ducimus eum iste dolores est dolorum voluptatem.', 1, 1),
 ('Entretien chaudière', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-04-17T16:06:25.184Z"', '2 hours', 'Programmée', 'Sit consequatur earum optio.', 'Pariatur qui numquam ducimus eum iste dolores est dolorum voluptatem.', 1, 1),
-('Fuite eau', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-04-17T07:19:23.161Z"', '2 hours', 'Programmée', 'Ut dolores mollitia et architecto fuga placeat consequuntur natus placeat.', 'Officia et dolorem laboriosam reprehenderit consequuntur ea nam.', 1, 2),
-('Trou pour piscine', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-03-31T21:01:33.323Z"', '2 hours', 'Terminée', 'Asperiores sunt dignissimos unde.', 'Quia non cumque perspiciatis libero ut.', 2, 3),
-('Sol piscine', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-04-28T12:52:07.648Z"', '2 hours', 'Programmée', 'Odit voluptas aut.', 'Perferendis et provident.', 2, 3),
-('Remplissage piscine', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-05-02T16:29:54.788Z"', '2 hours', 'Programmée', 'Incidunt non aut porro quis esse.', 'Nihil libero consequatur eveniet consequatur recusandae neque provident cum.', 2, 3);
+('Fuite eau', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-04-17T07:19:23.161Z"', '2 hours', 'Programmée', 'Ut dolores mollitia et architecto fuga placeat consequuntur natus placeat.', 'Officia et dolorem laboriosam reprehenderit consequuntur ea nam.', 2, 2),
+('Trou pour piscine', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-03-31T21:01:33.323Z"', '2 hours', 'Terminée', 'Asperiores sunt dignissimos unde.', 'Quia non cumque perspiciatis libero ut.', 3, 3),
+('Sol piscine', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-04-28T12:52:07.648Z"', '2 hours', 'Programmée', 'Odit voluptas aut.', 'Perferendis et provident.', 3, 3),
+('Remplissage piscine', 'Enim cupiditate vel aut dicta magni dicta inventore fugit.', '"2022-05-02T16:29:54.788Z"', '2 hours', 'Programmée', 'Incidunt non aut porro quis esse.', 'Nihil libero consequatur eveniet consequatur recusandae neque provident cum.', 3, 3);
 
 -- Table: picture
 INSERT INTO "picture" ("title", "status", "path", "intervention_id") VALUES

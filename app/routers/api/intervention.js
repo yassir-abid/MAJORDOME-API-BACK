@@ -19,7 +19,7 @@ router
      * @summary Get all interventions
      * @tags Intervention
      * @security BearerAuth
-     * @returns {array<Intervention>} 200 - success response - application/json
+     * @returns {array<InterventionWithProjectAndClient>} 200 - success response - application/json
      */
     .get(authenticateToken, controllerHandler(controller.getAll))
     /**

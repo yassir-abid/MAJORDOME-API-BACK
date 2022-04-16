@@ -7,6 +7,7 @@ const client = require('../config/db');
  * @property {string} title - Intervention title
  * @property {string} description - Intervention description
  * @property {string} date - Intervention date (timestamptz)
+ * @property {string} duration - Intervention duration (interval)
  * @property {string} status - Intervention status
  * @property {string} comments - Intervention comments and specific informations
  * @property {string} report - Post-Intervention report
@@ -55,6 +56,8 @@ const client = require('../config/db');
  * @property {string} title - Intervention title
  * @property {string} description - Intervention description
  * @property {string} date - Intervention date (timestamptz)
+ * @property {string} duration - Intervention duration (interval)
+ * @property {string} end_date - Intervention end date (timestamptz)
  * @property {string} status - Intervention status
  * @property {string} comments - Intervention comments and specific informations
  * @property {string} report - Post-Intervention report
@@ -68,6 +71,7 @@ const client = require('../config/db');
  * @property {string} title - Intervention title
  * @property {string} description - Intervention description
  * @property {string} date - Intervention date (timestamptz)
+ * @property {string} duration - Intervention duration (interval)
  * @property {string} status - Intervention status
  * @property {string} comments - Intervention comments and specific informations
  * @property {string} report - Post-Intervention report
@@ -103,6 +107,21 @@ const interventionDataMapper = {
         const preparedQuery = {
             text: `SELECT intervention.* FROM intervention
             JOIN project ON project.id = intervention.project_id
+            JOIN client ON client.id = project.client_id
+            WHERE client.provider_id = $1;`,
+            values: [providerId],
+        };
+        const result = await client.query(preparedQuery);
+        return result.rows;
+    },
+    /**
+     * @returns {array<InterventionWithProjectAndClient>} - All interventions of the database
+     */
+    async findAllWithDetails(providerId) {
+        debug('findAllWithDetails');
+        const preparedQuery = {
+            text: `SELECT intervention_project_client_address.* FROM intervention_project_client_address
+            JOIN project ON project.id = intervention_project_client_address.project_id
             JOIN client ON client.id = project.client_id
             WHERE client.provider_id = $1;`,
             values: [providerId],
@@ -161,37 +180,10 @@ const interventionDataMapper = {
         debug('findByPk');
         const preparedQuery = {
             text: `
-            SELECT intervention.*,
-            json_build_object('id', project.id,
-                            'title', project.title,
-                            'description', project.description,
-                            'status', project.status,
-                            'comments', project.comments,
-                            'client_id', project.client_id)
-                            AS project,
-            json_build_object('id', client.id,
-                            'firstname', client.firstname,
-                            'lastname', client.lastname,
-                            'email', client.email,
-                            'phone', client.phone,
-                            'comments', client.comments,
-                            'our_equipments', client.our_equipments,
-                            'other_equipments', client.other_equipments,
-                            'needs', client.needs,
-                            'provider_id', client.provider_id) AS client,
-            json_build_object('id', address.id,
-                            'number', address.number,
-                            'street', address.street,
-                            'postal_code', address.postal_code,
-                            'city', address.city,
-                            'comments', address.comments,
-                            'client_id', address.client_id)
-                            AS address
-            FROM intervention
-            JOIN project ON intervention.project_id = project.id
-            JOIN client ON project.client_id = client.id
-            LEFT JOIN address ON intervention.address_id = address.id
-            WHERE intervention.id = $1 AND client.provider_id = $2;
+            SELECT intervention_project_client_address.* FROM intervention_project_client_address
+            JOIN project ON project.id = intervention_project_client_address.project_id
+            JOIN client ON client.id = project.client_id
+            WHERE intervention_project_client_address.id = $1 AND client.provider_id = $2;
             `,
             values: [interventionId, providerId],
         };
@@ -213,10 +205,10 @@ const interventionDataMapper = {
         debug('insert');
         const preparedQuery = {
             text: ` INSERT INTO intervention
-            (title, description, date, status, comments, report, project_id, address_id) VALUES
-            ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;`,
+            (title, description, date, duration, status, comments, report, project_id, address_id) VALUES
+            ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;`,
             values: [intervention.title, intervention.description,
-                intervention.date, intervention.status,
+                intervention.date, intervention.duration, intervention.status,
                 intervention.comments, intervention.report,
                 intervention.project_id, intervention.address_id],
         };

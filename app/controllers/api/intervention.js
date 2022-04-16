@@ -13,11 +13,11 @@ const interventionController = {
      * ExpressMiddleware signature
      * @param {object} request Express request object (not used)
      * @param {object} response Express response object
-     * @returns {array<Intervention>} Route API JSON response
+     * @returns {array<InterventionWithProjectAndClient>} Route API JSON response
      */
     async getAll(request, response) {
         debug('getAll');
-        const interventions = await interventionDataMapper.findAll(request.decoded.id);
+        const interventions = await interventionDataMapper.findAllWithDetails(request.decoded.id);
         return response.json(interventions);
     },
 
