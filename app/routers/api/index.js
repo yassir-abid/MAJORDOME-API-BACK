@@ -8,6 +8,7 @@ const clientRouter = require('./client');
 const projectRouter = require('./project');
 const interventionRouter = require('./intervention');
 const documentRouter = require('./document');
+const supplierRouter = require('./supplier');
 const resetPasswordRouter = require('./resetPassword');
 const changePasswordRouter = require('./changePassword');
 
@@ -32,6 +33,7 @@ router.use('/clients', clientRouter);
 router.use('/projects', projectRouter);
 router.use('/interventions', interventionRouter);
 router.use('/documents', documentRouter);
+router.use('/suppliers', supplierRouter);
 router.use('/resetpassword', resetPasswordRouter);
 router.use('/changepassword', changePasswordRouter);
 

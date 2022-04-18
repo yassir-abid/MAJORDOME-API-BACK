@@ -20,7 +20,7 @@ router
      * @returns {LinkToResetPassword} 201 - created - application/json
      * @returns {ApiError} 401 - Invalid email - application/json
      */
-    .post(validate('body', resetPasswordSchema), resetPasswordController.askResetPassword)
+    .post(validate('body', resetPasswordSchema), controllerHandler(resetPasswordController.askResetPassword))
     /**
      * GET /api/resetpassword
      * @summary Get reset password route
