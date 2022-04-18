@@ -41,6 +41,7 @@ router
     .route('/:id(\\d+)')
     /**
      * GET /api/projects/{id}
+
      * @summary Get one project, his client and all his interventions
      * @tags Project
      * @security BearerAuth

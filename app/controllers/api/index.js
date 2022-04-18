@@ -1,11 +1,14 @@
 // todo Import entities controllers
 const signupController = require('./signup');
 const loginController = require('./login');
+const resetPasswordController = require('./resetPassword');
 const profileController = require('./profile');
 const clientController = require('./client');
 const projectController = require('./project');
 const interventionController = require('./intervention');
 const pictureController = require('./picture');
+const documentController = require('./document');
+const changePasswordController = require('./changePassword');
 
 const apiController = {
     /**
@@ -33,4 +36,7 @@ module.exports = {
     projectController,
     interventionController,
     pictureController,
+    documentController,
+    resetPasswordController,
+    changePasswordController,
 };

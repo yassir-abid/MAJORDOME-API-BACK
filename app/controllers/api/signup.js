@@ -5,6 +5,8 @@ const signupDataMapper = require('../../models/signup');
 const profileDataMapper = require('../../models/profile');
 const { ApiError } = require('../../helpers/errorHandler');
 
+const bcryptSalt = process.env.BCRYPT_SALT;
+
 const signupController = {
     /**
      * Signup controller to create an account.
@@ -27,7 +29,7 @@ const signupController = {
             throw new ApiError('Password and its confirmation does not match', { statusCode: 409 });
         }
 
-        const passwordHashed = await bcrypt.hash(request.body.password, 10);
+        const passwordHashed = await bcrypt.hash(request.body.password, Number(bcryptSalt));
 
         const newUser = await profileDataMapper.insert(
             {
