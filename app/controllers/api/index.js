@@ -8,6 +8,7 @@ const projectController = require('./project');
 const interventionController = require('./intervention');
 const pictureController = require('./picture');
 const documentController = require('./document');
+const changePasswordController = require('./changePassword');
 
 const apiController = {
     /**
@@ -37,4 +38,5 @@ module.exports = {
     pictureController,
     documentController,
     resetPasswordController,
+    changePasswordController,
 };

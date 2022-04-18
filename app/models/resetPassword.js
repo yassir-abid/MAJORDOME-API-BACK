@@ -12,14 +12,14 @@ const client = require('../config/db');
  */
 
 /**
- * @typedef {object} InputAskNewPassword
+ * @typedef {object} InputResetPassword
  * @property {string} email - User email
  */
 
 /**
- * @typedef {object} InputResetPassword
- * @property {string} newPassword - User new password
- * @property {string} newPasswordConfirm - User new password confirmation
+ * @typedef {object} InputSetNewPassword
+ * @property {string} password - User new password
+ * @property {string} passwordConfirm - User new password confirmation
  */
 
 /**
@@ -56,6 +56,29 @@ const dataMapper = {
     },
 
     /**
+     * Edit password in database
+     * @param {number} id - profile id
+     * @param {InputSetNewPassword} passwordInfos - Password and its confirmation
+     * @returns {Profile} - Edited Profile
+     */
+    async updatePassword(id, password) {
+        debug('update');
+
+        const savedPassword = await client.query(
+            `
+                    UPDATE provider
+                    SET password =$2
+                    WHERE id = $1
+                    RETURNING id, firstname, lastname, email, phone, address, picture
+                `,
+            [id, password],
+        );
+        debug(savedPassword);
+
+        return savedPassword.rows[0];
+    },
+
+    /**
      * Find if a token exists for the user
      * @returns {(Token|null)} - Existing Profile
      * or null if no Profile with these data
@@ -76,12 +99,12 @@ const dataMapper = {
         return result.rows[0];
     },
 
-    async createToken(token, expiring_date, provider_id) {
+    async createToken(token, expiringDate, providerId) {
         const preparedQuery = {
             text: `INSERT INTO token
             (token, expiring_date, provider_id)
             VALUES ($1, $2, $3) RETURNING *`,
-            values: [token, expiring_date, provider_id],
+            values: [token, expiringDate, providerId],
         };
         const savedToken = await client.query(preparedQuery);
 
@@ -95,10 +118,10 @@ const dataMapper = {
      * @param {number} id - id of the token to delete
      * @returns {boolean} - Result of the delete operation
      */
-    async deleteToken(id) {
+    async deleteToken(providerId) {
         const preparedQuery = {
-            text: 'DELETE FROM token WHERE id = $1',
-            values: [id],
+            text: 'DELETE FROM token WHERE token.provider_id = $1',
+            values: [providerId],
         };
 
         const result = await client.query(preparedQuery);

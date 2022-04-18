@@ -2,9 +2,7 @@ const express = require('express');
 
 const validate = require('../../validation/validator');
 
-const resetPasswordAsking = require('../../validation/schemas/resetPasswordAskingSchema');
-
-const resetPasswordSetNew = require('../../validation/schemas/resetPasswordSetNewSchema');
+const resetPasswordSchema = require('../../validation/schemas/resetPasswordSchema');
 
 const resetPasswordController = require('../../controllers/api/resetPassword');
 
@@ -14,10 +12,24 @@ const router = express.Router();
 
 router
     .route('/')
-    .post(validate('body', resetPasswordAsking), controllerHandler(resetPasswordController.askResetPassword));
-
-router
-    .route('/newpassword')
-    .post(validate('body', resetPasswordSetNew),controllerHandler(resetPasswordController.changePassword));
+    /**
+     * POST /api/resetpassword
+     * @summary Send a reset passport request
+     * @tags Reset password
+     * @param {InputResetPassword} request.body.required - provider email
+     * @returns {LinkToResetPassword} 201 - created - application/json
+     * @returns {ApiError} 401 - Invalid email - application/json
+     */
+    .post(validate('body', resetPasswordSchema), resetPasswordController.askResetPassword)
+    /**
+     * GET /api/resetpassword
+     * @summary Get reset password route
+     * @tags Reset password
+     * @security BearerAuth
+     * @returns {Profile} 200 - success response - application/json
+     * @returns {ApiError} 401 - Unauthorized - application/json
+     * @returns {ApiError} 409 - Conflict - application/json
+     */
+    .get(controllerHandler(resetPasswordController.verifyToken));
 
 module.exports = router;

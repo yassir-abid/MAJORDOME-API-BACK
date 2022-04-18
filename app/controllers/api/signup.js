@@ -1,10 +1,11 @@
 const debug = require('debug')('account');
-require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const signupDataMapper = require('../../models/signup');
 const profileDataMapper = require('../../models/profile');
 const { ApiError } = require('../../helpers/errorHandler');
+
+const bcryptSalt = process.env.BCRYPT_SALT;
 
 const signupController = {
     /**
@@ -28,7 +29,7 @@ const signupController = {
             throw new ApiError('Password and its confirmation do not match', { statusCode: 409 });
         }
 
-        const passwordHashed = await bcrypt.hash(request.body.password, process.env.BCRYPT_SALT);
+        const passwordHashed = await bcrypt.hash(request.body.password, Number(bcryptSalt));
 
         const newUser = await profileDataMapper.insert(
             {

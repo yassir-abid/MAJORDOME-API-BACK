@@ -1,12 +1,15 @@
 const debug = require('debug')('resertPasswordController');
 const dayjs = require('dayjs');
+const isBetween = require('dayjs/plugin/isBetween');
+dayjs.extend(isBetween)
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const sendEmail = require('../../utils/email');
 const resetPasswordDataMapper = require('../../models/resetPassword');
 const { ApiError } = require('../../helpers/errorHandler');
 
-const baseUrl = process.env.BCRYPT_SALT;
+const baseUrl = process.env.BASE_URL;
+const bcryptSalt = process.env.BCRYPT_SALT;
 
 const resetPasswordController = {
     /**
@@ -19,61 +22,50 @@ const resetPasswordController = {
     async askResetPassword(request, response) {
         debug('askreset');
         const user = await resetPasswordDataMapper.findByEmail(request.body);
-
-        if (!user) {
+        if (!user || request.body.email === undefined) {
             throw new ApiError('Invalid Email', { statusCode: 401 });
         }
-
         const token = await resetPasswordDataMapper.findToken(user.id);
-
         if (token) {
             await resetPasswordDataMapper.deleteToken(token.id);
         }
         const resetToken = crypto.randomBytes(32).toString('hex');
-
-        const hash = await bcrypt.hash(resetToken, Number(baseUrl));
+        const hash = await bcrypt.hash(resetToken, Number(bcryptSalt));
         debug(hash);
-        const expiringTime = dayjs().add(30, 'minute');
+        const expiringTime = dayjs().add(30, 'minute').format();
         debug(expiringTime);
-
         const newToken = await resetPasswordDataMapper.createToken(hash, expiringTime, user.id);
         debug(newToken.token);
         const link = `${baseUrl}/resetpassword?token=${newToken.token}&id=${user.id}`;
         debug(link);
-        await sendEmail(user.email, 'Password Reset Request', `Bonjour ${user.firstname} ${user.lastname},
-        Nous avons reçu une demande pour réinitialiser le mot de passe associé à votre compte Majordome. Pour continuer,
-        cliquez sur le lien suivant : ${link}`);
-        return link;
+        sendEmail.emailConfig(user.email, 'Password Reset Request', `Bonjour ${user.firstname} ${user.lastname},
+            Nous avons reçu une demande pour réinitialiser le mot de passe associé à votre compte Majordome. Pour continuer,
+            cliquez sur le lien suivant : ${link}.
+            Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer ce message. Votre mot de passe restera inchangé.`);
+        return response.status(200).json;
     },
 
-//    async changePassword(request, response) {
-//        const passwordResetToken = await resetPasswordDataMapper.findToken(request.params.id);
-//
-//        if (!passwordResetToken) {
-//            throw new ApiError('Invalid or expired password reset token');
-//        }
-//        const isValid = await bcrypt.compare(token, passwordResetToken.token);
-//        if (!isValid) {
-//            throw new ApiError('Invalid or expired password reset token');
-//        }
-//        const hash = await bcrypt.hash(password, Number(process.env.BCRYPT_SALT));
-//        await profileDataMapper.update(
-//            { _id: userId },
-//            { $set: { password: hash } },
-//            { new: true },
-//        );
-//        const user = await User.findById({ _id: userId });
-//        sendEmail(
-//            user.email,
-//            'Password Reset Successfully',
-//            {
-//                name: user.name,
-//            },
-//            './template/resetPassword.handlebars'
-//        );
-//        await passwordResetToken.deleteOne();
-//        return true;
-//    },
+    async verifyToken(request, response) {
+        debug('verifyToken');
+        const userId = request.query.id;
+        const passwordResetToken = await resetPasswordDataMapper.findToken(userId);
+
+        if (!passwordResetToken) {
+            throw new ApiError('Invalid or expired password reset token', { statusCode: 401 });
+        }
+        debug(request.query.token);
+        debug(passwordResetToken.token);
+        if (request.query.token !== passwordResetToken.token) {
+            throw new ApiError('Invalid password reset token', { statusCode: 401 });
+        }
+        if (!dayjs().isBetween(
+            passwordResetToken.creation_date,
+            passwordResetToken.expiring_date)) {
+            throw new ApiError('Expired password reset token', { statusCode: 401 });
+        }
+        debug('success')
+        return response.status(200).json;
+    },
 };
 
 module.exports = resetPasswordController;

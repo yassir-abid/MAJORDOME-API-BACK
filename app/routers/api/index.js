@@ -8,7 +8,8 @@ const clientRouter = require('./client');
 const projectRouter = require('./project');
 const interventionRouter = require('./intervention');
 const documentRouter = require('./document');
-const resetPasswordRouter = require ('./resetPassword');
+const resetPasswordRouter = require('./resetPassword');
+const changePasswordRouter = require('./changePassword');
 
 const { apiController } = require('../../controllers/api');
 
@@ -32,6 +33,7 @@ router.use('/projects', projectRouter);
 router.use('/interventions', interventionRouter);
 router.use('/documents', documentRouter);
 router.use('/resetpassword', resetPasswordRouter);
+router.use('/changepassword', changePasswordRouter);
 
 router.use(() => {
     throw new ApiError('API Route not found', { statusCode: 404 });
