@@ -119,7 +119,7 @@ const dataMapper = {
     async findAll(providerId) {
         debug('findAll');
         const preparedQuery = {
-            text: 'SELECT * FROM client_and_addresses WHERE provider_id = $1 ORDER BY lastname, firstname;',
+            text: 'SELECT * FROM client_addresses_projects WHERE provider_id = $1 ORDER BY lastname, firstname;',
             values: [providerId],
         };
         const result = await client.query(preparedQuery);
