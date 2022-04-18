@@ -1,7 +1,7 @@
 const debug = require('debug')('resertPasswordController');
 const dayjs = require('dayjs');
 const isBetween = require('dayjs/plugin/isBetween');
-dayjs.extend(isBetween)
+dayjs.extend(isBetween);
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const sendEmail = require('../../utils/email');
