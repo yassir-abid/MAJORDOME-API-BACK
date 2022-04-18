@@ -12,7 +12,7 @@ const clientController = {
      * ExpressMiddleware signature
      * @param {object} request Express request object (not used)
      * @param {object} response Express response object
-     * @returns {array<ClientWithAddress>} Route API JSON response
+     * @returns {array<ClientAddressesProject>} Route API JSON response
      */
     async getAll(request, response) {
         debug('getAll');

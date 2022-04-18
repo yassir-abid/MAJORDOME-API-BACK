@@ -114,12 +114,12 @@ const client = require('../config/db');
 const dataMapper = {
     /**
      * @param {number} providerId - provider id
-     * @returns {array<ClientWithAddress>} - All clients of the database and their addresses
+     * @returns {array<ClientAddressesProject>} - All clients of the database and their addresses
      */
     async findAll(providerId) {
         debug('findAll');
         const preparedQuery = {
-            text: 'SELECT * FROM client_and_addresses WHERE provider_id = $1 ORDER BY lastname, firstname;',
+            text: 'SELECT * FROM client_addresses_projects WHERE provider_id = $1 ORDER BY lastname, firstname;',
             values: [providerId],
         };
         const result = await client.query(preparedQuery);
@@ -130,7 +130,7 @@ const dataMapper = {
      * Find client by id
      * @param {number} clientId - id of the desired client
      * @param {number} providerId - provider id
-     * @returns {(ClientWithAddress|undefined)} -
+     * @returns {(ClientAddressesProject|undefined)} -
      * The desired client or undefined if no client found with this id
      */
     async findByPk(clientId, providerId) {

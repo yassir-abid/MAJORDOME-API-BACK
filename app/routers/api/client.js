@@ -18,7 +18,7 @@ router
      * @summary Get all clients and their addresses
      * @tags Client
      * @security BearerAuth
-     * @returns {array<ClientWithAddress>} 200 - success response - application/json
+     * @returns {array<ClientAddressesProject>} 200 - success response - application/json
      */
     .get(authenticateToken, controllerHandler(controller.getAll))
     /**
