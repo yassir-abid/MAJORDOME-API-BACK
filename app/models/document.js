@@ -186,7 +186,7 @@ const dataMapper = {
       * Update document
       * @param {number} id - id of the document to update
       * @param {InputDocument} documentInfos - Data to update
-      * @returns {Document} - Updated project
+      * @returns {Document} - Updated document
       */
     async update(id, documentInfos) {
         debug('update');

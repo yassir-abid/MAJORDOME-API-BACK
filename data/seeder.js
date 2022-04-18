@@ -136,6 +136,17 @@ const tables = [
             intervention_id: { to: 'intervention' },
         },
     },
+
+    {
+        name: 'token',
+        rows: 6,
+        columns: {
+            token: () => faker.datatype.string(20),
+            date: () => faker.date.recent(),
+            date: () => faker.date.recent(),
+            provider_id: { to: 'provider' },
+        },
+    },
 ];
 
 const seeder = new Seeder(tables, { directory: './data', truncate: true });

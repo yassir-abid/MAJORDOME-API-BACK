@@ -12,5 +12,6 @@ SELECT * FROM "intervention" WHERE false;
 SELECT * FROM "picture" WHERE false;
 SELECT * FROM "document" WHERE false;
 SELECT * FROM "notification" WHERE false;
+SELECT * FROM "token" WHERE false;
 
 ROLLBACK;

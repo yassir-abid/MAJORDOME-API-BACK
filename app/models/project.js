@@ -25,6 +25,30 @@ const client = require('../config/db');
  */
 
 /**
+ * @typedef {object} Address
+ * @property {number} id - Address id
+ * @property {string} number - Number of the street
+ * @property {string} street - Street
+ * @property {string} postal_code - Postal_code
+ * @property {string} city - City
+ * @property {string} comments - Additionnal informations
+ * @property {number} client_id - Id of the client linked to the address
+ */
+
+/**
+ * @typedef {object} Intervention
+ * @property {number} id - Intervention id
+ * @property {string} title - Intervention title
+ * @property {string} description - Intervention description
+ * @property {string} date - Intervention date (timestamptz)
+ * @property {string} status - Intervention status
+ * @property {string} comments - Intervention comments and specific informations
+ * @property {string} report - Post-Intervention report
+ * @property {number} project_id - Id of the project linked to the intervention
+ * @property {number} address_id - Id of the client address linked to the intervention
+ */
+
+/**
  * @typedef {object} ProjectWithClient
  * @property {number} id - Project id
  * @property {string} title - Project title
@@ -43,6 +67,18 @@ const client = require('../config/db');
  * @property {number} client_id - Id of the client linked to the project
  * @property {Client} client - project client
  * @property {array<Intervention>} interventions - project interventions
+ */
+
+/**
+ * @typedef {object} ProjectWithInterventionAddressAndClient
+ * @property {number} id - Project id
+ * @property {string} title - Project title
+ * @property {string} description - Project description
+ * @property {string} comments - Project comments
+ * @property {number} client_id - Id of the client linked to the project
+ * @property {Intervention} intervention - intervention linked to the project
+ * @property {Client} client - client linked to the project
+ * @property {Address} address - address linked to the project
  */
 
 /**
@@ -75,7 +111,7 @@ const dataMapper = {
     },
 
     /**
-     * Find project by id with the associated client
+     * Find project by id with the associated client, a
      * @param {number} projectId - id of the desired project
      * @param {number} providerId - provider id
      * @returns {(ProjectClientInterventions|undefined)} -
@@ -86,7 +122,7 @@ const dataMapper = {
         debug('findByPkWithDetails');
 
         const preparedQuery = {
-            text: `SELECT project_client_interventions.* FROM project_client_interventions 
+            text: `SELECT project_client_interventions.* FROM project_client_interventions
             JOIN client ON client.id = project_client_interventions.client_id
             WHERE project_client_interventions.id = $1 AND client.provider_id = $2`,
             values: [projectId, providerId],
@@ -104,7 +140,7 @@ const dataMapper = {
     },
 
     /**
-     * Find project by id
+     * Find project by id, linked to client, address and intervention
      * @param {number} projectId - id of the desired project
      * @param {number} providerId - provider id
      * @returns {(Project|undefined)} -
@@ -113,7 +149,7 @@ const dataMapper = {
     async findByPk(projectId, providerId) {
         debug('findByPk');
         const preparedQuery = {
-            text: `SELECT project.* FROM project 
+            text: `SELECT project.* FROM project
             JOIN client ON client.id = project.client_id
             WHERE project.id = $1 AND client.provider_id = $2;`,
             values: [projectId, providerId],
