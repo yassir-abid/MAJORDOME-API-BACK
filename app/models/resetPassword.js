@@ -118,10 +118,10 @@ const dataMapper = {
      * @param {number} id - id of the token to delete
      * @returns {boolean} - Result of the delete operation
      */
-    async deleteToken(providerId) {
+    async deleteToken(id) {
         const preparedQuery = {
-            text: 'DELETE FROM token WHERE token.provider_id = $1',
-            values: [providerId],
+            text: 'DELETE FROM token WHERE id = $1',
+            values: [id],
         };
 
         const result = await client.query(preparedQuery);

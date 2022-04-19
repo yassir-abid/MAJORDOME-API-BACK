@@ -18,10 +18,10 @@ const changePassword = {
         const updatedProfile = await resetPasswordDataMapper.updatePassword(request.body.id, hash);
         debug(updatedProfile)
 
-        sendEmail.emailConfig(updatedProfile.email, 'Password Reset Successfully', `Bonjour ${updatedProfile.firstname} ${updatedProfile.lastname},
+        sendEmail.emailConfig(updatedProfile.email, 'Changement de mot de passe réussi', `Bonjour ${updatedProfile.firstname} ${updatedProfile.lastname},
         Votre mot de passe a été changé avec succès.`);
         await resetPasswordDataMapper.deleteToken(updatedProfile.id);
-        return response.status(200).json;
+        return response.status(200).json();
     },
 };
 
