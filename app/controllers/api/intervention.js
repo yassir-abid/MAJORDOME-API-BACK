@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 const debug = require('debug')('InterventionController');
-
+const dayjs = require('dayjs');
 const interventionDataMapper = require('../../models/intervention');
 const addressDataMapper = require('../../models/address');
 const projectDataMapper = require('../../models/project');
@@ -74,6 +74,9 @@ const interventionController = {
         if (!foundAddress) {
             throw new ApiError('This address_id does not match with any intervention client addresses', { statusCode: 409 });
         }
+        if (new Date(request.body.end_date) <= new Date(request.body.date)) {
+            throw new ApiError('End date can\'t be inferior than start date', { statusCode: 409 });
+        }
         const savedintervention = await interventionDataMapper.insert(request.body);
 
         return response.json(savedintervention);
@@ -124,6 +127,20 @@ const interventionController = {
             if (!foundAddress) {
                 throw new ApiError('Intervention address and client address does not match', { statusCode: 409 });
             }
+        }
+
+        if (request.body.end_date) {
+            let startDate;
+            if (request.body.date) {
+                startDate = request.body.date;
+            } else {
+                startDate = intervention.date;
+            }
+            if (new Date(request.body.end_date) <= new Date(startDate)) {
+                throw new ApiError('End date can\'t be inferior than start date', { statusCode: 409 });
+            }
+            request.body.duration = await interventionDataMapper.calculateDuration(startDate, request.body.end_date);
+            delete request.body.end_date;
         }
 
         const savedIntervention = await interventionDataMapper.update(

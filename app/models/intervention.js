@@ -70,8 +70,8 @@ const client = require('../config/db');
  * @typedef {object} InputIntervention
  * @property {string} title - Intervention title
  * @property {string} description - Intervention description
- * @property {string} date - Intervention date (timestamptz)
- * @property {string} duration - Intervention duration (interval)
+ * @property {string} date - Intervention start date (timestamptz)
+ * @property {string} end_date - Intervention end date (timestamptz)
  * @property {string} status - Intervention status
  * @property {string} comments - Intervention comments and specific informations
  * @property {string} report - Post-Intervention report
@@ -206,11 +206,11 @@ const interventionDataMapper = {
         const preparedQuery = {
             text: ` INSERT INTO intervention
             (title, description, date, duration, status, comments, report, project_id, address_id) VALUES
-            ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *;`,
+            ($1, $2, $3, ($4::timestamptz - $3::timestamptz)::interval, $5, $6, $7, $8, $9) RETURNING *;`,
             values: [intervention.title, intervention.description,
-                intervention.date, intervention.duration, intervention.status,
-                intervention.comments, intervention.report,
-                intervention.project_id, intervention.address_id],
+            intervention.date, intervention.end_date, intervention.status,
+            intervention.comments, intervention.report,
+            intervention.project_id, intervention.address_id],
         };
         const savedIntervention = await client.query(preparedQuery);
 
@@ -301,6 +301,23 @@ const interventionDataMapper = {
         }
 
         return result.rows[0];
+    },
+
+    /**
+     * Calculate intervention duration
+     * @param {string} startDate - intervention start date
+     * @param {string} endDate - intervention end date
+     * @returns {(string)} - intervention duration
+     */
+    async calculateDuration(startDate, endDate) {
+        debug('calculateDuration');
+        const preparedQuery = {
+            text: 'SELECT ($1::timestamptz - $2::timestamptz)::interval',
+            values: [endDate, startDate],
+        };
+        const result = await client.query(preparedQuery);
+        debug(result)
+        return result.rows[0].interval;
     },
 };
 

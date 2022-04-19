@@ -4,6 +4,7 @@ module.exports = Joi.object({
     title: Joi.string(),
     description: Joi.string(),
     date: Joi.date(),
+    end_date: Joi.date(),
     status: Joi.string().pattern(/^Programmée|Annulée|Terminée$/),
     comments: Joi.string(),
     report: Joi.string(),
