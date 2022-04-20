@@ -18,7 +18,7 @@ const sendEmail = {
             to: email,
             subject,
             text,
-        }
+        };
 
         await transporter.sendMail(options, (error, response) => {
             if (error) {
