@@ -12,6 +12,11 @@ const client = require('../config/db');
  */
 
 /**
+ * @typedef {object} ProfilePicture
+ * @property {string} path - Profile avatar path
+ */
+
+/**
  * @typedef {object} InputProfile
  * @property {string} firstname - Profile firstname
  * @property {string} lastname - Profile lastname

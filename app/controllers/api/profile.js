@@ -22,7 +22,7 @@ const profileController = {
             throw new ApiError('Profile not found', { statusCode: 404 });
         }
 
-        debug(profile);
+        profile.picture = `${baseUrl}avatar/${profile.picture}`;
 
         return response.json(profile);
     },
@@ -112,7 +112,7 @@ const profileController = {
      * ExpressMiddleware signature
      * @param {object} request Express request object
      * @param {object} response Express response object
-     * @returns Route API JSON response
+     * @returns {ProfilePicture} Route API JSON response
      */
     async getPicture(request, response) {
         debug('getPicture');

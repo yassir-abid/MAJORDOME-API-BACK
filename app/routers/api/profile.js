@@ -56,7 +56,7 @@ router
      * @summary Download profile picture
      * @tags Profile
      * @security BearerAuth
-     * @returns 200 - success response - application/json
+     * @returns {ProfilePicture} 200 - success response - application/json
      * @returns {ApiError} 404 - Profile not found - application/json
      */
     .get(authenticateToken, controllerHandler(profileController.getPicture))
