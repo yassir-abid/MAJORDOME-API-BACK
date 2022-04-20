@@ -2,13 +2,23 @@ const debug = require('debug')('ResetPassword');
 const client = require('../config/db');
 
 /**
- * @typedef {object} Profile
+ * @typedef {object} ProfileWithPassword
  * @property {number} id - Profile id
  * @property {string} firstname - Profile firstname
  * @property {string} lastname - Profile lastname
  * @property {string} email - Profile email
  * @property {string} phone - Profile phone number
  * @property {string} password - Profile password
+ */
+
+/**
+ * @typedef {object} Profile
+ * @property {number} id - Profile id
+ * @property {string} firstname - Profile firstname
+ * @property {string} lastname - Profile lastname
+ * @property {string} email - Profile email
+ * @property {string} phone - Profile phone number
+ * @property {string} picture - Profile picture
  */
 
 /**
@@ -34,7 +44,7 @@ const dataMapper = {
     /**
      * Find if a profile exists with the same email
      * @param {InputAskNewPassword} inputData - Data provided by user
-     * @returns {(Profile|null)} - Existing Profile
+     * @returns {(ProfileWithPassword|null)} - Existing Profile
      * or null if no Profile with these data
      */
     async findByEmail(inputData) {
