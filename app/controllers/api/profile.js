@@ -22,7 +22,9 @@ const profileController = {
             throw new ApiError('Profile not found', { statusCode: 404 });
         }
 
-        profile.picture = `${baseUrl}avatar/${profile.picture}`;
+        if (profile.picture) {
+            profile.picture = `${baseUrl}avatar/${profile.picture}`;
+        }
 
         return response.json(profile);
     },
