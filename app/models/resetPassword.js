@@ -18,6 +18,7 @@ const client = require('../config/db');
  * @property {string} lastname - Profile lastname
  * @property {string} email - Profile email
  * @property {string} phone - Profile phone number
+ * @property {string} address - Profile address
  * @property {string} picture - Profile picture
  */
 
