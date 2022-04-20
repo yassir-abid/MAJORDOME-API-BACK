@@ -223,9 +223,9 @@ const interventionDataMapper = {
             (title, description, date, duration, status, comments, report, project_id, address_id) VALUES
             ($1, $2, $3, ($4::timestamptz - $3::timestamptz)::interval, $5, $6, $7, $8, $9) RETURNING *;`,
             values: [intervention.title, intervention.description,
-            intervention.date, intervention.end_date, intervention.status,
-            intervention.comments, intervention.report,
-            intervention.project_id, intervention.address_id],
+                intervention.date, intervention.end_date, intervention.status,
+                intervention.comments, intervention.report,
+                intervention.project_id, intervention.address_id],
         };
         const savedIntervention = await client.query(preparedQuery);
 
@@ -331,7 +331,6 @@ const interventionDataMapper = {
             values: [endDate, startDate],
         };
         const result = await client.query(preparedQuery);
-        debug(result)
         return result.rows[0].interval;
     },
 };

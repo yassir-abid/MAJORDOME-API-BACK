@@ -1,11 +1,12 @@
 /* eslint-disable max-len */
 const debug = require('debug')('InterventionController');
-const dayjs = require('dayjs');
 const interventionDataMapper = require('../../models/intervention');
 const addressDataMapper = require('../../models/address');
 const projectDataMapper = require('../../models/project');
 
 const { ApiError } = require('../../helpers/errorHandler');
+
+const baseUrl = process.env.BASE_FILE_URL;
 
 const interventionController = {
     /**
@@ -185,6 +186,12 @@ const interventionController = {
         }
 
         const report = await interventionDataMapper.findReport(request.params.id);
+
+        if (report.pictures.length > 0) {
+            report.pictures.forEach((picture) => {
+                picture.path = `${baseUrl}picture/${picture.path}`;
+            });
+        }
 
         return response.json(report);
     },
