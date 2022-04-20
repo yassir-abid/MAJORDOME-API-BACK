@@ -8,10 +8,10 @@ module.exports = Joi.object({
         phone: Joi.string()
             // .pattern(/^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/)
             .pattern(/^0[1-9]\d{8}$/),
-        comments: Joi.string(),
-        our_equipments: Joi.string(),
-        other_equipments: Joi.string(),
-        needs: Joi.string(),
+        comments: Joi.string().allow(null, ''),
+        our_equipments: Joi.string().allow(null, ''),
+        other_equipments: Joi.string().allow(null, ''),
+        needs: Joi.string().allow(null, ''),
     }),
     addresses: Joi.array().items(Joi.object({
         id: Joi.number().integer().min(1).allow(null),
@@ -19,6 +19,6 @@ module.exports = Joi.object({
         street: Joi.alternatives().conditional('id', { is: null, then: Joi.string().required(), otherwise: Joi.string() }),
         postal_code: Joi.alternatives().conditional('id', { is: null, then: Joi.string().required(), otherwise: Joi.string() }),
         city: Joi.alternatives().conditional('id', { is: null, then: Joi.string().required(), otherwise: Joi.string() }),
-        comments: Joi.string().optional(),
+        comments: Joi.string().allow(null, '').optional(),
     })),
 }).min(1).required();

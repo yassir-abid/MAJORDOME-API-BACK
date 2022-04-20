@@ -7,7 +7,7 @@ module.exports = Joi.object({
     phone: Joi.string()
     // .pattern(/^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/)
         .pattern(/^0[1-9]\d{8}$/),
-    address: Joi.string(),
-    comments: Joi.string(),
+    address: Joi.string().allow(null, ''),
+    comments: Joi.string().allow(null, ''),
 
 }).min(1).required();
