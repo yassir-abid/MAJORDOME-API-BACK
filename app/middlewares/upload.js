@@ -45,20 +45,26 @@ const uploadFileMiddleware = util.promisify(uploadFile);
 
 const upload = async (request, response, next) => {
     debug('upload');
-    try {
-        await uploadFileMiddleware(request, response);
-        if (request.file === undefined) {
-            throw new ApiError('Please upload a file!', { statusCode: 400 });
-        }
-        debug(request.file);
-        next();
-    } catch (error) {
-        // handle the error by checking error code (LIMIT_FILE_SIZE)
-        if (error.code === 'LIMIT_FILE_SIZE') {
-            throw new ApiError('File size cannot be larger than 2MB!', { statusCode: 400 });
-        }
-        throw new ApiError(`Could not upload the file. Error: ${error}`, { statusCode: 500 });
+    // try {
+    //     await uploadFileMiddleware(request, response);
+    //     if (request.file === undefined) {
+    //         throw new ApiError('Please upload a file!', { statusCode: 400 });
+    //     }
+    //     debug(request.file);
+    //     next();
+    // } catch (error) {
+    //     // handle the error by checking error code (LIMIT_FILE_SIZE)
+    //     if (error.code === 'LIMIT_FILE_SIZE') {
+    //         throw new ApiError('File size cannot be larger than 2MB!', { statusCode: 400 });
+    //     }
+    //     throw new ApiError(`Could not upload the file. Error: ${error}`, { statusCode: 500 });
+    // }
+    await uploadFileMiddleware(request, response);
+    if (request.file === undefined) {
+        throw new ApiError('Please upload a file!', { statusCode: 400 });
     }
+    debug(request.file);
+    next();
 };
 
 module.exports = upload;

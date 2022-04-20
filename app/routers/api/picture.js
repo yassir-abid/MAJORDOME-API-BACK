@@ -37,7 +37,7 @@ router
      * @returns {ApiError} 404 - Intervention not found - application/json
      */
     // .post(authenticateToken, validate('body', createSchema), upload, controllerHandler(controller.create));
-    .post(authenticateToken, upload, controllerHandler(controller.create));
+    .post(authenticateToken, controllerHandler(upload), controllerHandler(controller.create));
 
 router
     .route('/pictures/:pictureId(\\d+)/details')
@@ -66,7 +66,7 @@ router
      * @returns {Picture} 200 - success response - application/json
      * @returns {ApiError} 404 - Intervention or Picture not found - application/json
      */
-    .patch(authenticateToken, upload, controllerHandler(controller.updateFile));
+    .patch(authenticateToken, controllerHandler(upload), controllerHandler(controller.updateFile));
 
 router
     .route('/pictures/:pictureId(\\d+)')

@@ -34,7 +34,7 @@ router
      * @returns {ApiError} 404 - Document not found - application/json
      * @returns {ApiError} 409 - Conflict response - application/json
      */
-    .post(authenticateToken, upload, controllerHandler(documentController.create));
+    .post(authenticateToken, controllerHandler(upload), controllerHandler(documentController.create));
 // .post(authenticateToken, validate('body', createSchema), upload, controllerHandler(documentController.create));
 
 router
@@ -124,7 +124,7 @@ router
      * @returns {ApiError} 404 - Document not found - application/json
      * @returns {ApiError} 409 - Conflict response - application/json
      */
-    .patch(authenticateToken, upload, controllerHandler(documentController.updateFile));
+    .patch(authenticateToken, controllerHandler(upload), controllerHandler(documentController.updateFile));
 
 router
     .route('/:id(\\d+)')
