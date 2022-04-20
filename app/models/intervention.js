@@ -89,12 +89,27 @@ const client = require('../config/db');
  */
 
 /**
+ * @typedef {object} ReportProject
+ * @property {number} id - Report project id
+ * @property {string} title - Report project title
+ */
+
+/**
+ * @typedef {object} ReportClient
+ * @property {number} id - Report client id
+ * @property {string} firstname - Report client firstname
+ * @property {string} lastname - Report client lastname
+ */
+
+/**
  * @typedef {object} Report
  * @property {number} id - Intervention id
  * @property {string} title - Intervention title
  * @property {string} description - Intervention description
  * @property {string} date - Intervention date (timestamptz)
  * @property {string} report - Post-Intervention report
+ * @property {ReportProject} project - Post-Intervention report
+ * @property {ReportClient} client - Post-Intervention report
  * @property {array<Picture>} pictures - project linked to the intervention
  */
 
