@@ -187,7 +187,7 @@ const documentController = {
             throw new ApiError('Document must be attached to a client, a project, an intervention or a supplier', { statusCode: 409 });
         }
         if (request.body.client_id) {
-            const client = await clientDataMapper.findByPk(request.body.client_id, request.decoded.id);
+            const client = await clientDataMapper.findByPk(Number(request.body.client_id), request.decoded.id);
             if (!client) {
                 throw new ApiError('Client not found', { statusCode: 404 });
             }

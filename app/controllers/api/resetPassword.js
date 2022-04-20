@@ -64,7 +64,7 @@ const resetPasswordController = {
         )) {
             throw new ApiError('Expired password reset token', { statusCode: 401 });
         }
-        debug('success')
+        debug('success');
         return response.status(200).json();
     },
 };

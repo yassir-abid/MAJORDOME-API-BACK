@@ -114,6 +114,7 @@ const clientController = {
             const clientAddresses = await addressDataMapper.findByClient(request.params.id);
             addressId.forEach((id) => {
                 const foundAddress = clientAddresses.find((clientAddress) => clientAddress.id === Number(id));
+                debug(foundAddress)
                 if (!foundAddress) {
                     throw new ApiError('Address_id does not match with any client addresses', { statusCode: 409 });
                 }

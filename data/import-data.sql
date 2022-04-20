@@ -472,9 +472,7 @@ VALUES
     3,
     5
   );
-> > > > > > >
-modify
-  - password -- Table: notification
+-- Table: notification
 INSERT INTO
   "notification" (
     "title",
