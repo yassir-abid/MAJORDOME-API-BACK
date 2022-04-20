@@ -12,6 +12,7 @@ const { ApiError } = require('../helpers/errorHandler');
  * @returns {object} next or error
  */
 const authenticateToken = (request, _, next) => {
+    // eslint-disable-next-line dot-notation
     const bearerHeader = request.headers['authorization'];
     if (!bearerHeader) {
         throw new ApiError('Invalid authentification', { statusCode: 401 });
