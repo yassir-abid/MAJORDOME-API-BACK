@@ -116,6 +116,8 @@ FROM project;
 -- View to select intervention report and pictures
 CREATE VIEW report_with_pictures AS
 SELECT intervention.id, intervention.title, intervention.description, intervention.date, (intervention.date + intervention.duration) as end_date, intervention.report,
+json_build_object('id', client.id, 'firstname', client.firstname, 'lastname', client.lastname) as client,
+json_build_object('id', project.id, 'title', project.title) as project,
 json_agg(json_build_object('id', picture.id,
 				'title', picture.title,
 				'status', picture.status,
@@ -124,11 +126,18 @@ json_agg(json_build_object('id', picture.id,
 				AS pictures
 FROM intervention
 JOIN picture ON picture.intervention_id = intervention.id
-GROUP BY intervention.id;
+JOIN project ON project.id = intervention.project_id
+JOIN client ON client.id = project.client_id
+GROUP BY intervention.id, client.id, project.id;
 
 CREATE VIEW report_without_pictures AS
 SELECT intervention.id, intervention.title, intervention.description, intervention.date, (intervention.date + intervention.duration) as end_date, intervention.report,
-json_build_array() AS pictures FROM intervention
+json_build_object('id', client.id, 'firstname', client.firstname, 'lastname', client.lastname) as client,
+json_build_object('id', project.id, 'title', project.title) as project,
+json_build_array() AS pictures
+FROM intervention
+JOIN project ON project.id = intervention.project_id
+JOIN client ON client.id = project.client_id
 WHERE intervention.id <> ALL (
 		SELECT picture.intervention_id FROM picture
 );
