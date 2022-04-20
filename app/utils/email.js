@@ -14,7 +14,7 @@ const sendEmail = {
         });
 
         const options = {
-            from: process.env.USER,
+            from: 'lamar.trantow44@ethereal.email',
             to: email,
             subject,
             text,
