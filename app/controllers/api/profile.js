@@ -104,7 +104,7 @@ const profileController = {
 
         const savedProfile = await profileDataMapper.updatePicture(request.decoded.id, request.file.customName);
 
-        savedProfile.picture = `${baseUrl}avatar/${profile.picture}`;
+        savedProfile.picture = `${baseUrl}avatar/${savedProfile.picture}`;
 
         return response.json(savedProfile);
     },
