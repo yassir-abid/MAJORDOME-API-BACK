@@ -142,8 +142,8 @@ const tables = [
         rows: 6,
         columns: {
             token: () => faker.datatype.string(20),
-            date: () => faker.date.recent(),
-            date: () => faker.date.recent(),
+            creation_date: () => faker.date.recent(),
+            expiring_date: () => faker.date.recent(),
             provider_id: { to: 'provider' },
         },
     },
