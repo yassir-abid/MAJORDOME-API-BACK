@@ -42,7 +42,7 @@ const resetPasswordController = {
             Nous avons reçu une demande pour réinitialiser le mot de passe associé à votre compte Majordome. Pour continuer,
             cliquez sur le lien suivant : ${link}.
             Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer ce message. Votre mot de passe restera inchangé.`);
-        return response.status(200).json();
+        return response.status(200).json({ success: true });
     },
 
     async verifyToken(request, response) {
@@ -65,7 +65,7 @@ const resetPasswordController = {
             throw new ApiError('Expired password reset token', { statusCode: 401 });
         }
         debug('success');
-        return response.status(200).json();
+        return response.status(200).json(userId);
     },
 };
 

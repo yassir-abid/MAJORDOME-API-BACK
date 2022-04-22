@@ -16,7 +16,7 @@ router
      * POST /api/resetpassword/changepassword
      * @summary Send new password and its confirmation
      * @tags Set new password
-     * @param {InputSetNewPassword} request.body.required - email and its confirmation
+     * @param {InputChangePassword} request.body.required - email and its confirmation
      * @returns {Boolean} 200 - success response - application/json
      * @returns {ApiError} 409 -  Email already exists - application/json
      */

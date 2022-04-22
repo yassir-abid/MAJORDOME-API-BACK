@@ -28,7 +28,7 @@ const client = require('../config/db');
  */
 
 /**
- * @typedef {object} InputSetNewPassword
+ * @typedef {object} InputChangePassword
  * @property {string} password - User new password
  * @property {string} passwordConfirm - User new password confirmation
  */
@@ -69,7 +69,7 @@ const dataMapper = {
     /**
      * Edit password in database
      * @param {number} id - profile id
-     * @param {InputSetNewPassword} passwordInfos - Password and its confirmation
+     * @param {InputChangePassword} passwordInfos - Password and its confirmation
      * @returns {Profile} - Edited Profile
      */
     async updatePassword(id, password) {
