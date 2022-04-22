@@ -36,11 +36,14 @@ const loginController = {
                 expiresIn: '2h',
             },
         );
+        if (user.picture !== null) {
+            user.picture = `${baseUrl}avatar/${user.picture}`;
+        }
         return response.json({
             logged: true,
             pseudo: `${user.firstname} ${user.lastname}`,
             token,
-            picture: `${baseUrl}avatar/${user.picture}`,
+            picture: user.picture,
         });
     },
 
