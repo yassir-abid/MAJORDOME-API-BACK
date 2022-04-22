@@ -25,7 +25,6 @@ router
      * GET /api/resetpassword
      * @summary Get reset password route
      * @tags Reset password
-     * @security BearerAuth
      * @returns {Profile} 200 - success response - application/json
      * @returns {ApiError} 401 - Unauthorized - application/json
      * @returns {ApiError} 409 - Conflict - application/json
