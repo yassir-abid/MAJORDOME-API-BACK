@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 const ApiError = require('../errors/apiError');
 
 const sendEmail = {
-    async emailConfig(email, subject, text) {
+    async emailConfig(email, subject, html) {
         const transporter = nodemailer.createTransport({
             host: 'smtp.ethereal.email',
             port: 587,
@@ -17,7 +17,7 @@ const sendEmail = {
             from: 'lamar.trantow44@ethereal.email',
             to: email,
             subject,
-            text,
+            html,
         };
 
         await transporter.sendMail(options, (error, response) => {

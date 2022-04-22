@@ -38,10 +38,11 @@ const resetPasswordController = {
         debug(newToken.token);
         const link = `${baseUrl}/resetpassword?token=${newToken.token}&id=${user.id}`;
         debug(link);
-        sendEmail.emailConfig(user.email, 'Demande de modification de mot de passe', `Bonjour ${user.firstname} ${user.lastname},
-            Nous avons reçu une demande pour réinitialiser le mot de passe associé à votre compte Majordome. Pour continuer,
-            cliquez sur le lien suivant : ${link}.
-            Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer ce message. Votre mot de passe restera inchangé.`);
+        sendEmail.emailConfig(user.email, 'Demande de réinitialisation de mot de passe', `<p>Bonjour ${user.firstname} ${user.lastname},</p>
+            <p>Nous avons reçu une demande pour réinitialiser le mot de passe associé à votre compte Majordome. Pour continuer,
+            cliquez sur le lien suivant :</p> <a href=${link}>Lien de réinitialisation du mot de passe</a>.
+            <p>Si vous n'êtes pas à l'origine de cette demande, veuillez ignorer ce message. Votre mot de passe restera inchangé.</p>
+            <p>L'équipe de Majordome</p>`);
         return response.status(200).json({ success: true });
     },
 
