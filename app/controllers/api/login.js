@@ -5,6 +5,8 @@ const loginDataMapper = require('../../models/login');
 const profileDataMapper = require('../../models/profile');
 const { ApiError } = require('../../helpers/errorHandler');
 
+const baseUrl = process.env.BASE_FILE_URL;
+
 const loginController = {
     /**
      * Login controller to access an account.
@@ -38,6 +40,7 @@ const loginController = {
             logged: true,
             pseudo: `${user.firstname} ${user.lastname}`,
             token,
+            picture: `${baseUrl}avatar/${user.picture}`,
         });
     },
 
