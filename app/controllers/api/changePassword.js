@@ -21,7 +21,7 @@ const changePassword = {
         sendEmail.emailConfig(updatedProfile.email, 'Changement de mot de passe réussi', `Bonjour ${updatedProfile.firstname} ${updatedProfile.lastname},
         Votre mot de passe a été changé avec succès.`);
         await resetPasswordDataMapper.deleteToken(updatedProfile.id);
-        return response.status(200).json({succes: true});
+        return response.status(200).json({ succes: true });
     },
 };
 

@@ -48,7 +48,7 @@ const dataMapper = {
     async findByPk(profileId) {
         debug('findByPk');
         const preparedQuery = {
-            text: 'SELECT firstname, lastname, email, phone, address, picture FROM provider WHERE id = $1',
+            text: 'SELECT id, firstname, lastname, email, phone, address, picture FROM provider WHERE id = $1',
             values: [profileId],
         };
 
