@@ -6,7 +6,7 @@ const pictureDataMapper = require('../../models/picture');
 
 const { ApiError } = require('../../helpers/errorHandler');
 
-const baseUrl = process.env.BASE_FILE_URL;
+const baseUrl = process.env.BASE_URL;
 
 const pictureController = {
     /**
