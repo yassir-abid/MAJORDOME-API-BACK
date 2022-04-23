@@ -38,7 +38,7 @@ const resetPasswordController = {
         debug(expiringTime);
         const newToken = await resetPasswordDataMapper.createToken(hash, expiringTime, user.id);
         debug(newToken.token);
-        const link = `${baseUrl}/resetpassword?token=${newToken.token}&id=${user.id}`;
+        const link = `${baseUrl}resetpassword?token=${newToken.token}&id=${user.id}`;
         debug(link);
         sendEmail.emailConfig(user.email, 'Demande de réinitialisation de mot de passe', `<p>Bonjour ${user.firstname} ${user.lastname},</p>
             <p>Nous avons reçu une demande pour réinitialiser le mot de passe associé à votre compte Majordome. Pour continuer,
