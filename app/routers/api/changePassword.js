@@ -13,7 +13,7 @@ const router = express.Router();
 router
     .route('/')
     /**
-     * POST /api/resetpassword/changepassword
+     * PATCH /api/changepassword
      * @summary Send new password and its confirmation
      * @tags Set new password
      * @param {InputChangePassword} request.body.required - email and its confirmation

@@ -29,6 +29,7 @@ const client = require('../config/db');
 
 /**
  * @typedef {object} InputChangePassword
+ * @property {number} id - User id
  * @property {string} password - User new password
  * @property {string} passwordConfirm - User new password confirmation
  */

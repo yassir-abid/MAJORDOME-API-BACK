@@ -16,7 +16,7 @@ const changePassword = {
         const hash = await bcrypt.hash(request.body.password, Number(bcryptSalt));
 
         const updatedProfile = await resetPasswordDataMapper.updatePassword(request.body.id, hash);
-        debug(updatedProfile)
+        debug(updatedProfile);
 
         sendEmail.emailConfig(updatedProfile.email, 'Changement de mot de passe réussi', `Bonjour ${updatedProfile.firstname} ${updatedProfile.lastname},
         Votre mot de passe a été changé avec succès.`);
