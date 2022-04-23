@@ -6,7 +6,7 @@ const projectDataMapper = require('../../models/project');
 const interventionDataMapper = require('../../models/intervention');
 const { ApiError } = require('../../helpers/errorHandler');
 
-const baseUrl = process.env.BASE_FILE_URL;
+const baseUrl = process.env.BASE_URL;
 
 const documentController = {
 

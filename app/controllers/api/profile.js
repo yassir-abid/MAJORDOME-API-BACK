@@ -3,7 +3,7 @@ const debug = require('debug')('ProfileController');
 const profileDataMapper = require('../../models/profile');
 const { ApiError } = require('../../helpers/errorHandler');
 
-const baseUrl = process.env.BASE_FILE_URL;
+const baseUrl = process.env.BASE_URL;
 
 const profileController = {
 

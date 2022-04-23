@@ -6,7 +6,7 @@ const projectDataMapper = require('../../models/project');
 
 const { ApiError } = require('../../helpers/errorHandler');
 
-const baseUrl = process.env.BASE_FILE_URL;
+const baseUrl = process.env.BASE_URL;
 
 const interventionController = {
     /**
