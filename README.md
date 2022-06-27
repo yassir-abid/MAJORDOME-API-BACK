@@ -6,7 +6,7 @@ This app aims to help itinerant self-employed craftsmen (ardener, plumber, haird
 
 It was developed by a team of 2 backend developers and 3 frontend developers, in 3 weeks.
 
-**[See app presentation](https://youtu.be/MiFhbAqCyDI)**
+**[See app presentation](https://youtu.be/fIBe2SE69I0)**
 
 **[See app website](https://majordome-app.herokuapp.com/)**
 
@@ -20,7 +20,7 @@ The front part source code, is available [HERE](https://github.com/yassir-abid/M
 
 ### Useful Links
 
-- [App presentation](https://youtu.be/MiFhbAqCyDI)
+- [App presentation](https://youtu.be/fIBe2SE69I0)
 
 - [App website](https://majordome-app.herokuapp.com/)
 
