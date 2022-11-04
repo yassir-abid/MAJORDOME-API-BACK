@@ -318,8 +318,6 @@ const documentController = {
             throw new ApiError('Document not found', { statusCode: 404 });
         }
 
-        debug(document);
-
         await documentDataMapper.delete(request.params.id);
 
         return response.status(204).json();

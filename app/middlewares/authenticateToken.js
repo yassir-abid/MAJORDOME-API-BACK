@@ -12,21 +12,18 @@ const { ApiError } = require('../helpers/errorHandler');
  * @returns {object} next or error
  */
 const authenticateToken = (request, _, next) => {
+    debug('authenticateToken');
     // eslint-disable-next-line dot-notation
     const bearerHeader = request.headers['authorization'];
     if (!bearerHeader) {
         throw new ApiError('Invalid authentification', { statusCode: 401 });
     }
-    debug(bearerHeader);
 
     const bearerToken = bearerHeader.split(' ')[1];
 
     try {
         const decoded = jwt.verify(bearerToken, process.env.TOKEN_KEY);
         request.decoded = decoded;
-
-        debug(decoded);
-
         next();
     } catch (error) {
         throw new ApiError('Invalid authentification', { statusCode: 401 });

@@ -78,8 +78,6 @@ const dataMapper = {
         };
         const savedProfile = await client.query(preparedQuery);
 
-        debug(savedProfile);
-
         return savedProfile.rows[0];
     },
 
@@ -94,10 +92,6 @@ const dataMapper = {
         const fields = Object.keys(profile).map((prop, index) => `"${prop}" = $${index + 1}`);
         const values = Object.values(profile);
 
-        debug(fields);
-
-        debug(values);
-
         const savedProfile = await client.query(
             `
                 UPDATE provider SET
@@ -107,7 +101,6 @@ const dataMapper = {
             `,
             [...values, id],
         );
-        debug(savedProfile);
 
         return savedProfile.rows[0];
     },
@@ -124,8 +117,6 @@ const dataMapper = {
             values: [id],
         };
         const result = await client.query(preparedQuery);
-
-        debug(result);
 
         return !!result.rowCount;
     },
@@ -172,8 +163,6 @@ const dataMapper = {
         }
 
         const result = await client.query(preparedQuery);
-
-        debug(result);
 
         if (result.rowCount === 0) {
             return null;

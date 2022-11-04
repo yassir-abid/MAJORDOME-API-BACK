@@ -63,7 +63,6 @@ const upload = async (request, response, next) => {
     if (request.file === undefined) {
         throw new ApiError('Please upload a file!', { statusCode: 400 });
     }
-    debug(request.file);
     next();
 };
 

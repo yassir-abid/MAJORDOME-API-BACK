@@ -43,7 +43,6 @@ const profileController = {
         if (!profile) {
             throw new ApiError('Profile not found', { statusCode: 404 });
         }
-        debug(profile);
 
         if (request.body.email) {
             const existingEmail = await profileDataMapper.isUnique(
@@ -51,16 +50,12 @@ const profileController = {
                 request.decoded.id,
             );
 
-            debug(existingEmail);
-
             if (existingEmail) {
                 throw new ApiError('Other user exists with this email', { statusCode: 409 });
             }
         }
 
         const savedProfile = await profileDataMapper.update(request.decoded.id, request.body);
-
-        debug(savedProfile);
 
         return response.json(savedProfile);
     },
@@ -79,8 +74,6 @@ const profileController = {
         if (!profile) {
             throw new ApiError('Profile not found', { statusCode: 404 });
         }
-
-        debug(profile);
 
         await profileDataMapper.delete(request.decoded.id);
 

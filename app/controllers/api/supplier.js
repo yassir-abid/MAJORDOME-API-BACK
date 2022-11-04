@@ -12,9 +12,8 @@ const supplierController = {
      * @returns {array<Supplier>} Route API JSON response
      */
     async getAll(request, response) {
+        debug('getAll');
         const suppliers = await supplierDataMapper.findAll(request.decoded.id);
-
-        debug(suppliers);
 
         return response.json(suppliers);
     },
@@ -27,9 +26,8 @@ const supplierController = {
      * @returns {Supplier} Route API JSON response
      */
     async getOne(request, response) {
+        debug('getOne');
         const supplier = await supplierDataMapper.findByPk(request.params.id, request.decoded.id);
-
-        debug(supplier);
 
         if (!supplier) {
             throw new ApiError('Supplier not found', { statusCode: 404 });
@@ -46,10 +44,9 @@ const supplierController = {
      * @returns {Supplier} Route API JSON response
      */
     async create(request, response) {
+        debug('create');
         const supplierInfos = request.body;
         const supplier = await supplierDataMapper.isUnique(supplierInfos);
-
-        debug(supplier);
 
         if (supplier) {
             throw new ApiError('Supplier with this email already exists', { statusCode: 409 });
@@ -57,8 +54,6 @@ const supplierController = {
 
         supplierInfos.provider_id = request.decoded.id;
         const savedSupplier = await supplierDataMapper.insert(supplierInfos);
-
-        debug(savedSupplier);
 
         return response.json(savedSupplier);
     },
@@ -71,9 +66,8 @@ const supplierController = {
      * @returns {Supplier} Route API JSON response
      */
     async update(request, response) {
+        debug('update');
         const supplier = await supplierDataMapper.findByPk(request.params.id, request.decoded.id);
-
-        debug(supplier);
 
         if (!supplier) {
             throw new ApiError('Supplier not found', { statusCode: 404 });
@@ -90,8 +84,6 @@ const supplierController = {
         }
         const savedSupplier = await supplierDataMapper.update(request.params.id, request.body);
 
-        debug(savedSupplier);
-
         return response.json(savedSupplier);
     },
 
@@ -103,13 +95,12 @@ const supplierController = {
      * @returns {string} Route API JSON response
      */
     async delete(request, response) {
+        debug('delete');
         const supplier = await supplierDataMapper.findByPk(request.params.id, request.decoded.id);
 
         if (!supplier) {
             throw new ApiError('Supplier not found', { statusCode: 404 });
         }
-
-        debug(supplier);
 
         await supplierDataMapper.delete(request.params.id);
 

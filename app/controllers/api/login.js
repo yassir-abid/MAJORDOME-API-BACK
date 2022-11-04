@@ -19,8 +19,6 @@ const loginController = {
         debug('login');
         const user = await loginDataMapper.findByEmail(request.body);
 
-        debug(user);
-
         if (!user) {
             throw new ApiError('Invalid Email and/or password', { statusCode: 401 });
         }

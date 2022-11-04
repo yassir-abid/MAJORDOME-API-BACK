@@ -40,8 +40,6 @@ const dataMapper = {
 
         const result = await client.query(preparedQuery);
 
-        debug(result);
-
         if (result.rowCount === 0) {
             return null;
         }

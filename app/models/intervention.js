@@ -192,7 +192,7 @@ const interventionDataMapper = {
      * The desired intervention or undefined if no intervention found with this id
      */
     async findByPkWithDetails(interventionId, providerId) {
-        debug('findByPk');
+        debug('findByPkWithDetails');
         const preparedQuery = {
             text: `
             SELECT intervention_project_client_address.* FROM intervention_project_client_address

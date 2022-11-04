@@ -14,7 +14,7 @@ const sanitize = (obj) => {
 };
 
 const cleaner = (request, response, next) => {
-    debug(request.url);
+    debug('cleaner');
     if (request.url.includes('/api/clients')) {
         sanitize(request.params);
         sanitize(request.query);
