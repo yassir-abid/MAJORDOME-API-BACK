@@ -52,8 +52,6 @@ const dataMapper = {
         };
         const result = await client.query(preparedQuery);
 
-        debug(result);
-
         return result.rows;
     },
 
@@ -75,7 +73,6 @@ const dataMapper = {
         if (result.rowCount === 0) {
             return undefined;
         }
-        debug(result);
 
         return result.rows[0];
     },
@@ -95,8 +92,6 @@ const dataMapper = {
 
         const result = await client.query(preparedQuery);
 
-        debug(result);
-
         return result.rows;
     },
 
@@ -114,8 +109,6 @@ const dataMapper = {
         };
 
         const result = await client.query(preparedQuery);
-
-        debug(result);
 
         return result.rows;
     },
@@ -135,8 +128,6 @@ const dataMapper = {
 
         const result = await client.query(preparedQuery);
 
-        debug(result);
-
         return result.rows;
     },
 
@@ -154,8 +145,6 @@ const dataMapper = {
         };
 
         const result = await client.query(preparedQuery);
-
-        debug(result);
 
         return result.rows;
     },
@@ -177,8 +166,6 @@ const dataMapper = {
         };
         const savedDocument = await client.query(preparedQuery);
 
-        debug(savedDocument);
-
         return savedDocument.rows[0];
     },
 
@@ -193,9 +180,6 @@ const dataMapper = {
         const fields = Object.keys(documentInfos).map((prop, index) => `"${prop}" = $${index + 1}`);
         const values = Object.values(documentInfos);
 
-        debug(fields);
-        debug(values);
-
         const savedDocument = await client.query(
             `UPDATE document SET
                  ${fields}
@@ -203,8 +187,6 @@ const dataMapper = {
                  RETURNING *`,
             [...values, id],
         );
-
-        debug(savedDocument);
 
         return savedDocument.rows[0];
     },
@@ -222,8 +204,6 @@ const dataMapper = {
         };
 
         const result = await client.query(preparedQuery);
-
-        debug(result);
 
         return !!result.rowCount;
     },

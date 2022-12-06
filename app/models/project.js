@@ -105,8 +105,6 @@ const dataMapper = {
         };
         const result = await client.query(preparedQuery);
 
-        debug(result);
-
         return result.rows;
     },
 
@@ -133,8 +131,6 @@ const dataMapper = {
         if (result.rowCount === 0) {
             return undefined;
         }
-
-        debug(result);
 
         return result.rows[0];
     },
@@ -180,8 +176,6 @@ const dataMapper = {
         };
         const savedProject = await client.query(preparedQuery);
 
-        debug(savedProject);
-
         return savedProject.rows[0];
     },
 
@@ -196,9 +190,6 @@ const dataMapper = {
         const fields = Object.keys(projectInfos).map((prop, index) => `"${prop}" = $${index + 1}`);
         const values = Object.values(projectInfos);
 
-        debug(fields);
-        debug(values);
-
         const savedProject = await client.query(
             `UPDATE project SET
                 ${fields}
@@ -206,8 +197,6 @@ const dataMapper = {
                 RETURNING *`,
             [...values, id],
         );
-
-        debug(savedProject);
 
         return savedProject.rows[0];
     },

@@ -17,8 +17,6 @@ const projectController = {
         debug('getAll');
         const projects = await projectDataMapper.findAll(request.decoded.id);
 
-        debug(projects);
-
         return response.json(projects);
     },
 
@@ -33,8 +31,6 @@ const projectController = {
         debug('getOne');
 
         const project = await projectDataMapper.findByPkWithDetails(request.params.id, request.decoded.id);
-
-        debug(project);
 
         if (!project) {
             throw new ApiError('Project not found', { statusCode: 404 });
@@ -61,15 +57,11 @@ const projectController = {
 
         const project = await projectDataMapper.isUnique(request.body);
 
-        debug(project);
-
         if (project) {
             throw new ApiError('Project with this title already exists for that client', { statusCode: 409 });
         }
 
         const savedProject = await projectDataMapper.insert(request.body);
-
-        debug(savedProject);
 
         return response.json(savedProject);
     },
@@ -84,8 +76,6 @@ const projectController = {
     async update(request, response) {
         debug('update');
         const project = await projectDataMapper.findByPk(request.params.id, request.decoded.id);
-
-        debug(project);
 
         if (!project) {
             throw new ApiError('Project not found', { statusCode: 404 });
@@ -110,8 +100,6 @@ const projectController = {
 
         const savedProject = await projectDataMapper.update(request.params.id, request.body);
 
-        debug(savedProject);
-
         return response.json(savedProject);
     },
 
@@ -129,8 +117,6 @@ const projectController = {
         if (!project) {
             throw new ApiError('Project not found', { statusCode: 404 });
         }
-
-        debug(project);
 
         await projectDataMapper.delete(request.params.id);
 

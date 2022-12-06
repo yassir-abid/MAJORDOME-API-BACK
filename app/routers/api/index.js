@@ -1,6 +1,5 @@
 const express = require('express');
 
-// todo Import entities routers
 const signupRouter = require('./signup');
 const loginRouter = require('./login');
 const profileRouter = require('./profile');
@@ -25,7 +24,6 @@ router.use((_, response, next) => {
 
 router.all('/', apiController.home);
 
-// todo Use entities routers
 router.use('/signup', signupRouter);
 router.use('/login', loginRouter);
 router.use('/profile', profileRouter);

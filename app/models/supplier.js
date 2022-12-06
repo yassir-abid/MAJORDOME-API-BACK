@@ -30,13 +30,12 @@ const dataMapper = {
       * @returns {array<Suppliers>} - All suppliers of the database
       */
     async findAll(providerId) {
+        debug('findAll');
         const preparedQuery = {
             text: 'SELECT * FROM supplier WHERE provider_id = $1 ORDER BY id ASC',
             values: [providerId],
-        }
+        };
         const result = await client.query(preparedQuery);
-
-        debug(result);
 
         return result.rows;
     },
@@ -49,6 +48,7 @@ const dataMapper = {
       * The desired supplier or undefined if no supplier found with this id
       */
     async findByPk(supplierId, providerId) {
+        debug('findByPk');
         const preparedQuery = {
             text: 'SELECT * FROM supplier WHERE id = $1 AND provider_id = $2',
             values: [supplierId, providerId],
@@ -58,9 +58,7 @@ const dataMapper = {
 
         if (result.rowCount === 0) {
             return undefined;
-        };
-
-        debug(result);
+        }
 
         return result.rows[0];
     },
@@ -71,6 +69,7 @@ const dataMapper = {
       * @returns {Supplier} - Inserted supplier
       */
     async insert(supplierInfos) {
+        debug('insert');
         const preparedQuery = {
             text: `INSERT INTO supplier
              (firstname, lastname, email, phone, address, comments, provider_id)
@@ -80,8 +79,6 @@ const dataMapper = {
                 supplierInfos.provider_id],
         };
         const savedSupplier = await client.query(preparedQuery);
-
-        debug(savedSupplier);
 
         return savedSupplier.rows[0];
     },
@@ -93,11 +90,9 @@ const dataMapper = {
       * @returns {Supplier} - Updated supplier
       */
     async update(id, supplierInfos) {
+        debug('update');
         const fields = Object.keys(supplierInfos).map((prop, index) => `"${prop}" = $${index + 1}`);
         const values = Object.values(supplierInfos);
-
-        debug(fields);
-        debug(values);
 
         const savedSupplier = await client.query(
             `UPDATE supplier SET
@@ -106,8 +101,6 @@ const dataMapper = {
                  RETURNING *`,
             [...values, id],
         );
-
-        debug(savedSupplier);
 
         return savedSupplier.rows[0];
     },
@@ -118,14 +111,13 @@ const dataMapper = {
       * @returns {boolean} - Result of the delete operation
       */
     async delete(id) {
+        debug('delete');
         const preparedQuery = {
             text: 'DELETE FROM supplier WHERE id = $1',
             values: [id],
         };
 
         const result = await client.query(preparedQuery);
-
-        debug(result);
 
         return !!result.rowCount;
     },
@@ -150,8 +142,6 @@ const dataMapper = {
         }
 
         const result = await client.query(preparedQuery);
-
-        debug(result);
 
         if (result.rowCount === 0) {
             return null;

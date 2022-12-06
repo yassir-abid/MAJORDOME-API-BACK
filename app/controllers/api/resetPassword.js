@@ -33,13 +33,12 @@ const resetPasswordController = {
         }
         const resetToken = crypto.randomBytes(32).toString('hex');
         const hash = await bcrypt.hash(resetToken, Number(bcryptSalt));
-        debug(hash);
         const expiringTime = dayjs().add(30, 'minute').format();
-        debug(expiringTime);
+
         const newToken = await resetPasswordDataMapper.createToken(hash, expiringTime, user.id);
-        debug(newToken.token);
+
         const link = `${baseUrl}resetpassword?token=${newToken.token}&id=${user.id}`;
-        debug(link);
+
         sendEmail.emailConfig(user.email, 'Demande de réinitialisation de mot de passe', `<p>Bonjour ${user.firstname} ${user.lastname},</p>
             <p>Nous avons reçu une demande pour réinitialiser le mot de passe associé à votre compte Majordome. Pour continuer,
             cliquez sur le lien suivant :</p> <a href=${link}>Lien de réinitialisation du mot de passe</a>.
@@ -56,8 +55,6 @@ const resetPasswordController = {
         if (!passwordResetToken) {
             throw new ApiError('Invalid or expired password reset token', { statusCode: 401 });
         }
-        debug(request.query.token);
-        debug(passwordResetToken.token);
         if (request.query.token !== passwordResetToken.token) {
             throw new ApiError('Invalid password reset token', { statusCode: 401 });
         }
@@ -67,7 +64,6 @@ const resetPasswordController = {
         )) {
             throw new ApiError('Expired password reset token', { statusCode: 401 });
         }
-        debug('success');
         return response.status(200).json(userId);
     },
 };

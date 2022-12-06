@@ -58,8 +58,6 @@ const dataMapper = {
 
         const result = await client.query(preparedQuery);
 
-        debug(result);
-
         if (result.rowCount === 0) {
             return null;
         }
@@ -75,7 +73,6 @@ const dataMapper = {
      */
     async updatePassword(id, password) {
         debug('update');
-
         const savedPassword = await client.query(
             `
                     UPDATE provider
@@ -85,7 +82,6 @@ const dataMapper = {
                 `,
             [id, password],
         );
-        debug(savedPassword);
 
         return savedPassword.rows[0];
     },
@@ -96,13 +92,12 @@ const dataMapper = {
      * or null if no Profile with these data
      */
     async findToken(providerId) {
+        debug('findToken');
         const preparedQuery = {
             text: 'SELECT * FROM token WHERE provider_id = $1',
             values: [providerId],
         };
         const result = await client.query(preparedQuery);
-
-        debug(result);
 
         if (result.rowCount === 0) {
             return null;
@@ -112,6 +107,7 @@ const dataMapper = {
     },
 
     async createToken(token, expiringDate, providerId) {
+        debug('createToken');
         const preparedQuery = {
             text: `INSERT INTO token
             (token, expiring_date, provider_id)
@@ -119,8 +115,6 @@ const dataMapper = {
             values: [token, expiringDate, providerId],
         };
         const savedToken = await client.query(preparedQuery);
-
-        debug(savedToken);
 
         return savedToken.rows[0];
     },
@@ -131,14 +125,13 @@ const dataMapper = {
      * @returns {boolean} - Result of the delete operation
      */
     async deleteToken(id) {
+        debug('deleteToken');
         const preparedQuery = {
             text: 'DELETE FROM token WHERE id = $1',
             values: [id],
         };
 
         const result = await client.query(preparedQuery);
-
-        debug(result);
 
         return !!result.rowCount;
     },

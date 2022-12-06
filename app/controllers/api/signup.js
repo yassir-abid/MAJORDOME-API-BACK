@@ -19,8 +19,6 @@ const signupController = {
         debug('signup');
         const user = await signupDataMapper.findByEmail(request.body);
 
-        debug(user);
-
         if (user) {
             throw new ApiError('User with this email already exists', { statusCode: 409 });
         }
@@ -41,8 +39,6 @@ const signupController = {
                 password: passwordHashed,
             },
         );
-
-        debug(newUser);
 
         const token = jwt.sign(
             {
