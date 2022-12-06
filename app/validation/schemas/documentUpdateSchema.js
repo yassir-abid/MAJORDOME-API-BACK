@@ -2,8 +2,7 @@ const Joi = require('joi');
 
 module.exports = Joi.object({
     title: Joi.string(),
-    description: Joi.string(),
-    path: Joi.string(),
+    description: Joi.string().allow(null, ''),
     client_id: Joi.number().integer().min(1),
     project_id: Joi.number().integer().min(1),
     intervention_id: Joi.number().integer().min(1),
