@@ -45,8 +45,6 @@ const documentController = {
         debug('getOne');
         const document = await documentDataMapper.findByPk(request.params.id, request.decoded.id);
 
-        debug(document);
-
         if (!document) {
             throw new ApiError('Document not found', { statusCode: 404 });
         }
