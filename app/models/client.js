@@ -69,7 +69,7 @@ const client = require('../config/db');
  */
 
 /**
- * @typedef {Object} InputClient
+ * @typedef {object} InputClient
  * @property {string} firstname - Client firstname
  * @property {string} lastname - Client lastname
  * @property {string} email - Client email
@@ -100,13 +100,13 @@ const client = require('../config/db');
  */
 
 /**
- * @typedef {Object} InsertClientWithAddress
+ * @typedef {object} InsertClientWithAddress
  * @property {InputClient} client - Client informations
  * @property {array<InsertInputAddress>} addresses - Client's addresses informations
  */
 
 /**
- * @typedef {Object} UpdateClientWithAddress
+ * @typedef {object} UpdateClientWithAddress
  * @property {InputClient} client - Client informations
  * @property {array<UpdateInputAddress>} addresses - Client's addresses informations with their
  */
