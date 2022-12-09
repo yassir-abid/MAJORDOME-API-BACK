@@ -8,13 +8,13 @@ const sendEmail = {
             port: 587,
             secure: false,
             auth: {
-                user: 'lamar.trantow44@ethereal.email',
-                pass: 'zvxsSwK3aG15SaA4Rk',
+                user: process.env.USER_EMAIL,
+                pass: process.env.PASS_EMAIL,
             },
         });
 
         const options = {
-            from: 'lamar.trantow44@ethereal.email',
+            from: process.env.USER_EMAIL,
             to: email,
             subject,
             html,
